@@ -10,9 +10,9 @@ import pandas as pd
 import itertools
 from tqdm import tqdm
 
-from utils.args import parse_args, fix_seed
+from utils.args import parse_args
 from utils.device import gpu_to_cpu, cpu_to_gpu
-from utils.set_path import make_log, modify_path
+from utils.util import fix_seed, make_log, modify_path
 from data_utils import *
 from models import *
 from train_tools.client_opt import client_opt
