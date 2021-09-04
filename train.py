@@ -97,15 +97,15 @@ def train():
             selected_clients_num[sc] += 1
         
         # evaluate the generalization of the server model
-        acc, std, min, max = test(args, model, client_loader, dataset_sizes)
-        print('Test Accuracy: %.2f' % acc)
+        mean, std, min, max = test(args, model, client_loader, dataset_sizes)
+        print('Test Accuracy: %.2f' % mean)
         
-        test_acc.append(acc)
-        if acc >= best_acc[0]: 
-            best_acc = [acc, std, min, max]
+        test_acc.append(mean)
+        if mean >= best_acc[0]: 
+            best_acc = [mean, std, min, max]
             
         # record the results
-        log_pd.loc[r] = [acc, std, min, max]
+        log_pd.loc[r] = [mean, std, min, max]
         log_pd.to_csv(args.log_path)        
 
     # plot the results
@@ -142,12 +142,12 @@ def test(args, model, client_loader, dataset_sizes):
                 accuracy[cls] += 1.0
 
     accuracy = (accuracy / (dataset_sizes['test'] / args.num_classes)) * 100
-    acc = round((np.sum(accuracy) / args.num_classes), 2)
+    mean = round((np.sum(accuracy) / args.num_classes), 2)
     std = round(np.std(accuracy), 4)
     min = round(np.min(accuracy), 2)
     max = round(np.max(accuracy), 2)
 
-    return acc, std, min, max
+    return mean, std, min, max
 
     
 if __name__ == '__main__':
