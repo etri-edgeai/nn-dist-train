@@ -20,17 +20,17 @@ def set_path(args):
             os.makedirs(path)
     
     # set file path
-    args.log_path = './logs/%s/%s/non_iid_%s/[%s]seed%s_clients%s-%s_rounds%s_epochs%s' % (args.dataset, args.model, args.non_iid, args.algorithm, args.seed, args.num_clients, args.clients_per_round, args.num_epochs)
+    args.log_path = './logs/%s/%s/non-iid_%s/[%s]seed%s_clients%s-%s_rounds%s_epochs%s' % (args.dataset, args.model, args.non_iid, args.algorithm, args.seed, args.num_clients, args.clients_per_round, args.num_epochs)
     if args.exp_name:
         args.log_path += '_%s' % args.exp_name
     args.log_path += '.csv'
     
-    args.checkpoint_path = './model_checkpoints/%s/%s/non_iid_%s/[%s]seed%s_clients%s-%s_rounds%s_epochs%s' % (args.dataset, args.model, args.non_iid, args.algorithm, args.seed, args.num_clients, args.clients_per_round, args.num_epochs)
+    args.checkpoint_path = './model_checkpoints/%s/%s/non-iid_%s/[%s]seed%s_clients%s-%s_rounds%s_epochs%s' % (args.dataset, args.model, args.non_iid, args.algorithm, args.seed, args.num_clients, args.clients_per_round, args.num_epochs)
     if args.exp_name:
         args.checkpoint_path += '_%s' % args.exp_name
     args.checkpoint_path += '.pth'
     
-    args.img_path = './img/%s/%s/non_iid_%s/[%s]seed%s_clients%s-%s_rounds%s_epochs%s' % (args.dataset, args.model, args.non_iid, args.algorithm, args.seed, args.num_clients, args.clients_per_round, args.num_epochs)
+    args.img_path = './img/%s/%s/non-iid_%s/[%s]seed%s_clients%s-%s_rounds%s_epochs%s' % (args.dataset, args.model, args.non_iid, args.algorithm, args.seed, args.num_clients, args.clients_per_round, args.num_epochs)
     if args.exp_name:
         args.img_path += '_%s' % args.exp_name
     if not os.path.isdir(args.img_path):

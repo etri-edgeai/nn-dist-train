@@ -58,16 +58,14 @@ def _transform_setter(dataset=str):
     return train_transforms, test_transforms
 
 
-def _divide_dataset(_trainset, num_classes=10, num_clients=20, valid_size=0, non_iid=10.0, img_path=''):
-    # _train_set: whole train dataset
-    # num_clients: the number of clients. Should be integer type.
-    # valid_size: the number of images per class in valid dataset. type: int
-    # replacement: boolean value whether sampling with replacement or not.
-    # dist_mode: 'class'-diri distribution for the number of classes.
+def _divide_dataset(args, _trainset, num_classes=10):
     # Here, we handle the non-iidness via the Dirichlet distribution.
     # non_iid: the concentration parameter alpha in the Dirichlet distribution. Should be float type.
     # We refer to the paper 'https://arxiv.org/pdf/1909.06335.pdf'
-
+    num_clients = args.num_clients
+    valid_size = args.valid_size
+    non_iid = args.non_iid
+    
     assert type(num_clients) is int, 'num_clients should be the type of integer.'
     assert type(valid_size) is int, 'valid_size should be the type of int.'
     assert type(non_iid) is float and non_iid > 0, 'iid should be the type of float.'
@@ -121,7 +119,7 @@ def _divide_dataset(_trainset, num_classes=10, num_clients=20, valid_size=0, non
     print('clients_data_num', [sum(clients_data_num[k]) for k in clients_data_num.keys()])
     
     # plot the data distribution
-    data_plotter(clients_data_num, img_path)
+    data_plotter(args, clients_data_num)
 
     return clients_data
 
@@ -152,7 +150,7 @@ def dirichlet_dataloader(args):
         testset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 10
 
-    clients_data = _divide_dataset(_trainset, num_classes=num_classes, num_clients=args.num_clients, valid_size=args.valid_size, non_iid=args.non_iid, img_path=args.img_path)
+    clients_data = _divide_dataset(args, _trainset, num_classes=num_classes)
     
     # Generate the dataloader
     client_loader = {'train': {}}
