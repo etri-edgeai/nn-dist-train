@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 from utils.args import parse_args
 from utils.device import gpu_to_cpu, cpu_to_gpu
-from utils.util import fix_seed, make_log, modify_path
+from utils.util import fix_seed, set_path
 from data_utils import *
 from models import *
 from train_tools.client_opt import client_opt
@@ -30,17 +30,14 @@ def _get_args():
     fix_seed(args.seed)
         
     # model log file
-    args.log_filename, args.log_pd, args.check_filename, args.img_filename = make_log(args)
+    args, log_pd = set_path(args)
     
-    return args
+    return args, log_pd
 
 
 def _make_dataloader(args):
     # create dataloader
-    client_loader, dataset_sizes, args.class_num, args.num_clients = DATASET[args.dataset](args)
-    
-    # refine path in argument
-    args.log_filename, args.check_filename, args.img_filename = modify_path(args)
+    client_loader, dataset_sizes, args.class_num = DATASET[args.dataset](args)
     
     # size of each local client's local data
     client_datasize = np.zeros(args.num_clients)
@@ -78,7 +75,7 @@ def _make_model(args):
 
     
 def train():
-    args = _get_args()
+    args, log_pd = _get_args()
     
     client_loader, dataset_sizes, args = _make_dataloader(args)
     
@@ -110,8 +107,8 @@ def train():
             best_acc = [acc, std, min, max]
             
         # record the results
-        args.log_pd.loc[r] = [acc, std, min, max]
-        args.log_pd.to_csv(args.log_filename)        
+        log_pd.loc[r] = [acc, std, min, max]
+        log_pd.to_csv(args.log_path)        
 
     # plot the results
     selected_clients_plotter(selected_clients_num, args)
@@ -120,13 +117,13 @@ def train():
     # save file
     state={}
     state['checkpoint'] = weight['server']
-    torch.save(state, args.check_filename)
+    torch.save(state, args.checkpoint_path)
     
-    print('Successfully saved' + check_filename)
+    print('Successfully saved' + checkpoint_path)
     print('Best Test Accuracy: %.2f' % best_acc[0])
            
-    args.log_pd.loc[args.num_rounds] = best_acc
-    args.log_pd.to_csv(args.log_filename)
+    log_pd.loc[args.num_rounds] = best_acc
+    log_pd.to_csv(args.log_path)
 
     
 if __name__ == '__main__':
