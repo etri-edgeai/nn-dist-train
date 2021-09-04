@@ -140,4 +140,28 @@ def parse_args():
                        type=str,
                        default='uniform')
     
-    return parser.parse_args()
+    args = parser.parse_args()
+    args = _align_args(args)
+    
+    return args
+
+
+def _align_args(args):
+    # align other argument according to args.algorithm
+    if args.algorithm == 'fedavg':
+        args.mab_decay = 1.0
+        args.mu = 0.0
+        args.full_part = True
+        
+    elif args.algorithm == 'fedavg-conv':
+        args.mab_decay = 1.0
+        args.mu = 0.0
+        args.full_part = False
+        
+    elif args.algorithm == 'fedprox':
+        assert args.mu != 0.0
+        args.full_part = False
+    else:
+        pass
+        
+    return args
