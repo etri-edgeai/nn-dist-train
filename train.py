@@ -13,7 +13,7 @@ from tqdm import tqdm
 from utils.args import parse_args
 from utils.device import gpu_to_cpu, cpu_to_gpu
 from utils.util import fix_seed, set_path
-from data_utils import *
+from data import dirichlet_dataloader
 from models import *
 from train_tools.client_opt import client_opt
 from train_tools.server_opt import server_opt
@@ -37,14 +37,12 @@ def _get_args():
 
 def _make_dataloader(args):
     # create dataloader
-    client_loader, dataset_sizes, args.class_num = DATASET[args.dataset](args)
+    if 'dirichlet' in args.dataset:
+        client_loader, dataset_sizes = dirichlet_dataloader(args)
+    else:
+        client_loader, dataset_sizes = DATASET[args.dataset](args) 
     
-    # size of each local client's local data
-    client_datasize = np.zeros(args.num_clients)
-    for client in range(args.num_clients): 
-        client_datasize[client] += dataset_sizes['train'][client]    
-    
-    return client_loader, dataset_sizes, args
+    return client_loader, dataset_sizes
     
     
 def _make_model(args):
@@ -89,10 +87,10 @@ def train():
     # Federated Learning Pipeline
     for r in tqdm(range(args.num_rounds)):
         # client selection and updated the selected clients
-        weight, momentum, selected_clients = client_opt(args, client_loader, client_datasize, model, weight, momentum, rounds=r)
+        weight, momentum, selected_clients = client_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, rounds=r)
         
         # aggregate the updates and update the server
-        model, weight, momentum = server_opt(args, client_loader, client_datasize, model, weight, momentum, selected_clients, rounds=r)
+        model, weight, momentum = server_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, selected_clients, rounds=r)
         
         # update the history of selected_clients
         for sc in selected_clients: 
