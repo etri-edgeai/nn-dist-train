@@ -24,6 +24,10 @@ def parse_args():
                     help='seed for experiment',
                     type=int,
                     default=0)
+    parser.add_argument('--exp-name',
+                    help='name for experiment',
+                    type=str,
+                    default='')
     
     #################### dataset ####################
     # basic settings
@@ -85,8 +89,8 @@ def parse_args():
                     default=100)
     parser.add_argument('--clients-per-round',
                     help='number of clients trained per round;',
-                    type=str,
-                    default='20')
+                    type=int,
+                    default=20)
     parser.add_argument('--global-momentum',
                     help='whether to use momentum in server optimizers;',
                     type=float,
