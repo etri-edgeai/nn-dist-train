@@ -97,7 +97,7 @@ def train():
             selected_clients_num[sc] += 1
         
         # evaluate the generalization of the server model
-        acc, std, min, max = evaluate_accuracy(model, dataset_sizes['test'], client_loader['test'], args)
+        acc, std, min, max = test(args, model, client_loader, dataset_sizes)
         print('Test Accuracy: %.2f' % acc)
         
         test_acc.append(acc)
@@ -122,6 +122,32 @@ def train():
            
     log_pd.loc[args.num_rounds] = best_acc
     log_pd.to_csv(args.log_path)
+
+    
+def test(args, model, client_loader, dataset_sizes):
+    prediction = lambda logits : torch.argmax(logits, 1)
+    accuracy = np.zeros(args.num_classes)
+
+    model.eval()
+    for inputs, labels in client_loader['test']:
+        inputs = inputs.to(args.device)
+        labels = labels.to(args.device)
+
+        with torch.set_grad_enabled(False):
+            logits = model(inputs)
+            pred = prediction(logits)
+
+            correct = (pred == labels.data)
+            for cls in labels[correct]:
+                accuracy[cls] += 1.0
+
+    accuracy = (accuracy / (dataset_sizes['test'] / args.num_classes)) * 100
+    acc = round((np.sum(accuracy) / args.num_classes), 2)
+    std = round(np.std(accuracy), 4)
+    min = round(np.min(accuracy), 2)
+    max = round(np.max(accuracy), 2)
+
+    return acc, std, min, max
 
     
 if __name__ == '__main__':
