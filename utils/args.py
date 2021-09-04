@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument('--data-dir', 
                     help='dir for dataset;',
                     type=str,
-                    default='./data')
+                    default='./data/benchmarks')
     parser.add_argument('--batch-size',
                     help='batch size of local data on each client;',
                     type=int,
@@ -57,10 +57,6 @@ def parse_args():
                     default=20)
     
     # non-iidness
-    parser.add_argument('--dist-mode', 
-                    help='which criterion to use on distributing the dataset;',
-                    type=str,
-                    default='class')
     parser.add_argument('--non-iid', 
                     help='dirichlet parameter to control non-iidness of dataset;',
                     type=float,
