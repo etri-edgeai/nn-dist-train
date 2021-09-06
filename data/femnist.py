@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import torch.utils.data as data
 
-__all__ = ['load_femnist']
+__all__ = ['load_federated_emnist']
 
 logging.basicConfig()
 logger = logging.getLogger()
@@ -67,9 +67,9 @@ def _get_dataloader(data_dir, train_bs, test_bs, client_idx=None):
     return train_dl, test_dl
 
 
-def load_femnist(args):
+def load_federated_emnist(args):
     if (not os.path.isfile(os.path.join(args.data_dir, DEFAULT_TRAIN_FILE))) or (not  os.path.isfile(os.path.join(args.data_dir, DEFAULT_TEST_FILE))):
-        os.system('bash ./data_utils/download_scripts/download_EMNIST.sh')
+        os.system('bash ./data/scripts/download_emnist.sh')
         
     # client ids
     train_file_path = os.path.join(args.data_dir, DEFAULT_TRAIN_FILE)
@@ -100,14 +100,14 @@ def load_femnist(args):
                 data.ConcatDataset(
                     list(dl.dataset for dl in list(train_data_local_dict.values()))
                 ),
-                args.batch_size=args.batch_size, shuffle=True)
+                batch_size=args.batch_size, shuffle=True)
     train_data_num = len(train_data_global.dataset)
     
     test_data_global = data.DataLoader(
                 data.ConcatDataset(
                     list(dl.dataset for dl in list(test_data_local_dict.values()) if dl is not None)
                 ),
-                args.batch_size=args.batch_size, shuffle=True)
+                batch_size=args.batch_size, shuffle=True)
     test_data_num = len(test_data_global.dataset)
     
     # class number
