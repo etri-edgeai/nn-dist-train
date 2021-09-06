@@ -10,16 +10,16 @@ __all__ = ['dirichlet_dataloader']
 
 
 def _get_mean_std(dataset):
-    if dataset == 'dirichlet-cifar10':
+    if dataset == 'dirichlet_cifar10':
         mean = [0.4914, 0.4822, 0.4465]
         std = [0.2023, 0.1994, 0.2010]
-    elif dataset == 'dirichlet-cifar100':
+    elif dataset == 'dirichlet_cifar100':
         mean = [0.5071, 0.4865, 0.4409]
         std = [0.2673, 0.2564, 0.2762]
-    elif dataset == 'dirichlet-mnist':
+    elif dataset == 'dirichlet_mnist':
         mean = [0.5]
         std = [0.5]
-    elif dataset == 'dirichlet-fmnist':
+    elif dataset == 'dirichlet_fmnist':
         mean = [0.5]
         std = [0.5]
     else:
@@ -32,7 +32,7 @@ def _transform_setter(dataset=str):
     mean, std = _get_mean_std(dataset=dataset)
     
     # train, test augmentation
-    if dataset == 'dirichlet-mnist' or dataset == 'dirichlet-fmnist':
+    if dataset == 'dirichlet_mnist' or dataset == 'dirichlet_fmnist':
         train_transforms = transforms.Compose([
             transforms.RandomResizedCrop((32, 32)),
             transforms.ToTensor(),
@@ -130,22 +130,22 @@ def dirichlet_dataloader(args):
         os.makedirs(root)
         
     train_transforms, test_transforms = _transform_setter(dataset=args.dataset)
-    if args.dataset == 'dirichlet-cifar10':
+    if args.dataset == 'dirichlet_cifar10':
         _trainset = datasets.CIFAR10(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.CIFAR10(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 10
         
-    elif args.dataset == 'dirichlet-cifar100':
+    elif args.dataset == 'dirichlet_cifar100':
         _trainset = datasets.CIFAR100(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.CIFAR100(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 100
         
-    elif args.dataset == 'dirichlet-mnist':
+    elif args.dataset == 'dirichlet_mnist':
         _trainset = datasets.MNIST(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.MNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 10
         
-    elif args.dataset == 'dirichlet-fmnist':
+    elif args.dataset == 'dirichlet_fmnist':
         _trainset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 10

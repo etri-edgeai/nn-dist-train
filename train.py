@@ -19,7 +19,7 @@ from train_tools.client_opt import client_opt
 from train_tools.server_opt import server_opt
 
 
-DATASET = {}
+DATASET = {'dirichlet_cifar10': load_dirichlet_data, 'dirichlet_cifar100': load_dirichlet_data, 'dirichlet_mnist': load_dirichlet_data, 'dirichlet_fmnist': load_dirichlet_data, 'femnist': load_femnist}
 MODEL = {}
 
 def _get_args():
@@ -37,10 +37,7 @@ def _get_args():
 
 def _make_dataloader(args):
     # create dataloader
-    if 'dirichlet' in args.dataset:
-        client_loader, dataset_sizes = dirichlet_dataloader(args)
-    else:
-        client_loader, dataset_sizes = DATASET[args.dataset](args) 
+    client_loader, dataset_sizes = DATASET[args.dataset](args) 
     
     return client_loader, dataset_sizes
     
