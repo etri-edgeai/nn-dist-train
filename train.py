@@ -18,9 +18,9 @@ from models import *
 from train_tools.client_opt import client_opt
 from train_tools.server_opt import server_opt
 
-
-DATASET = {'dirichlet_cifar10': load_dirichlet_data, 'dirichlet_cifar100': load_dirichlet_data, 'dirichlet_mnist': load_dirichlet_data, 'dirichlet_fmnist': load_dirichlet_data, 'femnist': load_femnist}
+DATASET = {'dirichlet_cifar10': load_dirichlet_data, 'dirichlet_cifar100': load_dirichlet_data, 'dirichlet_mnist': load_dirichlet_data, 'dirichlet_fmnist': load_dirichlet_data, 'femnist': load_federated_emnist, 'cifar100': load_federated_cifar100}
 MODEL = {}
+
 
 def _get_args():
     # get argument for training
@@ -33,13 +33,6 @@ def _get_args():
     args, log_pd = set_path(args)
     
     return args, log_pd
-
-
-def _make_dataloader(args):
-    # create dataloader
-    client_loader, dataset_sizes = DATASET[args.dataset](args) 
-    
-    return client_loader, dataset_sizes
     
     
 def _make_model(args):
@@ -72,7 +65,8 @@ def _make_model(args):
 def train():
     args, log_pd = _get_args()
     
-    client_loader, dataset_sizes, args = _make_dataloader(args)
+    # create dataloader
+    client_loader, dataset_sizes = DATASET[args.dataset](args) 
     
     model, model, weight, momentum = _make_model(args)
 
