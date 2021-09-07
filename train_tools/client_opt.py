@@ -8,7 +8,7 @@ __all__ = ['client_opt']
 
 
 CRITERION = {'ce': cross_entropy}
-OPTIMIZER = {}
+OPTIMIZER = {'sgd': sgd}
 CLSCHEDULER = {}
 
 
