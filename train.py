@@ -19,7 +19,7 @@ from train_tools.server_opt import server_opt
 
 DATASET = {'dirichlet_cifar10': load_dirichlet_data, 'dirichlet_cifar100': load_dirichlet_data, 'dirichlet_mnist': load_dirichlet_data, 'dirichlet_fmnist': load_dirichlet_data, 'femnist': load_federated_emnist, 'cifar100': load_federated_cifar100, 'landmark_g23k': load_federated_landmarks_g23k, 'landmark_g160k': load_federated_landmarks_g160k, 'synthetic': load_federated_synthetic}
 
-MODEL = {'lenet': LeNet, 'lenet_container': LeNetContainer}
+MODEL = {'lenet': LeNet, 'lenet_container': LeNetContainer, 'resnet8': resnet8}
 
 
 def _get_args():
