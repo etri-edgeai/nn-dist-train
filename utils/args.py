@@ -122,7 +122,7 @@ def parse_args():
                     default=0.0)
     parser.add_argument('--nesterov',
                     help='nesterov switch for local momentum',
-                    action='store_true')
+                    action='store_false')
     parser.add_argument('--local-momentum',
                     help='whether to use momentum in local optimizers;',
                     type=float,

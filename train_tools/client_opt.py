@@ -3,6 +3,7 @@ import torch
 import itertools
 from utils.util import gpu_to_cpu, cpu_to_gpu
 from .criterion import cross_entropy
+from .optimizer import sgd, apply_local_momentum
 
 __all__ = ['client_opt']
 
@@ -25,10 +26,6 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     num_clients = CLSCHEDULER[args.cl_scheduler](round(float(eval(args.clients_per_round))), rounds, args)
 #     num_clients = uniform(round(float(eval(args.clients_per_round))), rounds, args)
 
-    # regularization
-    momentum = args.local_momentum
-    # only use nesterov True update
-    nesterov = True
     wd = args.wd
     mu = args.mu
     
@@ -36,7 +33,6 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     selected_clients = client_selection(clients, num_clients, args, client_datasize)
     print('[%s algorithm] %s clients are selected' % (args.algorithm, selected_clients))
     
-#     prev_momentum = copy.deepcopy(client_momentum)
     for client in set(selected_clients):
         # load client weights
         client_weight[client] = cpu_to_gpu(client_weight[client], args.device)
@@ -78,12 +74,15 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
                         model = fedprox(model, mu, server_weight)
                         server_weight = gpu_to_cpu(server_weight)
                     
-                    if momentum:
-                        model, client_momentum = apply_local_momentum(model, momentum, nesterov, client_momentum, client, args.device)
+                    if args.local_momentum:
+                        model, client_momentum = apply_local_momentum(args, model, client, client_momentum)
                         
                     model = optimizer(model, lr)
                     
         # after local training
         client_weight[client] = gpu_to_cpu(copy.deepcopy(model.state_dict()))
-
-    return client_weight, selected_clients, client_momentum
+    
+    weight['client'] = client_weight
+    momentum['client'] = client_momentum
+    
+    return weight, momentum, selected_clients
