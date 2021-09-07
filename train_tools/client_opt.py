@@ -1,11 +1,11 @@
 import copy
 import torch
-import itertools
 from utils.util import gpu_to_cpu, cpu_to_gpu
 from .criterion import cross_entropy
 from .optimizer import sgd, apply_local_momentum
 from .regularizer import weight_decay, fedprox
 from .scheduler import multistep_lr_scheduler, cosine_lr_scheduler
+from .client_selection import client_selection
 
 __all__ = ['client_opt']
 
@@ -25,8 +25,7 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     optimizer = OPTIMIZER[args.local_optimizer]
     optimizer = SCHEDULER[args.scheduler](args, optimizer, rounds)
     
-    clients = client_loader['train'].keys()
-    selected_clients = client_selection(clients, num_clients, args, client_datasize)
+    selected_clients = client_selection(args, client_datasize)
     print('[%s algorithm] %s clients are selected' % (args.algorithm, selected_clients))
     
     for client in set(selected_clients):
@@ -48,27 +47,26 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
                         p.grad.detach_()
                         p.grad.zero_()
                 
-                with torch.set_grad_enabled(True):
-                    # Forward pass
-                    pred  = model(inputs)
-                    loss = criterion(pred, labels, args.device)
+                # Forward pass
+                pred  = model(inputs)
+                loss = criterion(pred, labels, args.device)
 
-                    # Backward pass (compute the gradient graph)
-                    loss.backward()
-                    
-                    # regularization term
-                    if args.wd:
-                        model = weight_decay(model, args.wd)
-                    # fedprox algorithm
-                    if args.mu:
-                        server_weight = cpu_to_gpu(server_weight, args.device)
-                        model = fedprox(model, mu, server_weight)
-                        server_weight = gpu_to_cpu(server_weight)
-                    # sgd with momentum
-                    if args.local_momentum:
-                        model, client_momentum = apply_local_momentum(args, model, client, client_momentum)
-                        
-                    model = optimizer(model, lr)
+                # Backward pass (compute the gradient graph)
+                loss.backward()
+
+                # regularization term
+                if args.wd:
+                    model = weight_decay(model, args.wd)
+                # fedprox algorithm
+                if args.mu:
+                    server_weight = cpu_to_gpu(server_weight, args.device)
+                    model = fedprox(model, mu, server_weight)
+                    server_weight = gpu_to_cpu(server_weight)
+                # sgd with momentum
+                if args.local_momentum:
+                    model, client_momentum = apply_local_momentum(args, model, client, client_momentum)
+
+                model = optimizer(model, lr)
                     
         # after local training
         client_weight[client] = gpu_to_cpu(copy.deepcopy(model.state_dict()))

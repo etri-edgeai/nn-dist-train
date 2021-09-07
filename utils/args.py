@@ -35,7 +35,7 @@ def parse_args():
                     help='name of dataset;',
                     type=str,
                     required=True,
-                    choices=['dirichlet-mnist', 'dirichlet-cifar10', 'dirichlet-cifar100', 'dirichlet-fmnist', 'emnist', 'fed-cifar100', 'synthetic', 'landmark-g23k', 'landmark-g160k'])
+                    choices=['dirichlet-mnist', 'dirichlet-cifar10', 'dirichlet-cifar100', 'dirichlet-fmnist', 'femnist', 'cifar100', 'synthetic', 'landmark_g23k', 'landmark_g160k'])
     parser.add_argument('--data-dir', 
                     help='dir for dataset;',
                     type=str,
@@ -78,7 +78,8 @@ def parse_args():
     parser.add_argument('--algorithm',
                     help='which algorithm to select clients;',
                     type=str,
-                    default='fedavg')
+                    default='fedavg',
+                    chocies=['fedavg', 'fedprox', 'fedavg_pdp'])
     parser.add_argument('--num-rounds',
                     help='number of rounds to simulate;',
                     type=int,
