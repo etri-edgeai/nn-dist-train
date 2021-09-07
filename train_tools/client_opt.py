@@ -5,13 +5,14 @@ from utils.util import gpu_to_cpu, cpu_to_gpu
 from .criterion import cross_entropy
 from .optimizer import sgd, apply_local_momentum
 from .regularizer import weight_decay, fedprox
+from .scheduler import multistep_lr_scheduler
 
 __all__ = ['client_opt']
 
 
 CRITERION = {'ce': cross_entropy}
 OPTIMIZER = {'sgd': sgd}
-CLSCHEDULER = {}
+SCHEDULER = {'multistep': multistep_lr_scheduler}
 
 
 # train local clients
@@ -22,11 +23,8 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     
     criterion = CRITERION[args.local_criterion]
     optimizer = OPTIMIZER[args.local_optimizer]
+    optimizer = SCHEDULER[args.scheduler](args, optimizer, rounds)
     
-    lr = scheduler(args.local_lr, rounds, args.lr_decay, [int(epo) for epo in args.milestones.split(',')], args.sch_type)
-    num_clients = CLSCHEDULER[args.cl_scheduler](round(float(eval(args.clients_per_round))), rounds, args)
-#     num_clients = uniform(round(float(eval(args.clients_per_round))), rounds, args)
-
     clients = client_loader['train'].keys()
     selected_clients = client_selection(clients, num_clients, args, client_datasize)
     print('[%s algorithm] %s clients are selected' % (args.algorithm, selected_clients))
@@ -35,11 +33,6 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
         # load client weights
         client_weight[client] = cpu_to_gpu(client_weight[client], args.device)
         model.load_state_dict(client_weight[client])
-        if args.logit_distillation:
-            tmp_model = copy.deepcopy(model)
-            tmp_model.eval()
-            for param in tmp_model.parameters():
-                param.requires_grad = False
         
         # local training
         model.train()

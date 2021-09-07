@@ -127,18 +127,19 @@ def parse_args():
                     help='whether to use momentum in local optimizers;',
                     type=float,
                     default=0.9)
+    parser.add_argument('--scheduler',
+                    help= 'choose the scheduler type',
+                    type= str,
+                    default='multistep',
+                    choices=['multistep'])
     parser.add_argument('--lr-decay',
-                    help = 'learning rate decay',
-                    type = float,
-                    default = 0.1)
+                    help='learning rate decay',
+                    type=float,
+                    default=0.1)
     parser.add_argument('--milestones',
-                    help= 'milestones for step scheduler',
-                    type = str,
-                    default = '50,75')
-    parser.add_argument('--sch-type',
-                       help = 'scheduler for local client learning rate',
-                       type=str,
-                       default='uniform')
+                    help='milestones for step scheduler',
+                    type=str,
+                    default='50,75')
     
     args = parser.parse_args()
     args = _align_args(args)
