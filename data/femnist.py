@@ -8,6 +8,7 @@ import torch.utils.data as data
 
 __all__ = ['load_federated_emnist']
 
+
 logging.basicConfig()
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

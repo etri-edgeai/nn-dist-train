@@ -9,6 +9,7 @@ import torchvision.transforms as transforms
 
 __all__ = ['load_federated_cifar100']
 
+
 logging.basicConfig()
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
