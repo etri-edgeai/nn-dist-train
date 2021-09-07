@@ -12,7 +12,7 @@ __all__ = ['client_opt']
 
 CRITERION = {'ce': cross_entropy}
 OPTIMIZER = {'sgd': sgd}
-SCHEDULER = {'multistep': multistep_lr_scheduler, 'cosine': cosine_lr_scheduler }
+SCHEDULER = {'multistep': multistep_lr_scheduler, 'cosine': cosine_lr_scheduler}
 
 
 # train local clients

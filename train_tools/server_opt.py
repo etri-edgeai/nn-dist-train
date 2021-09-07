@@ -1,7 +1,7 @@
 import copy
 import torch
 from utils.util import gpu_to_cpu, cpu_to_gpu
-from .optimizer import pseudo_sgd
+from .optimizer import pseudo_sgd, apply_global_momentum
 
 __all__ = ['server_opt']
 
