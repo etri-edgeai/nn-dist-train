@@ -4,7 +4,7 @@ import itertools
 from utils.util import gpu_to_cpu, cpu_to_gpu
 from .criterion import cross_entropy
 from .optimizer import sgd, apply_local_momentum
-from .regularizer import weight_decay
+from .regularizer import weight_decay, fedprox
 
 __all__ = ['client_opt']
 
@@ -27,8 +27,6 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     num_clients = CLSCHEDULER[args.cl_scheduler](round(float(eval(args.clients_per_round))), rounds, args)
 #     num_clients = uniform(round(float(eval(args.clients_per_round))), rounds, args)
 
-    mu = args.mu
-    
     clients = client_loader['train'].keys()
     selected_clients = client_selection(clients, num_clients, args, client_datasize)
     print('[%s algorithm] %s clients are selected' % (args.algorithm, selected_clients))
@@ -68,12 +66,12 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
                     # regularization term
                     if args.wd:
                         model = weight_decay(model, args.wd)
-                        
-                    if mu and not sub_model:
+                    # fedprox algorithm
+                    if args.mu:
                         server_weight = cpu_to_gpu(server_weight, args.device)
                         model = fedprox(model, mu, server_weight)
                         server_weight = gpu_to_cpu(server_weight)
-                    
+                    # sgd with momentum
                     if args.local_momentum:
                         model, client_momentum = apply_local_momentum(args, model, client, client_momentum)
                         

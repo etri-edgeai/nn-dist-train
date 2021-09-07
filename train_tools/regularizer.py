@@ -1,7 +1,6 @@
 import torch
-import copy
 
-__all__ = ['weight_decay']
+__all__ = ['weight_decay', 'fedprox']
 
 
 def weight_decay(model, lamb):
@@ -9,4 +8,11 @@ def weight_decay(model, lamb):
         if p.grad is not None:
             p.grad.add_(p.data, alpha=lamb)
             
+    return model
+
+
+def fedprox(model, mu, server_weight):
+    for name, p in model.named_parameters():
+        p.grad.add_(torch.abs(p.data - server_weight[name].data).mul(mu))
+        
     return model
