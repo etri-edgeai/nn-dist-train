@@ -79,7 +79,7 @@ def train():
         weight, momentum, selected_clients = client_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, r)
         
         # aggregate the updates and update the server
-        model, weight, momentum = server_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, selected_clients, rounds=r)
+        weight, momentum, model = server_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, selected_clients, rounds=r)
         
         # update the history of selected_clients
         for sc in selected_clients: 
@@ -87,7 +87,6 @@ def train():
         
         # evaluate the generalization of the server model
         mean, std, min, max = test(args, model, client_loader, dataset_sizes)
-        print('Test Accuracy: %.2f' % mean)
         
         test_acc.append(mean)
         if mean >= best_acc[0]: 
@@ -104,8 +103,7 @@ def train():
     # save file
     state={}
     state['checkpoint'] = weight['server']
-    torch.save(state, args.checkpoint_path)
-    
+    torch.save(state, args.checkpoint_path)    
     print('Successfully saved' + checkpoint_path)
     print('Best Test Accuracy: %.2f' % best_acc[0])
            
@@ -136,6 +134,8 @@ def test(args, model, client_loader, dataset_sizes):
     min = round(np.min(accuracy), 2)
     max = round(np.max(accuracy), 2)
 
+    print('Test Accuracy: %.2f' % mean)
+    
     return mean, std, min, max
 
     

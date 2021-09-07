@@ -151,12 +151,10 @@ def parse_args():
 def _align_args(args):
     # align other argument according to args.algorithm
     if args.algorithm == 'fedavg':
-        args.mab_decay = 1.0
         args.mu = 0.0
         args.full_part = True
         
-    elif args.algorithm == 'fedavg-conv':
-        args.mab_decay = 1.0
+    elif args.algorithm == 'fedavg_pdp':
         args.mu = 0.0
         args.full_part = False
         
