@@ -2,7 +2,7 @@ import random
 import torch
 import numpy as np
 
-__all__ = ['fix_seed', 'set_path']
+__all__ = ['fix_seed', 'set_path', 'cpu_to_gpu', 'gpu_to_cpu']
 
 
 def fix_seed(seed):
@@ -40,4 +40,15 @@ def set_path(args):
     log_pd = pd.DataFrame(np.zeros([args.num_rounds + 1, len(log_columns)]), columns = log_columns)
 
     return args, log_pd
+
+
+def cpu_to_gpu(current_state, device):
+    for k, v in current_state.items():
+        current_state[k] = v.to(device)
+    return current_state
     
+
+def gpu_to_cpu(current_state):
+    for k, v in current_state.items():
+        current_state[k] = v.cpu()
+    return current_state
