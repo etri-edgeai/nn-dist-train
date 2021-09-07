@@ -5,14 +5,14 @@ from utils.util import gpu_to_cpu, cpu_to_gpu
 from .criterion import cross_entropy
 from .optimizer import sgd, apply_local_momentum
 from .regularizer import weight_decay, fedprox
-from .scheduler import multistep_lr_scheduler
+from .scheduler import multistep_lr_scheduler, cosine_lr_scheduler
 
 __all__ = ['client_opt']
 
 
 CRITERION = {'ce': cross_entropy}
 OPTIMIZER = {'sgd': sgd}
-SCHEDULER = {'multistep': multistep_lr_scheduler}
+SCHEDULER = {'multistep': multistep_lr_scheduler, 'cosine': cosine_lr_scheduler }
 
 
 # train local clients

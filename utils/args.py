@@ -131,7 +131,7 @@ def parse_args():
                     help= 'choose the scheduler type',
                     type= str,
                     default='multistep',
-                    choices=['multistep'])
+                    choices=['multistep', 'cosine'])
     parser.add_argument('--lr-decay',
                     help='learning rate decay',
                     type=float,
