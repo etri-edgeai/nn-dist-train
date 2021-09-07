@@ -1,13 +1,13 @@
 import copy
 import torch
 import itertools
-
 from utils.util import gpu_to_cpu, cpu_to_gpu
+from .criterion import cross_entropy
 
 __all__ = ['client_opt']
 
 
-CRITERION = {}
+CRITERION = {'ce': cross_entropy}
 OPTIMIZER = {}
 CLSCHEDULER = {}
 
@@ -17,9 +17,9 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     # argument for training clients
     server_weight, client_weight = weight['server'], weight['client']
     client_momentum = momentum['client']
-    num_epochs = args.num_epochs
-    optimizer = OPTIMIZER[args.local_optimizer]
+    
     criterion = CRITERION[args.local_criterion]
+    optimizer = OPTIMIZER[args.local_optimizer]
     
     lr = scheduler(args.local_lr, rounds, args.lr_decay, [int(epo) for epo in args.milestones.split(',')], args.sch_type)
     num_clients = CLSCHEDULER[args.cl_scheduler](round(float(eval(args.clients_per_round))), rounds, args)
@@ -49,10 +49,11 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
         
         # local training
         model.train()
-        for epoch in range(num_epochs):
+        for epoch in range(args.num_epochs):
             for ind, (inputs, labels) in enumerate(client_loader['train'][client]):
                 # more develpment required
-                inputs, labels = input_reg(inputs, labels, args.device)
+                inputs = inputs.to(args.device)
+                labels = labels.to(args.device)
 
                 # optimizer.zero_grad()
                 for p in model.parameters():
@@ -63,7 +64,7 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
                 with torch.set_grad_enabled(True):
                     # Forward pass
                     pred  = model(inputs)
-                    loss = criterion(pred, labels, args.device, args.num_classes, args.smoothing, args.temperature, args.tcp_aware)
+                    loss = criterion(pred, labels, args.device)
 
                     # Backward pass (compute the gradient graph)
                     loss.backward()
