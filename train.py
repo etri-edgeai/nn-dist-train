@@ -15,7 +15,7 @@ from utils.device import gpu_to_cpu, cpu_to_gpu
 from utils.util import fix_seed, set_path
 from data import dirichlet_dataloader
 from models import *
-from train_tools.client_opt import client_opt
+from train_tools import client_opt
 from train_tools.server_opt import server_opt
 
 DATASET = {'dirichlet_cifar10': load_dirichlet_data, 'dirichlet_cifar100': load_dirichlet_data, 'dirichlet_mnist': load_dirichlet_data, 'dirichlet_fmnist': load_dirichlet_data, 'femnist': load_federated_emnist, 'cifar100': load_federated_cifar100, 'landmark_g23k': load_federated_landmarks_g23k, 'landmark_g160k': load_federated_landmarks_g160k, 'synthetic': load_federated_synthetic}
@@ -78,7 +78,7 @@ def train():
     # Federated Learning Pipeline
     for r in tqdm(range(args.num_rounds)):
         # client selection and updated the selected clients
-        weight, momentum, selected_clients = client_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, rounds=r)
+        weight, momentum, selected_clients = client_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, r)
         
         # aggregate the updates and update the server
         model, weight, momentum = server_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, selected_clients, rounds=r)
