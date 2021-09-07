@@ -1,3 +1,4 @@
 from .dirichlet_data import load_dirichlet_data
 from .femnist import load_femnist
 from .cifar100 import load_federated_cifar100
+from .landmakr import load_federated_landmarks_g23k, load_federated_landmarks_g160k
