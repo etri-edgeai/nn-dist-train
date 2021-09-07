@@ -2,6 +2,8 @@ import copy
 import torch
 import itertools
 
+from utils.util import gpu_to_cpu, cpu_to_gpu
+
 __all__ = ['client_opt']
 
 
