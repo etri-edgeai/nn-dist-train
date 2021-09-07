@@ -11,7 +11,7 @@ import itertools
 from tqdm import tqdm
 
 from utils.args import parse_args
-from utils.util import fix_seed, set_path, gpu_to_cpu, cpu_to_gpu
+from utils.util import fix_seed, set_path, gpu_to_cpu, cpu_to_gpu, save_checkpoint
 from data import load_dirichlet_data, load_femnist, load_federated_cifar100, load_federated_landmarks_g23k, load_federated_landmarks_g160k, load_federated_synthetic
 from models import *
 from train_tools import client_opt
@@ -100,15 +100,12 @@ def train():
     selected_clients_plotter(selected_clients_num, args)
     test_acc_plotter(test_acc, args)
     
-    # save file
-    state={}
-    state['checkpoint'] = weight['server']
-    torch.save(state, args.checkpoint_path)    
-    print('Successfully saved' + checkpoint_path)
-    print('Best Test Accuracy: %.2f' % best_acc[0])
+    # save checkpoint
+    save_checkpoint(args, weight['server'])
            
     log_pd.loc[args.num_rounds] = best_acc
     log_pd.to_csv(args.log_path)
+    print('Best Test Accuracy: %.2f' % best_acc[0])
 
     
 def test(args, model, client_loader, dataset_sizes):

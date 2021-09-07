@@ -2,7 +2,7 @@ import copy
 import torch
 from utils.util import gpu_to_cpu, cpu_to_gpu
 
-__all__ = ['sgd', 'apply_local_momentum', 'pseudo_sgd']
+__all__ = ['sgd', 'apply_local_momentum', 'pseudo_sgd', 'apply_global_momentum']
 
     
 def sgd(model, lr):

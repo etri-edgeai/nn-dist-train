@@ -2,7 +2,7 @@ import random
 import torch
 import numpy as np
 
-__all__ = ['fix_seed', 'set_path', 'cpu_to_gpu', 'gpu_to_cpu']
+__all__ = ['fix_seed', 'set_path', 'cpu_to_gpu', 'gpu_to_cpu', 'save_checkpoint']
 
 
 def fix_seed(seed):
@@ -52,3 +52,11 @@ def gpu_to_cpu(current_state):
     for k, v in current_state.items():
         current_state[k] = v.cpu()
     return current_state
+
+
+def save_checkpoint(args, checkpoint):
+    # save file
+    state={}
+    state['checkpoint'] = weight['server']
+    torch.save(state, args.checkpoint_path)    
+    print('Successfully saved' + checkpoint_path)
