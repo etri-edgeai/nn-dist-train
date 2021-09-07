@@ -18,7 +18,8 @@ from train_tools import client_opt
 from train_tools.server_opt import server_opt
 
 DATASET = {'dirichlet_cifar10': load_dirichlet_data, 'dirichlet_cifar100': load_dirichlet_data, 'dirichlet_mnist': load_dirichlet_data, 'dirichlet_fmnist': load_dirichlet_data, 'femnist': load_federated_emnist, 'cifar100': load_federated_cifar100, 'landmark_g23k': load_federated_landmarks_g23k, 'landmark_g160k': load_federated_landmarks_g160k, 'synthetic': load_federated_synthetic}
-MODEL = {}
+
+MODEL = {'lenet': LeNet, 'lenet_container': LeNetContainer}
 
 
 def _get_args():
@@ -37,26 +38,24 @@ def _get_args():
 def _make_model(args):
     # create model for server and client
     model = MODEL[args.model](num_classes=args.num_classes, **args.model_kwargs) if args.model_kwargs else MODEL[args.model](num_classes=args.num_classes)
-    
-    # model to gpu
-    model = model.to(args.device)
         
     # initialize server and client model weights
-    server_weight = gpu_to_cpu(copy.deepcopy(model.state_dict()))
-    for k, v in server_weight.items():
-        server_weight[k] = v
+    server_weight = copy.deepcopy(model.state_dict())
     server_momentum = {}
     
     client_weight = {}
     client_momentum = {}
     for client in range(args.num_clients):
-        client_weight[client] = gpu_to_cpu(copy.deepcopy(model.state_dict()))
+        client_weight[client] = copy.deepcopy(model.state_dict())
         client_momentum[client] = {}
     
     weight = {'server': server_weight,
               'client': client_weight}
     momentum = {'server': server_momentum,
                 'client': client_momentum}
+    
+    # model to gpu
+    model = model.to(args.device)
     
     return model, weight, momentum
 
