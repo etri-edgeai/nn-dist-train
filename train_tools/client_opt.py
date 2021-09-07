@@ -4,6 +4,7 @@ import itertools
 from utils.util import gpu_to_cpu, cpu_to_gpu
 from .criterion import cross_entropy
 from .optimizer import sgd, apply_local_momentum
+from .regularizer import weight_decay
 
 __all__ = ['client_opt']
 
@@ -26,7 +27,6 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     num_clients = CLSCHEDULER[args.cl_scheduler](round(float(eval(args.clients_per_round))), rounds, args)
 #     num_clients = uniform(round(float(eval(args.clients_per_round))), rounds, args)
 
-    wd = args.wd
     mu = args.mu
     
     clients = client_loader['train'].keys()
@@ -66,8 +66,8 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
                     loss.backward()
                     
                     # regularization term
-                    if wd:
-                        model = weight_decay(model, wd)
+                    if args.wd:
+                        model = weight_decay(model, args.wd)
                         
                     if mu and not sub_model:
                         server_weight = cpu_to_gpu(server_weight, args.device)
