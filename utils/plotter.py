@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-__all__ = ['clients_data_num_plotter', 'test_acc_plotter']
+__all__ = ['clients_data_num_plotter', 'test_acc_plotter', 'selected_clients_plotter']
 
 
 def clients_data_num_plotter(args, clients_data_num):
@@ -56,4 +56,29 @@ def test_acc_plotter(args, test_acc):
     ax.set_xticks(x)
     
     f.savefig(args.img_path + '/test_acc.png', bbox_inches='tight')
+    plt.close()
+
+
+def selected_clients_plotter(args, selected_clients_num):
+    num_clients = args.num_clients
+    
+    x = range(num_clients)
+    labels = ['C{}'.format(number) for number in range(num_clients)]
+
+    f = plt.figure(figsize=(20,10))
+    plt.bar(x, selected_clients_num)
+    plt.axhline(args.num_rounds, x[0], x[-1], color='red')
+    
+    plt.rc('legend', fontsize=18)
+    plt.rc('xtick', labelsize=20)
+    plt.rc('ytick', labelsize=20)
+    ax = plt.subplot()
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    #plt.title('Dirichilet data distribution with non-iid {}'.format(non_iid))
+    #plt.xlabel('Clients')
+    #plt.ylabel('number of data')
+    plt.legend(loc='upper center', ncol=10, bbox_to_anchor= (0.5,-0.05))
+    
+    f.savefig(args.img_path + '/selected_clients_num.png', bbox_inches = 'tight')
     plt.close()
