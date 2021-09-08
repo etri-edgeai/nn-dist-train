@@ -4,7 +4,7 @@ import random
 import numpy as np
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, sampler, Subset
-from utils import data_plotter
+from utils import clients_data_num_plotter
 
 __all__ = ['dirichlet_dataloader']
 
@@ -119,7 +119,7 @@ def _divide_dataset(args, _trainset, num_classes=10):
     print('clients_data_num', [sum(clients_data_num[k]) for k in clients_data_num.keys()])
     
     # plot the data distribution
-    data_plotter(args, clients_data_num)
+    clients_data_num_plotter(args, clients_data_num)
 
     return clients_data
 

@@ -3,10 +3,10 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-__all__ = ['data_plotter']
+__all__ = ['clients_data_num_plotter', 'test_acc_plotter']
 
 
-def data_plotter(args, clients_data_num):
+def clients_data_num_plotter(args, clients_data_num):
     num_clients = len(clients_data_num)
     num_classes = len(clients_data_num[0])
     
@@ -41,4 +41,19 @@ def data_plotter(args, clients_data_num):
     
     f.savefig(args.img_path + '/clients_data_num.png', bbox_inches = 'tight')
     plt.show()
+    plt.close()
+
+
+def test_acc_plotter(args, test_acc):    
+    x = range(args.num_rounds)
+
+    f = plt.figure(figsize=(20,10))
+    plt.plot(x, test_acc)
+    
+    plt.rc('xtick', labelsize=20)
+    plt.rc('ytick', labelsize=20)
+    ax = plt.subplot()
+    ax.set_xticks(x)
+    
+    f.savefig(args.img_path + '/test_acc.png', bbox_inches='tight')
     plt.close()
