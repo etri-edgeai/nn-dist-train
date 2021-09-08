@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from utils.args import parse_args
 from utils.util import fix_seed, set_path, gpu_to_cpu, cpu_to_gpu, save_checkpoint
+from utils.plotter import test_acc_plotter
 from data import load_dirichlet_data, load_femnist, load_federated_cifar100, load_federated_landmarks_g23k, load_federated_landmarks_g160k, load_federated_synthetic
 from models import *
 from train_tools import client_opt
@@ -97,8 +98,8 @@ def train():
         log_pd.to_csv(args.log_path)        
 
     # plot the results
+    test_acc_plotter(args, test_acc)
     selected_clients_plotter(selected_clients_num, args)
-    test_acc_plotter(test_acc, args)
     
     # save checkpoint
     save_checkpoint(args, weight['server'])
