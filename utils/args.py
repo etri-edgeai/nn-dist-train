@@ -101,7 +101,7 @@ def parse_args():
     parser.add_argument('--num-epochs',
                     help='number of rounds to local update;',
                     type=int,
-                    default=1)
+                    default=5)
     # criterion
     parser.add_argument('--local-criterion',
                     help='criterion to use in local training;',
