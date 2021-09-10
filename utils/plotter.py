@@ -7,7 +7,8 @@ __all__ = ['clients_data_num_plotter', 'test_acc_plotter', 'selected_clients_plo
 
 
 def clients_data_num_plotter(args, clients_data_num):
-    assert args.dataset in ['dirichlet_cifar10', 'dirichlet_mnist']
+    if args.dataset not in ['dirichlet_cifar10', 'dirichlet_mnist']:
+        pass
     
     num_clients = len(clients_data_num)
     num_classes = len(clients_data_num[0])
