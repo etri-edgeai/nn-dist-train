@@ -35,7 +35,7 @@ def parse_args():
                     help='name of dataset;',
                     type=str,
                     required=True,
-                    choices=['dirichlet-mnist', 'dirichlet-cifar10', 'dirichlet-cifar100', 'dirichlet-fmnist', 'femnist', 'cifar100', 'synthetic', 'landmark_g23k', 'landmark_g160k'])
+                    choices=['dirichlet_mnist', 'dirichlet_cifar10', 'dirichlet_cifar100', 'dirichlet_fmnist', 'femnist', 'cifar100', 'synthetic', 'landmark_g23k', 'landmark_g160k'])
     parser.add_argument('--data-dir', 
                     help='dir for dataset;',
                     type=str,
@@ -55,6 +55,10 @@ def parse_args():
                     help='number of clients;',
                     type=int,
                     default=20)
+    parser.add_argument('--valid-size', 
+                    help='number of validation dataset;',
+                    type=int,
+                    default=0)
     
     # non-iidness
     parser.add_argument('--non-iid', 
@@ -79,7 +83,7 @@ def parse_args():
                     help='which algorithm to select clients;',
                     type=str,
                     default='fedavg',
-                    chocies=['fedavg', 'fedprox', 'fedavg_pdp'])
+                    choices=['fedavg', 'fedprox', 'fedavg_pdp'])
     parser.add_argument('--num-rounds',
                     help='number of rounds to simulate;',
                     type=int,
