@@ -23,7 +23,7 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
     
     criterion = CRITERION[args.local_criterion]
     optimizer = OPTIMIZER[args.local_optimizer]
-    optimizer = SCHEDULER[args.scheduler](args, optimizer, rounds)
+    lr = SCHEDULER[args.scheduler](args, rounds)
     
     selected_clients = client_selection(args, client_datasize)
     print('[%s algorithm] %s clients are selected' % (args.algorithm, selected_clients))

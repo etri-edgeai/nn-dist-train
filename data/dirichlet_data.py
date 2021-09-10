@@ -150,6 +150,7 @@ def load_federated_dirichlet_data(args):
         testset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 10
 
+    args.num_classes = num_classes
     clients_data = _divide_dataset(args, _trainset, num_classes=num_classes)
     
     # Generate the dataloader

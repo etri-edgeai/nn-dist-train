@@ -67,7 +67,7 @@ def train():
     # create dataloader
     client_loader, dataset_sizes, args = DATASET[args.dataset](args) 
     
-    model, model, weight, momentum = _make_model(args)
+    model, weight, momentum = _make_model(args)
 
     # evaluation metrics
     selected_clients_num = np.zeros(args.num_clients)
