@@ -6,7 +6,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, sampler, Subset
 from utils import clients_data_num_plotter
 
-__all__ = ['dirichlet_dataloader']
+__all__ = ['load_federated_dirichlet_data']
 
 
 def _get_mean_std(dataset):
@@ -124,7 +124,7 @@ def _divide_dataset(args, _trainset, num_classes=10):
     return clients_data
 
 
-def dirichlet_dataloader(args):
+def load_federated_dirichlet_data(args):
     root = args.data_dir
     if not os.path.isdir(root):
         os.makedirs(root)
@@ -160,11 +160,11 @@ def dirichlet_dataloader(args):
         
         if client_idx == 'valid':
             client_loader['valid'] = torch.utils.data.DataLoader(subset, batch_size=args.batch_size, shuffle=False, pin_memory=args.pin_memory, num_workers=args.num_workers)
-            dataset_sizes['valid'] = len(clients[client_idx])
+            dataset_sizes['valid'] = len(clients_data[client_idx])
             
         else:
             client_loader['train'][client_idx] = torch.utils.data.DataLoader(subset, batch_size=args.batch_size, shuffle=True, pin_memory=args.pin_memory, num_workers=args.num_workers)
-            dataset_sizes['train'][client_idx] = len(clients[client_idx])
+            dataset_sizes['train'][client_idx] = len(clients_data[client_idx])
                         
     client_loader['test'] = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, pin_memory=args.pin_memory, num_workers=args.num_workers)
     dataset_sizes['test'] = len(testset)
