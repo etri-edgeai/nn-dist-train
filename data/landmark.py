@@ -205,10 +205,11 @@ def load_federated_landmarks_g23k(args):
     test_files = _read_csv(fed_test_map_file)
 
     class_num = len(np.unique([item['class'] for item in train_files]))
+    args.num_classes = class_num
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))
     train_data_num = len(train_files)
 
-    train_data_global, test_data_global = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size)
+    train_data_global, test_data_global = _get_dataloader(os.path.join(args.data_dir, 'images'), train_files, test_files, args.batch_size, args.batch_size)
     # logging.info("train_dl_global number = " + str(len(train_data_global)))
     # logging.info("test_dl_global number = " + str(len(test_data_global)))
     test_data_num = len(test_files)
@@ -227,7 +228,7 @@ def load_federated_landmarks_g23k(args):
         # logging.info("client_idx = %d, local_sample_number = %d" % (client_idx, local_data_num))
 
         # training batch size = 64; algorithms batch size = 32
-        train_data_local, test_data_local = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size,
+        train_data_local, test_data_local = _get_dataloader(os.path.join(args.data_dir, 'images'), train_files, test_files, args.batch_size, args.batch_size,
                                                  dataidxs)
         # logging.info("client_idx = %d, batch_num_train_local = %d, batch_num_test_local = %d" % (
         #     client_idx, len(train_data_local), len(test_data_local)))
@@ -261,10 +262,11 @@ def load_federated_landmarks_g160k(args):
     test_files = _read_csv(fed_test_map_file)
 
     class_num = len(np.unique([item['class'] for item in train_files]))
+    args.num_classes = class_num
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))
     train_data_num = len(train_files)
 
-    train_data_global, test_data_global = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size)
+    train_data_global, test_data_global = _get_dataloader(os.path.join(args.data_dir, 'images'), train_files, test_files, args.batch_size, args.batch_size)
     # logging.info("train_dl_global number = " + str(len(train_data_global)))
     # logging.info("test_dl_global number = " + str(len(test_data_global)))
     test_data_num = len(test_files)
@@ -283,7 +285,7 @@ def load_federated_landmarks_g160k(args):
         # logging.info("client_idx = %d, local_sample_number = %d" % (client_idx, local_data_num))
 
         # training batch size = 64; algorithms batch size = 32
-        train_data_local, test_data_local = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size,
+        train_data_local, test_data_local = _get_dataloader(os.path.join(args.data_dir, 'images'), train_files, test_files, args.batch_size, args.batch_size,
                                                  dataidxs)
         # logging.info("client_idx = %d, batch_num_train_local = %d, batch_num_test_local = %d" % (
         #     client_idx, len(train_data_local), len(test_data_local)))

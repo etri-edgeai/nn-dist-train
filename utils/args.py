@@ -153,6 +153,12 @@ def parse_args():
 
 
 def _align_args(args):
+    # for multi step lr scheduler
+    iterations = args.milestones.split(',')
+    args.milestones = list([])
+    for it in iterations:
+        args.milestones.append(int(it))
+        
     # align other argument according to args.algorithm
     if args.algorithm == 'fedavg':
         args.mu = 0.0

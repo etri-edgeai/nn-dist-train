@@ -119,7 +119,8 @@ def load_federated_emnist(args):
     with h5py.File(train_file_path, 'r') as train_h5:
         class_num = len(np.unique([train_h5[_EXAMPLE][client_ids_train[idx]][_LABEL][0] for idx in range(DEFAULT_TRAIN_CLIENTS_NUM)]))
         logging.info("class_num = %d" % class_num)
-
+        args.num_classes = class_num
+        
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
     dataset_sizes = {'train': data_local_num_dict, 'test': test_data_num}
     

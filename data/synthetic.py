@@ -62,6 +62,7 @@ def load_federated_synthetic(args):
         test_data_num = len(test_data_global.dataset)
         data_local_num_dict = np.array([len(train_data_local_dict[i].dataset) for i in train_data_local_dict])
         class_num = 10
+        args.num_classes = class_num
 
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
     dataset_sizes = {'train': data_local_num_dict, 'test': test_data_num}
