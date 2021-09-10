@@ -30,6 +30,8 @@ def load_federated_synthetic(args):
         client_ids_test = test_data[_USERS]
         client_num = len(train_data[_USERS])
         
+        args.num_clients = client_num
+        
         full_x_train = torch.from_numpy(np.asarray([])).float()
         full_y_train = torch.from_numpy(np.asarray([])).long()
         full_x_test = torch.from_numpy(np.asarray([])).float()
@@ -64,4 +66,4 @@ def load_federated_synthetic(args):
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
     dataset_sizes = {'train': data_local_num_dict, 'test': test_data_num}
     
-    return client_loader, dataset_sizes
+    return client_loader, dataset_sizes, args

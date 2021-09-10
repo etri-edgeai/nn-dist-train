@@ -144,7 +144,6 @@ def _get_mapping_per_user(fn, args):
 
     data_local_num_dict = np.zeros(args.num_clients)
 
-
     mapping_per_user = collections.defaultdict(list)
     data_files = []
     net_dataidx_map = {}
@@ -167,7 +166,7 @@ def _get_mapping_per_user(fn, args):
 
 
 # for centralized training
-def _get_dataloader(dataset, datadir, train_files, test_files, train_bs, test_bs, dataidxs=None):
+def _get_dataloader(datadir, train_files, test_files, train_bs, test_bs, dataidxs=None):
     return _get_dataloader_Landmarks(datadir, train_files, test_files, train_bs, test_bs, dataidxs)
 
 
@@ -186,13 +185,19 @@ def _get_dataloader_Landmarks(datadir, train_files, test_files, train_bs, test_b
 
 
 def load_federated_landmarks_g23k(args):
-    fed_g23k_train_map_file = './data/landmark/data_user_dict/gld23k_user_dict_train.csv'
-    fed_g23k_test_map_file = './data/landmark/data_user_dict/gld23k_user_dict_test.csv'
+    args.data_dir = os.path.join(args.data_dir, 'landmark')
+    if not os.path.isdir(args.data_dir):
+        os.makedirs(args.data_dir)
+        
+    fed_g23k_train_map_file = os.path.join(args.data_dir, 'data_user_dict/gld23k_user_dict_train.csv')
+    fed_g23k_test_map_file = os.path.join(args.data_dir, 'data_user_dict/gld23k_user_dict_test.csv')
 
-    if (not os.path.isfile(os.path.join(args.data_dir, fed_g23k_train_map_file))) or (not os.path.isfile(os.path.join(args.ata_dir, fed_g23k_test_map_file))):
+    if (not os.path.isfile(fed_g23k_train_map_file)) or (not os.path.isfile(fed_g23k_test_map_file)):
         os.system('bash ./data/scripts/download_landmark.sh')
         
     client_number = 233
+    args.num_clients = 233
+    
     fed_train_map_file = fed_g23k_train_map_file
     fed_test_map_file = fed_g23k_test_map_file
         
@@ -203,7 +208,7 @@ def load_federated_landmarks_g23k(args):
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))
     train_data_num = len(train_files)
 
-    train_data_global, test_data_global = _get_dataloader(dataset, args.data_dir, train_files, test_files, args.batch_size, args.batch_size)
+    train_data_global, test_data_global = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size)
     # logging.info("train_dl_global number = " + str(len(train_data_global)))
     # logging.info("test_dl_global number = " + str(len(test_data_global)))
     test_data_num = len(test_files)
@@ -222,7 +227,7 @@ def load_federated_landmarks_g23k(args):
         # logging.info("client_idx = %d, local_sample_number = %d" % (client_idx, local_data_num))
 
         # training batch size = 64; algorithms batch size = 32
-        train_data_local, test_data_local = _get_dataloader(dataset, args.data_dir, train_files, test_files, args.batch_size, args.batch_size,
+        train_data_local, test_data_local = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size,
                                                  dataidxs)
         # logging.info("client_idx = %d, batch_num_train_local = %d, batch_num_test_local = %d" % (
         #     client_idx, len(train_data_local), len(test_data_local)))
@@ -232,17 +237,23 @@ def load_federated_landmarks_g23k(args):
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
     dataset_sizes = {'train': data_local_num_dict, 'test': test_data_num}
     
-    return client_loader, dataset_sizes
+    return client_loader, dataset_sizes, args
 
 
 def load_federated_landmarks_g160k(args):
-    fed_g160k_train_map_file = './data/landmark/data_user_dict/gld160k_user_dict_train.csv'
-    fed_g160k_map_file = './data/landmark/data_user_dict/gld160k_user_dict_test.csv'
+    args.data_dir = os.path.join(args.data_dir, 'landmark')
+    if not os.path.isdir(args.data_dir):
+        os.makedirs(args.data_dir)
+        
+    fed_g160k_train_map_file = os.path.join(args.data_dir, 'data_user_dict/gld160k_user_dict_train.csv')
+    fed_g160k_map_file = os.path.join(args.data_dir, 'data_user_dict/gld160k_user_dict_test.csv')
 
-    if (not os.isfile(os.path.join(args.data_dir, fed_g23k_train_map_file))) or (not os.isfile(os.path.join(args.data_dir, fed_g23k_test_map_file))):
+    if (not os.isfile(fed_g23k_train_map_file)) or (not os.isfile(fed_g23k_test_map_file)):
         os.system('bash ./data/scripts/download_landmark.sh')
 
     client_number = 1262 
+    args.num_clients = 1262
+    
     fed_train_map_file = fed_g160k_train_map_file
     fed_test_map_file = fed_g160k_map_file
         
@@ -253,7 +264,7 @@ def load_federated_landmarks_g160k(args):
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))
     train_data_num = len(train_files)
 
-    train_data_global, test_data_global = _get_dataloader(dataset, args.data_dir, train_files, test_files, args.batch_size, args.batch_size)
+    train_data_global, test_data_global = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size)
     # logging.info("train_dl_global number = " + str(len(train_data_global)))
     # logging.info("test_dl_global number = " + str(len(test_data_global)))
     test_data_num = len(test_files)
@@ -272,7 +283,7 @@ def load_federated_landmarks_g160k(args):
         # logging.info("client_idx = %d, local_sample_number = %d" % (client_idx, local_data_num))
 
         # training batch size = 64; algorithms batch size = 32
-        train_data_local, test_data_local = _get_dataloader(dataset, args.data_dir, train_files, test_files, args.batch_size, args.batch_size,
+        train_data_local, test_data_local = _get_dataloader(args.data_dir, train_files, test_files, args.batch_size, args.batch_size,
                                                  dataidxs)
         # logging.info("client_idx = %d, batch_num_train_local = %d, batch_num_test_local = %d" % (
         #     client_idx, len(train_data_local), len(test_data_local)))
@@ -282,4 +293,4 @@ def load_federated_landmarks_g160k(args):
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
     dataset_sizes = {'train': data_local_num_dict, 'test': test_data_num}
     
-    return client_loader, dataset_sizes
+    return client_loader, dataset_sizes, args

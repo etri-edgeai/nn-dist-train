@@ -69,6 +69,10 @@ def _get_dataloader(data_dir, train_bs, test_bs, client_idx=None):
 
 
 def load_federated_emnist(args):
+    args.data_dir = os.path.join(args.data_dir, 'femnist')
+    if not os.path.isdir(args.data_dir):
+        os.makedirs(args.data_dir)
+    
     if (not os.path.isfile(os.path.join(args.data_dir, DEFAULT_TRAIN_FILE))) or (not  os.path.isfile(os.path.join(args.data_dir, DEFAULT_TEST_FILE))):
         os.system('bash ./data/scripts/download_emnist.sh')
         
@@ -81,18 +85,17 @@ def load_federated_emnist(args):
         client_ids_train = list(train_h5[_EXAMPLE].keys())
         client_ids_test = list(test_h5[_EXAMPLE].keys())
 
+    args.num_clients = DEFAULT_TRAIN_CLIENTS_NUM
+    
     # local dataset
-    data_local_num_dict = np.zeros(args.num_clients)
+    data_local_num_dict = np.zeros(DEFAULT_TRAIN_CLIENTS_NUM)
     train_data_local_dict = dict()
     test_data_local_dict = dict()
 
     for client_idx in range(DEFAULT_TRAIN_CLIENTS_NUM):
         train_data_local, test_data_local = _get_dataloader(args.data_dir, args.batch_size, args.batch_size, client_idx)
-#         local_data_num = len(train_data_local) + len(test_data_local)
+        
         data_local_num_dict[client_idx] = len(train_data_local)
-        # logging.info("client_idx = %d, local_sample_number = %d" % (client_idx, local_data_num))
-        # logging.info("client_idx = %d, batch_num_train_local = %d, batch_num_test_local = %d" % (
-        #     client_idx, len(train_data_local), len(test_data_local)))
         train_data_local_dict[client_idx] = train_data_local
         test_data_local_dict[client_idx] = test_data_local
 

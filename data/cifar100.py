@@ -58,13 +58,11 @@ def _preprocess_cifar_img(img, train):
     return transoformed_img
 
 
-def _get_dataloader(data_dir, train_bs, test_bs, client_idx = None):
+def _get_dataloader(args, client_idx=None):
+    train_bs, test_bs = args.batch_size, args.batch_size
     
-    if (not os.path.isfile(os.path.join(data_dir, DEFAULT_TRAIN_FILE))) or (not os.path.isfile(os.path.join(data_dir, DEFAULT_TEST_FILE))):
-        os.system('bash ./data/scripts/download_cifar100.sh')
-        
-    train_h5 = h5py.File(os.path.join(data_dir, DEFAULT_TRAIN_FILE), 'r')
-    test_h5 = h5py.File(os.path.join(data_dir, DEFAULT_TEST_FILE), 'r')
+    train_h5 = h5py.File(os.path.join(args.data_dir, DEFAULT_TRAIN_FILE), 'r')
+    test_h5 = h5py.File(os.path.join(args.data_dir, DEFAULT_TEST_FILE), 'r')
     train_x = []
     train_y = []
     test_x = []
@@ -114,6 +112,13 @@ def _get_dataloader(data_dir, train_bs, test_bs, client_idx = None):
 
 
 def load_federated_cifar100(args):
+    args.data_dir = os.path.join(args.data_dir, 'federated_cifar100')
+    if not os.path.isdir(args.data_dir):
+        os.makedirs(args.data_dir)
+        
+    if (not os.path.isfile(os.path.join(args.data_dir, DEFAULT_TRAIN_FILE))) or (not os.path.isfile(os.path.join(args.data_dir, DEFAULT_TEST_FILE))):
+        os.system('bash ./data/scripts/download_cifar100.sh')
+        
     #client id list
     train_file_path = os.path.join(args.data_dir, DEFAULT_TRAIN_FILE)
     test_file_path = os.path.join(args.data_dir, DEFAULT_TEST_FILE)
@@ -122,14 +127,15 @@ def load_federated_cifar100(args):
         client_ids_train = list(train_h5[_EXAMPLE].keys())
         client_ids_test = list(test_h5[_EXAMPLE].keys())
     
+    args.num_clients = DEFAULT_TRAIN_CLIENTS_NUM
+    
     # get local dataset
-    data_local_num_dict = np.zeros(args.num_clients)
+    data_local_num_dict = np.zeros(DEFAULT_TRAIN_CLIENTS_NUM)
     train_data_local_dict = dict()
     test_data_local_dict = dict()
     
     for client_idx in range(DEFAULT_TRAIN_CLIENTS_NUM):
-        train_data_local, test_data_local = _get_dataloader(
-            args.data_dir, args.batch_size, args.batch_size, client_idx)
+        train_data_local, test_data_local = _get_dataloader(args, client_idx)
         local_data_num = len(train_data_local.dataset)
         data_local_num_dict[client_idx] = local_data_num
         logging.info("client_idx = %d, local_sample_number = %d" % (client_idx, local_data_num))
@@ -155,4 +161,4 @@ def load_federated_cifar100(args):
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
     dataset_sizes = {'train': data_local_num_dict, 'test': test_data_num}
     
-    return client_loader, dataset_sizes
+    return client_loader, dataset_sizes, args
