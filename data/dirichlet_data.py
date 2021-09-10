@@ -171,4 +171,4 @@ def load_federated_dirichlet_data(args):
     
     # client_loader: data loader of each client. type is dictionary
     # dataset_sizes: the number of data for each client. type is dictionary
-    return client_loader, dataset_sizes
+    return client_loader, dataset_sizes, args

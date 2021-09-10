@@ -35,7 +35,7 @@ def parse_args():
                     help='name of dataset;',
                     type=str,
                     required=True,
-                    choices=['dirichlet_mnist', 'dirichlet_cifar10', 'dirichlet_cifar100', 'dirichlet_fmnist', 'femnist', 'cifar100', 'synthetic', 'landmark_g23k', 'landmark_g160k'])
+                    choices=['dirichlet_mnist', 'dirichlet_cifar10', 'dirichlet_cifar100', 'dirichlet_fmnist', 'femnist', 'federated_cifar100', 'synthetic', 'landmark_g23k', 'landmark_g160k'])
     parser.add_argument('--data-dir', 
                     help='dir for dataset;',
                     type=str,
