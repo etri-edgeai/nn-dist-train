@@ -1,3 +1,3 @@
 #! /bin/bash
 
-python train.py --dataset 'landmark_g23k' --model 'resnet8' --clients-per-round 4
+python train.py --dataset 'dirichlet_mnist' --model 'lenet' --clients-per-round 4 --num-rounds 1

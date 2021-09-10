@@ -64,7 +64,7 @@ def parse_args():
     parser.add_argument('--non-iid', 
                     help='dirichlet parameter to control non-iidness of dataset;',
                     type=float,
-                    default=10.0)
+                    default=100.0)
     
     ##################### model #####################
     parser.add_argument('--model',
@@ -153,6 +153,9 @@ def parse_args():
 
 
 def _align_args(args):
+    # number of clients
+    assert args.num_clients >= args.clients_per_round
+    
     # for multi step lr scheduler
     iterations = args.milestones.split(',')
     args.milestones = list([])
