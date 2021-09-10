@@ -80,7 +80,7 @@ def train():
         weight, momentum, selected_clients = client_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, r)
         
         # aggregate the updates and update the server
-        weight, momentum, model = server_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, selected_clients, rounds=r)
+        weight, momentum, model = server_opt(args, client_loader, dataset_sizes['train'], model, weight, momentum, selected_clients)
         
         # update the history of selected_clients
         for sc in selected_clients: 

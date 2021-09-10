@@ -7,6 +7,8 @@ __all__ = ['clients_data_num_plotter', 'test_acc_plotter', 'selected_clients_plo
 
 
 def clients_data_num_plotter(args, clients_data_num):
+    assert args.dataset in ['dirichlet_cifar10', 'dirichlet_mnist']
+    
     num_clients = len(clients_data_num)
     num_classes = len(clients_data_num[0])
     
@@ -16,7 +18,11 @@ def clients_data_num_plotter(args, clients_data_num):
         
     x = range(num_clients)
     labels = ['C{}'.format(number) for number in range(num_clients)]
-    classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+    if args.dataset == 'dirichlet_cifar10':
+        classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+    else:
+        classes = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+        
     tmp = np.zeros(num_clients)
 
     f = plt.figure(figsize=(20,10))
