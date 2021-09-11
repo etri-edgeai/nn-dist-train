@@ -8,7 +8,9 @@ __all__ = ['client_selection']
 def client_selection(args, client_datasize=None):
     clients = range(client_datasize.size)
     
-    if args.algorithm in ['fedavg', 'fedavg_pdp']:
+    if args.algorithm == 'centralized':
+        selected_clients = clients
+    elif args.algorithm in ['fedavg', 'fedavg_pdp']:
         selected_clients = random.sample(clients, args.clients_per_round)
     elif args.algorithm == 'fedprox':
         weight_dist = [num / sum(client_datasize) for num in client_datasize]
