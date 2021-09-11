@@ -83,7 +83,7 @@ def parse_args():
                     help='which algorithm to select clients;',
                     type=str,
                     default='fedavg',
-                    choices=['fedavg', 'fedprox', 'fedavg_pdp'])
+                    choices=['centralized', 'fedavg', 'fedprox', 'fedavg_pdp'])
     parser.add_argument('--num-rounds',
                     help='number of rounds to simulate;',
                     type=int,
@@ -163,7 +163,13 @@ def _align_args(args):
         args.milestones.append(int(it))
         
     # align other argument according to args.algorithm
-    if args.algorithm == 'fedavg':
+    if args.algorithm == 'centralized':
+        args.num_clients = 1
+        args.clients_per_round = 1
+        args.num_epochs = 1
+        args.full_part = True
+    
+    elif args.algorithm == 'fedavg':
         args.mu = 0.0
         args.full_part = True
         
