@@ -105,13 +105,14 @@ def _divide_dataset(args, _trainset, num_classes=10):
 
                 tmp = diri_dis.sample()
                 for cls in total_data.keys():
-                    tmp_set = random.sample(total_data[cls], min(len(total_data[cls]), int(nums * tmp[int(cls)] / 15)))
+                    tmp_set = random.sample(total_data[cls], min(len(total_data[cls]), int(nums * tmp[int(cls)] / 10)))
 
                     if len(clients_data[client_idx]) + len(tmp_set) > nums:
                         tmp_set = tmp_set[:nums-len(clients_data[client_idx])]
+                        
                     clients_data[client_idx] += tmp_set
-
                     clients_data_num[client_idx][int(cls)] += len(tmp_set)
+                    
                     total_data[cls] = list(set(total_data[cls])-set(tmp_set))   
 
         remain = sum([len(d) for _, d in total_data.items()])
@@ -145,7 +146,7 @@ def load_federated_dirichlet_data(args):
         testset = datasets.MNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 10
         
-    elif args.dataset == 'dirichlet_fmnist':
+    elif args.dataset == 'dirichlet_fashion_mnist':
         _trainset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
         num_classes = 10
