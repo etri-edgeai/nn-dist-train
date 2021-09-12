@@ -35,7 +35,7 @@ def parse_args():
                     help='name of dataset;',
                     type=str,
                     required=True,
-                    choices=['dirichlet_mnist', 'dirichlet_cifar10', 'dirichlet_cifar100', 'dirichlet_fmnist', 'femnist', 'federated_cifar100', 'synthetic', 'landmark_g23k', 'landmark_g160k'])
+                    choices=['dirichlet_mnist', 'dirichlet_cifar10', 'dirichlet_cifar100', 'dirichlet_fashion_mnist', 'femnist', 'federated_cifar100', 'synthetic', 'landmark_g23k', 'landmark_g160k'])
     parser.add_argument('--data-dir', 
                     help='dir for dataset;',
                     type=str,
@@ -71,7 +71,7 @@ def parse_args():
                     help='name of model;',
                     type=str,
                     required=True,
-                    choices=['lenet', 'lenetcontainer', 'vgg11', 'vgg11-bn', 'vgg13', 'vgg13-bn', 'vgg16', 'vgg16-bn', 'vgg19', 'vgg19-bn', 'resnet8'])
+                    choices=['lenet', 'lenetcontainer', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19', 'vgg19_bn', 'resnet8'])
     # example : --model-kwargs num_classes=10
     parser.add_argument('--model-kwargs',
                         dest='model_kwargs',

@@ -11,14 +11,14 @@ import itertools
 from tqdm import tqdm
 
 from utils.args import parse_args
-from utils.util import fix_seed, set_path, gpu_to_cpu, cpu_to_gpu, save_checkpoint
+from utils.util import fix_seed, set_path, save_checkpoint
 from utils.plotter import test_acc_plotter, selected_clients_plotter
 from data import load_federated_dirichlet_data, load_federated_emnist, load_federated_cifar100, load_federated_landmarks_g23k, load_federated_landmarks_g160k, load_federated_synthetic
 from models import *
 from train_tools import client_opt
 from train_tools.server_opt import server_opt
 
-DATASET = {'dirichlet_cifar10': load_federated_dirichlet_data, 'dirichlet_cifar100': load_federated_dirichlet_data, 'dirichlet_mnist': load_federated_dirichlet_data, 'dirichlet_fmnist': load_federated_dirichlet_data, 'femnist': load_federated_emnist, 'federated_cifar100': load_federated_cifar100, 'landmark_g23k': load_federated_landmarks_g23k, 'landmark_g160k': load_federated_landmarks_g160k, 'synthetic': load_federated_synthetic}
+DATASET = {'dirichlet_cifar10': load_federated_dirichlet_data, 'dirichlet_cifar100': load_federated_dirichlet_data, 'dirichlet_mnist': load_federated_dirichlet_data, 'dirichlet_fashion_mnist': load_federated_dirichlet_data, 'femnist': load_federated_emnist, 'federated_cifar100': load_federated_cifar100, 'landmark_g23k': load_federated_landmarks_g23k, 'landmark_g160k': load_federated_landmarks_g160k, 'synthetic': load_federated_synthetic}
 
 MODEL = {'lenet': LeNet, 'lenet_container': LeNetContainer, 'resnet8': resnet8, 'vgg11': vgg11, 'vgg11_bn': vgg11_bn, 'vgg13': vgg13, 'vgg13_bn': vgg13_bn, 'vgg16': vgg16, 'vgg16_bn': vgg16_bn, 'vgg19': vgg19, 'vgg19_bn': vgg19_bn}
 
@@ -39,7 +39,7 @@ def _get_args():
 def _make_model(args):
     # create model for server and client
     model = MODEL[args.model](num_classes=args.num_classes, **args.model_kwargs) if args.model_kwargs else MODEL[args.model](num_classes=args.num_classes)
-        
+    
     # initialize server and client model weights
     server_weight = copy.deepcopy(model.state_dict())
     server_momentum = {}
@@ -49,14 +49,14 @@ def _make_model(args):
     for client in range(args.num_clients):
         client_weight[client] = copy.deepcopy(model.state_dict())
         client_momentum[client] = {}
+        
+    # model to gpu
+    model = model.to(args.device)
     
     weight = {'server': server_weight,
               'client': client_weight}
     momentum = {'server': server_momentum,
                 'client': client_momentum}
-    
-    # model to gpu
-    model = model.to(args.device)
     
     return model, weight, momentum
 
