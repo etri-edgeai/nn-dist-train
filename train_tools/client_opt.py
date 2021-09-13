@@ -60,7 +60,7 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
                 # fedprox algorithm
                 if args.mu:
                     server_weight = cpu_to_gpu(server_weight, args.device)
-                    model = fedprox(model, mu, server_weight)
+                    model = fedprox(model, args.mu, server_weight)
                     server_weight = gpu_to_cpu(server_weight)
                 # sgd with momentum
                 if args.local_momentum:

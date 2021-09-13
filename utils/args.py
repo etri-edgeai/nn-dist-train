@@ -179,6 +179,10 @@ def _align_args(args):
         
     elif args.algorithm == 'fedprox':
         assert args.mu != 0.0
+        if not args.exp_name:
+            args.exp_name = 'mu%s' % args.mu
+        else:
+            args.exp_name += '_mu%s' % args.mu
         args.full_part = False
     else:
         pass
