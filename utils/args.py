@@ -71,7 +71,7 @@ def parse_args():
                     help='name of model;',
                     type=str,
                     required=True,
-                    choices=['lenet', 'lenetcontainer', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19', 'vgg19_bn', 'resnet8'])
+                    choices=['fc', 'lenet', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn', 'vgg19', 'vgg19_bn', 'resnet8'])
     # example : --model-kwargs num_classes=10
     parser.add_argument('--model-kwargs',
                         dest='model_kwargs',
@@ -162,6 +162,10 @@ def _align_args(args):
     for it in iterations:
         args.milestones.append(int(it))
         
+    # align other argument according to args.dataset
+    if args.dataset == 'synthetic':
+        assert args.model == 'fc'
+    
     # align other argument according to args.algorithm
     if args.algorithm == 'centralized':
         args.num_clients = 1
