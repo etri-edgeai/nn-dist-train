@@ -46,8 +46,10 @@ def _get_dataloader(data_dir, train_bs, test_bs, client_idx=None):
 
     # load data in numpy format from h5 file
     train_x = np.vstack([train_h5[_EXAMPLE][client_id][_IMGAE][()] for client_id in train_ids])
+    train_x = np.expand_dims(train_x, axis=1)
     train_y = np.vstack([train_h5[_EXAMPLE][client_id][_LABEL][()] for client_id in train_ids]).squeeze()
     test_x = np.vstack([test_h5[_EXAMPLE][client_id][_IMGAE][()] for client_id in test_ids])
+    test_x = np.expand_dims(test_x, axis=1)
     test_y = np.vstack([test_h5[_EXAMPLE][client_id][_LABEL][()] for client_id in test_ids]).squeeze()
 
     # dataloader
@@ -126,4 +128,4 @@ def load_federated_emnist(args):
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
     dataset_sizes = {'train': data_local_num_dict, 'test': test_data_num}
     
-    return client_loader, dataset_sizes
+    return client_loader, dataset_sizes, args

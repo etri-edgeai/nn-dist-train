@@ -10,11 +10,15 @@ class LeNet(nn.Module):
         super(LeNet, self).__init__()
         self.conv1 = nn.Conv2d(in_channels, 20, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)
-        self.fc1 = nn.Linear(5*5*50, 500) if num_classes <= 100 else nn.Linear(53*53*50, 500)
+        if num_classes == 10 or num_classes == 100:
+            self.fc1 = nn.Linear(5*5*50, 500)
+        elif num_classes == 62: # federated emnist
+            self.fc1 = nn.Linear(4*4*50, 500)
+        else: # landmark
+            self.fc1 = nn.Linear(53*53*50, 500)
         self.fc2 = nn.Linear(500, num_classes)
         
     def forward(self, x):
-        print(x.size())
         x = self.conv1(x)
         x = F.max_pool2d(x, 2, 2)
         x = F.relu(x)
