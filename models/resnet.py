@@ -95,7 +95,7 @@ class Bottleneck(nn.Module):
 
     
 class ResNet(nn.Module):
-    def __init__(self, width, depth, num_classes, bottleneck=False):
+    def __init__(self, width, depth, in_channels, num_classes, bottleneck=False):
         super(ResNet, self).__init__()
         self.inplanes = 16 * width
         if bottleneck == True:
@@ -106,7 +106,7 @@ class ResNet(nn.Module):
             block = BasicBlock
         
         
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(in_channels, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.layer1 = self._make_layer(block, 16* width, n)
@@ -114,7 +114,6 @@ class ResNet(nn.Module):
         self.layer3 = self._make_layer(block, 64* width, n, stride=2)
         self.avgpool = nn.AdaptiveAvgPool2d(1)
         self.fc = nn.Linear(64 * width * block.expansion, num_classes)
-
 
     def _make_layer(self, block, planes, blocks, stride=1):
         downsample = None
@@ -134,7 +133,6 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-
         x = self.conv1(x)
         x = self.bn1(x)
 
@@ -164,11 +162,9 @@ class ResNet(nn.Module):
         return [bn1, bn2, bn3]
 
     def get_channel_num(self):
-
         return [16, 32, 64]
 
     def extract_feature(self, x, preReLU=True):
-
         x = self.conv1(x)
         x = self.bn1(x)
 
@@ -189,7 +185,7 @@ class ResNet(nn.Module):
         return out
 
 
-def resnet8(num_classes):
-    model = ResNet(width=1, depth=8, num_classes=num_classes, bottleneck=False)
+def resnet8(in_channels, num_classes):
+    model = ResNet(width=1, depth=8, in_channels=in_channels, num_classes=num_classes, bottleneck=False)
     
     return model
