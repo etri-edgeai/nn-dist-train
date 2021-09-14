@@ -1,7 +1,7 @@
 #! /bin/bash
 
-model="lenet"
-dataset="femnist"
+model="resnet8"
+dataset="federated_cifar100"
 algorithm="fedavg"
 non_iid="0.001"
 participation="2"

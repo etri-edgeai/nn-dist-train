@@ -13,14 +13,14 @@ from tqdm import tqdm
 from utils.args import parse_args
 from utils.util import fix_seed, set_path, save_checkpoint
 from utils.plotter import test_acc_plotter, selected_clients_plotter
-from data import load_federated_dirichlet_data, load_federated_emnist, load_federated_cifar100, load_federated_landmarks_g23k, load_federated_landmarks_g160k, load_federated_synthetic
+from data import *
 from models import *
 from train_tools import client_opt
 from train_tools.server_opt import server_opt
 
 DATASET = {'dirichlet_cifar10': load_federated_dirichlet_data, 'dirichlet_cifar100': load_federated_dirichlet_data, 'dirichlet_mnist': load_federated_dirichlet_data, 'dirichlet_fashion_mnist': load_federated_dirichlet_data, 'femnist': load_federated_emnist, 'federated_cifar100': load_federated_cifar100, 'landmark_g23k': load_federated_landmarks_g23k, 'landmark_g160k': load_federated_landmarks_g160k, 'synthetic': load_federated_synthetic}
 
-MODEL = {'lenet': LeNet, 'resnet8': resnet8, 'vgg11': vgg11, 'vgg11_bn': vgg11_bn, 'vgg13': vgg13, 'vgg13_bn': vgg13_bn, 'vgg16': vgg16, 'vgg16_bn': vgg16_bn, 'vgg19': vgg19, 'vgg19_bn': vgg19_bn}
+MODEL = {'fc': FC, 'lenet': LeNet, 'resnet8': resnet8, 'vgg11': vgg11, 'vgg11_bn': vgg11_bn, 'vgg13': vgg13, 'vgg13_bn': vgg13_bn, 'vgg16': vgg16, 'vgg16_bn': vgg16_bn, 'vgg19': vgg19, 'vgg19_bn': vgg19_bn}
 
 
 def _get_args():
