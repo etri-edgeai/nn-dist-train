@@ -19,7 +19,7 @@ def _get_mean_std(dataset):
     elif dataset == 'dirichlet_mnist':
         mean = [0.5]
         std = [0.5]
-    elif dataset == 'dirichlet_fmnist':
+    elif dataset == 'dirichlet_fashion_mnist':
         mean = [0.5]
         std = [0.5]
     else:
@@ -32,7 +32,7 @@ def _transform_setter(dataset=str):
     mean, std = _get_mean_std(dataset=dataset)
     
     # train, test augmentation
-    if dataset == 'dirichlet_mnist' or dataset == 'dirichlet_fmnist':
+    if dataset == 'dirichlet_mnist' or dataset == 'dirichlet_fashion_mnist':
         train_transforms = transforms.Compose([
             transforms.RandomResizedCrop((32, 32)),
             transforms.ToTensor(),
