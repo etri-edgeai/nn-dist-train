@@ -38,7 +38,7 @@ def _get_args():
     
 def _make_model(args):
     # create model for server and client
-    model = MODEL[args.model](num_classes=args.num_classes, **args.model_kwargs) if args.model_kwargs else MODEL[args.model](num_classes=args.num_classes)
+    model = MODEL[args.model](in_channels=in_channels, num_classes=args.num_classes, **args.model_kwargs) if args.model_kwargs else MODEL[args.model](in_channels=in_channels, num_classes=args.num_classes)
     
     # initialize server and client model weights
     server_weight = copy.deepcopy(model.state_dict())

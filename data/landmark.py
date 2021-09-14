@@ -204,6 +204,7 @@ def load_federated_landmarks_g23k(args):
     train_files, data_local_num_dict, net_dataidx_map = _get_mapping_per_user(fed_train_map_file, args)
     test_files = _read_csv(fed_test_map_file)
 
+    args.in_channels = 3
     class_num = len(np.unique([item['class'] for item in train_files]))
     args.num_classes = class_num
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))
@@ -261,6 +262,7 @@ def load_federated_landmarks_g160k(args):
     train_files, data_local_num_dict, net_dataidx_map = _get_mapping_per_user(fed_train_map_file, args)
     test_files = _read_csv(fed_test_map_file)
 
+    args.in_channels = 3
     class_num = len(np.unique([item['class'] for item in train_files]))
     args.num_classes = class_num
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))

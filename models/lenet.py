@@ -6,9 +6,9 @@ __all__=['LeNet', 'LeNetContainer']
 
 # only for MNIST
 class LeNet(nn.Module):
-    def __init__(self, num_classes=10):
+    def __init__(self, in_channels=1, num_classes=10):
         super(LeNet, self).__init__()
-        self.conv1 = nn.Conv2d(1, 20, 5, 1)
+        self.conv1 = nn.Conv2d(in_channels, 20, 5, 1)
         self.conv2 = nn.Conv2d(20, 50, 5, 1)
         self.fc1 = nn.Linear(5*5*50, 500)
         self.fc2 = nn.Linear(500, num_classes)
