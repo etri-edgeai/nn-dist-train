@@ -206,7 +206,7 @@ def load_federated_landmarks_g23k(args):
 
     args.in_channels = 3
     class_num = len(np.unique([item['class'] for item in train_files]))
-    args.num_classes = class_num
+    args.num_classes = class_num # 203
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))
     train_data_num = len(train_files)
 
@@ -248,23 +248,23 @@ def load_federated_landmarks_g160k(args):
         os.makedirs(args.data_dir)
         
     fed_g160k_train_map_file = os.path.join(args.data_dir, 'data_user_dict/gld160k_user_dict_train.csv')
-    fed_g160k_map_file = os.path.join(args.data_dir, 'data_user_dict/gld160k_user_dict_test.csv')
+    fed_g160k_test_map_file = os.path.join(args.data_dir, 'data_user_dict/gld160k_user_dict_test.csv')
 
-    if (not os.isfile(fed_g23k_train_map_file)) or (not os.isfile(fed_g23k_test_map_file)):
+    if (not os.path.isfile(fed_g160k_train_map_file)) or (not os.path.isfile(fed_g160k_test_map_file)):
         os.system('bash ./data/scripts/download_landmark.sh')
 
     client_number = 1262 
     args.num_clients = 1262
     
     fed_train_map_file = fed_g160k_train_map_file
-    fed_test_map_file = fed_g160k_map_file
+    fed_test_map_file = fed_g160k_test_map_file
         
     train_files, data_local_num_dict, net_dataidx_map = _get_mapping_per_user(fed_train_map_file, args)
     test_files = _read_csv(fed_test_map_file)
 
     args.in_channels = 3
     class_num = len(np.unique([item['class'] for item in train_files]))
-    args.num_classes = class_num
+    args.num_classes = class_num # 2028
     # logging.info("traindata_cls_counts = " + str(traindata_cls_counts))
     train_data_num = len(train_files)
 
