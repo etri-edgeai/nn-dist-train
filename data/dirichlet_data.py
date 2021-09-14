@@ -134,23 +134,24 @@ def load_federated_dirichlet_data(args):
     if args.dataset == 'dirichlet_cifar10':
         _trainset = datasets.CIFAR10(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.CIFAR10(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
-        num_classes = 10
+        in_channels, num_classes = 3, 10
         
     elif args.dataset == 'dirichlet_cifar100':
         _trainset = datasets.CIFAR100(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.CIFAR100(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
-        num_classes = 100
+        in_channels, num_classes = 3, 100
         
     elif args.dataset == 'dirichlet_mnist':
         _trainset = datasets.MNIST(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.MNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
-        num_classes = 10
+        in_channels, num_classes = 1, 10
         
     elif args.dataset == 'dirichlet_fashion_mnist':
         _trainset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=True, transform = train_transforms, download = True)
         testset = datasets.FashionMNIST(os.path.join(root, args.dataset), train=False, transform = test_transforms, download = False)
-        num_classes = 10
+        in_channels, num_classes = 1, 10
 
+    args.in_channels = in_channels
     args.num_classes = num_classes
     clients_data = _divide_dataset(args, _trainset, num_classes=num_classes)
     

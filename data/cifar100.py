@@ -158,6 +158,7 @@ def load_federated_cifar100(args):
                 batch_size=args.batch_size, shuffle=True)
     test_data_num = len(test_data_global.dataset)
     
+    args.in_channels = 3
     args.num_classes = 100
 
     client_loader = {'train': train_data_local_dict, 'test': test_data_global}
