@@ -120,7 +120,9 @@ def test(args, model, client_loader, dataset_sizes):
 
         with torch.set_grad_enabled(False):
             logits = model(inputs)
+            print(logits)
             pred = prediction(logits)
+            
 
             correct = (pred == labels.data)
             for cls in labels[correct]:

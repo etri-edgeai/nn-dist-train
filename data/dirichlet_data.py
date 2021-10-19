@@ -133,15 +133,10 @@ class SelfBalancing(Dataset):
         self.label = label
         self.prob_sample = False
         
-        self.dicts = {}
-        
     def __getitem__(self, idx):
         if self.prob_sample:
-            idx = torch.sum(self.prob < torch.rand(1))
-            if idx in self.dicts:
-                self.dicts[idx] += 1
-            else:
-                self.dicts[idx] = 1
+            u = torch.rand(1)
+            idx = torch.sum(self.prob < u)
         try:
             img = self.data[idx]
         except:
@@ -150,7 +145,7 @@ class SelfBalancing(Dataset):
             img = self.data[idx]
         img = Image.fromarray(img)
         
-        return self.transform(img), self.label[idx]
+        return self.transform(img), self.label[idx], idx
     
     def __len__(self):
         return len(self.data)
@@ -164,7 +159,6 @@ class SelfBalancing(Dataset):
     
     def sample_probabilistic(self):
         self.prob_sample = True
-        print(self.dicts)
         
         
 def load_federated_dirichlet_data(args):

@@ -64,7 +64,7 @@ def parse_args():
                     action='store_true')
     parser.add_argument('--fedcsb-warmup', 
                     help='warmup epoch;',
-                    default=10)
+                    default=0)
     parser.add_argument('--niid-split', 
                     help='split number when making non-iid dataset;',
                     type=int,
