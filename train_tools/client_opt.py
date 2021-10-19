@@ -1,5 +1,7 @@
 import copy
+import numpy as np
 import torch
+import torch.nn.functional as F
 from utils.util import gpu_to_cpu, cpu_to_gpu
 from .criterion import cross_entropy
 from .optimizer import sgd, apply_local_momentum
@@ -15,6 +17,29 @@ OPTIMIZER = {'sgd': sgd}
 SCHEDULER = {'multistep': multistep_lr_scheduler, 'cosine': cosine_lr_scheduler}
 
 
+def dataset_update(train_loader, model, args):
+    ret =[]
+    model.eval()
+    train_loader.dataset.sample_deterministic()
+
+    with torch.no_grad():
+        for idx, [x, y] in enumerate(train_loader):
+            x, y = x.to(args.device), y.to(args.device)
+
+            logit = model(x)
+            prob = F.softmax(logit, dim=1)
+
+            ret.extend(torch.gather(prob,1, y.unsqueeze(1)).detach().cpu().reshape(-1))
+    train_loader.dataset.sample_probabilistic()
+
+    weight = torch.tensor(ret)
+    weight = 1. / (weight + 0.01)
+    weight /= torch.sum(weight)
+    train_loader.dataset.update_prob(weight.detach())
+    print(weight, torch.max(weight), torch.mean(weight), torch.std(weight))
+    return train_loader
+
+    
 # train local clients
 def client_opt(args, client_loader, client_datasize, model, weight, momentum, rounds):
     # argument for training clients
@@ -36,6 +61,10 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
         # local training
         model.train()
         for epoch in range(args.num_epochs):
+            if args.self_balancing and rounds >= args.fedcsb_warmup:
+                print(client_loader['train'][client].dataset.dicts)
+                client_loader['train'][client] = dataset_update(client_loader['train'][client], model, args)
+            
             for ind, (inputs, labels) in enumerate(client_loader['train'][client]):
                 # more develpment required
                 inputs = inputs.to(args.device)

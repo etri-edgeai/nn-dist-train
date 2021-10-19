@@ -3,8 +3,9 @@ import torch
 import random
 import numpy as np
 from torchvision import datasets, transforms
-from torch.utils.data import DataLoader, sampler, Subset
+from torch.utils.data import DataLoader, sampler, Subset, Dataset
 from utils import clients_data_num_plotter
+from PIL import Image
 
 __all__ = ['load_federated_dirichlet_data']
 
@@ -105,7 +106,7 @@ def _divide_dataset(args, _trainset, num_classes=10):
 
                 tmp = diri_dis.sample()
                 for cls in total_data.keys():
-                    tmp_set = random.sample(total_data[cls], min(len(total_data[cls]), int(nums * tmp[int(cls)] / 10)))
+                    tmp_set = random.sample(total_data[cls], min(len(total_data[cls]), int(nums * tmp[int(cls)] / args.niid_split)))
 
                     if len(clients_data[client_idx]) + len(tmp_set) > nums:
                         tmp_set = tmp_set[:nums-len(clients_data[client_idx])]
@@ -125,6 +126,47 @@ def _divide_dataset(args, _trainset, num_classes=10):
     return clients_data
 
 
+class SelfBalancing(Dataset):
+    def __init__(self, data, label, transform):
+        self.transform = transform
+        self.data = data
+        self.label = label
+        self.prob_sample = False
+        
+        self.dicts = {}
+        
+    def __getitem__(self, idx):
+        if self.prob_sample:
+            idx = torch.sum(self.prob < torch.rand(1))
+            if idx in self.dicts:
+                self.dicts[idx] += 1
+            else:
+                self.dicts[idx] = 1
+        try:
+            img = self.data[idx]
+        except:
+            print('index: %s' % idx)
+            idx -= 1
+            img = self.data[idx]
+        img = Image.fromarray(img)
+        
+        return self.transform(img), self.label[idx]
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def update_prob(self, prob):
+        self.prob_sample = True
+        self.prob = torch.cumsum(prob, dim=0)
+        
+    def sample_deterministic(self):
+        self.prob_sample = False
+    
+    def sample_probabilistic(self):
+        self.prob_sample = True
+        print(self.dicts)
+        
+        
 def load_federated_dirichlet_data(args):
     root = args.data_dir
     if not os.path.isdir(root):
@@ -166,8 +208,12 @@ def load_federated_dirichlet_data(args):
             dataset_sizes['valid'] = len(clients_data[client_idx])
             
         else:
+            if args.self_balancing:
+                subset = SelfBalancing(_trainset.data[clients_data[client_idx]], np.array(_trainset.targets)[clients_data[client_idx]], train_transforms)
+
             client_loader['train'][client_idx] = torch.utils.data.DataLoader(subset, batch_size=args.batch_size, shuffle=True, pin_memory=args.pin_memory, num_workers=args.num_workers)
             dataset_sizes['train'][client_idx] = len(clients_data[client_idx])
+                
                         
     client_loader['test'] = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, pin_memory=args.pin_memory, num_workers=args.num_workers)
     dataset_sizes['test'] = len(testset)

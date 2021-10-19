@@ -59,6 +59,16 @@ def parse_args():
                     help='number of validation dataset;',
                     type=int,
                     default=0)
+    parser.add_argument('--self-balancing', 
+                    help='use FedCSB algorithm or not;',
+                    action='store_true')
+    parser.add_argument('--fedcsb-warmup', 
+                    help='warmup epoch;',
+                    default=10)
+    parser.add_argument('--niid-split', 
+                    help='split number when making non-iid dataset;',
+                    type=int,
+                    default=13)
     
     # non-iidness
     parser.add_argument('--non-iid', 
