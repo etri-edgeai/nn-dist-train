@@ -2,9 +2,9 @@
 
 model="vgg11_bn"
 dataset="dirichlet_cifar10"
-algorithm="fedavg_pdp"
+algorithm="fedcsb"
 non_iid="0.001 0.1 10.0"
-participation="6"
+participation="4"
 
 for niid in $non_iid
 do

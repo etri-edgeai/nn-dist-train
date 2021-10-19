@@ -202,7 +202,7 @@ def load_federated_dirichlet_data(args):
             dataset_sizes['valid'] = len(clients_data[client_idx])
             
         else:
-            if args.self_balancing:
+            if args.algorithm == 'fedcsb':
                 subset = SelfBalancing(_trainset.data[clients_data[client_idx]], np.array(_trainset.targets)[clients_data[client_idx]], train_transforms)
 
             client_loader['train'][client_idx] = torch.utils.data.DataLoader(subset, batch_size=args.batch_size, shuffle=True, pin_memory=args.pin_memory, num_workers=args.num_workers)

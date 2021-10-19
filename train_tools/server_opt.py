@@ -42,7 +42,7 @@ def server_opt(args, client_loader, client_datasize, model, weight, momentum, se
                     aggregate_weights[client] = 1 / len(selected_clients)
 
         else:
-            # fedavg_pdp algorithm
+            # fedavg_pdp, fedcsb algorithm
             total_datasize = 0
             for client in selected_clients:
                 total_datasize += client_datasize[client]

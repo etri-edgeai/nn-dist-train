@@ -10,6 +10,6 @@ for niid in $non_iid
 do
     for part in $participation
     do
-    CUDA_VISIBLE_DEVICES='2' python train.py --dataset $dataset --model $model --algorithm $algorithm --non-iid $niid --num-rounds 100 --num-clients 20 --clients-per-round $part --num-epochs 1
+    CUDA_VISIBLE_DEVICES='0' python train.py --dataset $dataset --model $model --algorithm $algorithm --non-iid $niid --num-rounds 100 --num-clients 20 --clients-per-round $part --num-epochs 1
     done
 done

@@ -20,50 +20,47 @@ SCHEDULER = {'multistep': multistep_lr_scheduler, 'cosine': cosine_lr_scheduler}
 def dataset_update(train_loader, model, args):
     ret,idx_list,label_list =[],[],[]
     model.eval()
+    
     train_loader.dataset.sample_deterministic()
-
     with torch.no_grad():
         for idx, [x, y, i] in enumerate(train_loader):
             x, y = x.to(args.device), y.to(args.device)
-
             logit = model(x)
             prob = F.softmax(logit, dim=1)
-
+            
             ret.extend(torch.gather(prob,1, y.unsqueeze(1)).detach().cpu().reshape(-1))
             idx_list.extend(i.squeeze())
             label_list.extend(y.squeeze().detach().cpu().reshape(-1))
-            
     train_loader.dataset.sample_probabilistic()
+    
+    if args.fedcsb_crit == 'label':
+        idx_list = torch.tensor(idx_list).reshape(-1)
+        label_list = torch.tensor(label_list).reshape(-1)
+        sort_pos = idx_list.argsort(descending=False)
+        label_list = label_list[sort_pos]
 
+        weight = torch.zeros_like(label_list).float()
+        for cidx in range(torch.max(label_list)+1):
+            pos = torch.where(label_list == cidx)[0]
+            weight[pos] = 1. / float(len(pos)) if len(pos) != 0 else 0
+        weight /= torch.sum(weight)
+
+        train_loader.dataset.update_prob(weight.detach())    
+        return train_loader
     
-    # label
-    idx_list = torch.tensor(idx_list).reshape(-1)
-    label_list = torch.tensor(label_list).reshape(-1)
-    
-    sort_pos = idx_list.argsort(descending=False)
-    label_list = label_list[sort_pos]
-    
-    weight = torch.zeros_like(label_list)
-    for cidx in range(torch.max(label_list)+1):
-        pos = torch.where(label_list == cidx)[0]
-        weight[pos] = len(weight) / len(pos) if len(pos) != 0 else 0
-    
-    print(weight.shape, weight)
-    weight = weight.float()
-    weight /= torch.sum(weight)
-    
-    weight = torch.ones_like(weight).float()/len(weight)
-        
-    # Softmax
-#     weight = torch.tensor(ret)
-#     weight = 1. / (weight + 0.01)
-#     weight /= torch.sum(weight)
-    
-    
-    
-    train_loader.dataset.update_prob(weight.detach())
-    print(weight, torch.max(weight), torch.mean(weight), torch.std(weight))
-    return train_loader
+    elif args.fedcsb_crit == 'softmax':
+        idx_list = torch.tensor(idx_list).reshape(-1)
+        sort_pos = idx_list.argsort(descending=False)
+
+        weight = torch.tensor(ret)[sort_pos].float()
+        weight = 1. / (weight + 5)
+#         weight = 1 - weight
+        weight /= torch.sum(weight)
+
+        train_loader.dataset.update_prob(weight.detach())
+        return train_loader
+    else:
+        raise NotImplemented
 
     
 # train local clients
@@ -85,17 +82,17 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
         model.load_state_dict(client_weight[client])
         
         # local training
-        model.train()
         for epoch in range(args.num_epochs):
-            if args.self_balancing and rounds >= args.fedcsb_warmup:
+            if args.algorithm == 'fedcsb':
                 client_loader['train'][client] = dataset_update(client_loader['train'][client], model, args)
             
+            model.train()
             for ind, data in enumerate(client_loader['train'][client]):
-                if not args.self_balancing:
+                if args.algorithm != 'fedcsb':
                     inputs, labels = data
                 else:
                     inputs, labels, _ = data
-                print(labels)
+                    
                 # more develpment required
                 inputs = inputs.to(args.device)
                 labels = labels.to(args.device)
@@ -126,7 +123,7 @@ def client_opt(args, client_loader, client_datasize, model, weight, momentum, ro
                     model, client_momentum = apply_local_momentum(args, model, client, client_momentum)
 
                 model = optimizer(model, lr)
-                    
+                
         # after local training
         client_weight[client] = gpu_to_cpu(copy.deepcopy(model.state_dict()))
     

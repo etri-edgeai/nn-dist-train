@@ -59,16 +59,10 @@ def parse_args():
                     help='number of validation dataset;',
                     type=int,
                     default=0)
-    parser.add_argument('--self-balancing', 
-                    help='use FedCSB algorithm or not;',
-                    action='store_true')
-    parser.add_argument('--fedcsb-warmup', 
-                    help='warmup epoch;',
-                    default=0)
     parser.add_argument('--niid-split', 
                     help='split number when making non-iid dataset;',
                     type=int,
-                    default=13)
+                    default=10)
     
     # non-iidness
     parser.add_argument('--non-iid', 
@@ -93,7 +87,11 @@ def parse_args():
                     help='which algorithm to select clients;',
                     type=str,
                     default='fedavg',
-                    choices=['centralized', 'fedavg', 'fedprox', 'fedavg_pdp'])
+                    choices=['centralized', 'fedavg', 'fedprox', 'fedavg_pdp', 'fedcsb'])
+    parser.add_argument('--fedcsb-crit', 
+                    help='which criterion to use on fedcsb algorithm;',
+                    default='label',
+                    choices=['label', 'softmax'])
     parser.add_argument('--num-rounds',
                     help='number of rounds to simulate;',
                     type=int,
@@ -188,6 +186,10 @@ def _align_args(args):
         args.full_part = True
         
     elif args.algorithm == 'fedavg_pdp':
+        args.mu = 0.0
+        args.full_part = False
+        
+    elif args.algorithm == 'fedcsb':
         args.mu = 0.0
         args.full_part = False
         

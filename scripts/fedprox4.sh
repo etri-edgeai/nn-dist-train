@@ -4,7 +4,7 @@ model="vgg11_bn"
 dataset="dirichlet_cifar10"
 algorithm="fedprox"
 non_iid="0.001 0.1 10.0"
-participation="6"
+participation="4"
 mu="0.001"
 
 for niid in $non_iid
