@@ -90,3 +90,21 @@ def get_data(args, env='fed'):
 
         return dataset_train, dataset_test, dict_users_train, dict_users_test
 
+
+def get_model(args):
+    if args.model == 'cnn' and args.dataset in ['cifar10', 'cifar100']:
+        net_glob = CNNCifar(args=args).to(args.device)
+    elif args.model == 'mobile' and args.dataset in ['cifar10', 'cifar100']:
+        net_glob = MobileNetCifar(num_classes=args.num_classes).to(args.device)
+    elif args.model == 'resnet18' and args.dataset in ['cifar10', 'cifar100']:
+        net_glob = ResNet18(num_classes=args.num_classes).to(args.device)
+    elif args.model == 'resnet50' and args.dataset in ['cifar10', 'cifar100']:
+        net_glob = ResNet50(num_classes=args.num_classes).to(args.device)
+    elif args.model == 'cnn' and args.dataset == 'mnist':
+        net_glob = CNNMnist(args=args).to(args.device)
+    elif args.model == 'mlp' and args.dataset == 'mnist':
+        net_glob = MLP(dim_in=784, dim_hidden=256, dim_out=args.num_classes).to(args.device)
+    else:
+        exit('Error: unrecognized model')
+
+    return net_glob
