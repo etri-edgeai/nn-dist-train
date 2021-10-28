@@ -9,7 +9,19 @@ import numpy as np
 import torch
 import pdb
 
-
+def fair_iid(dataset, num_users):
+    """
+    Sample I.I.D. client data from fairness dataset
+    :param dataset:
+    :param num_users:
+    :return: dict of image index
+    """
+    num_items = int(len(dataset)/num_users)
+    dict_users, all_idxs = {}, [i for i in range(len(dataset))]
+    for i in range(num_users):
+        dict_users[i] = set(np.random.choice(all_idxs, num_items, replace=False))
+        all_idxs = list(set(all_idxs) - dict_users[i])
+    return dict_users
 
 def fair_noniid(train_data, num_users, num_shards=200, num_imgs=300, train=True, rand_set_all=[]):
     """
@@ -55,7 +67,24 @@ def fair_noniid(train_data, num_users, num_shards=200, num_imgs=300, train=True,
 
     return dict_users, rand_set_all
 
-
+def iid(dataset, num_users, server_data_ratio):
+    """
+    Sample I.I.D. client data from MNIST dataset
+    :param dataset:
+    :param num_users:
+    :return: dict of image index
+    """
+    num_items = int(len(dataset)/num_users)
+    dict_users, all_idxs = {}, [i for i in range(len(dataset))]
+    
+    if server_data_ratio > 0.0:
+        dict_users['server'] = set(np.random.choice(all_idxs, int(len(dataset)*server_data_ratio), replace=False))
+    
+    for i in range(num_users):
+        dict_users[i] = set(np.random.choice(all_idxs, num_items, replace=False))
+        all_idxs = list(set(all_idxs) - dict_users[i])
+    
+    return dict_users
 
 def noniid(dataset, num_users, shard_per_user, server_data_ratio, rand_set_all=[]):
     """
