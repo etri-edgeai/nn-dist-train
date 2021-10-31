@@ -15,6 +15,14 @@ def args_parser():
     parser.add_argument('--local_bs', type=int, default=10, help="local batch size: B")
     parser.add_argument('--bs', type=int, default=128, help="test batch size")
     parser.add_argument('--lr', type=float, default=0.01, help="learning rate")
+    parser.add_argument('--momentum', type=float, default=0.5, help="SGD momentum (default: 0.5)")
+    parser.add_argument('--wd', type=float, default=0.0, help="weight decay (default: 0.0)")
+    parser.add_argument('--split', type=str, default='user', help="train-test split type, user or sample")
+    parser.add_argument('--grad_norm', action='store_true', help='use_gradnorm_avging')
+    parser.add_argument('--local_ep_pretrain', type=int, default=0, help="the number of pretrain local ep")
+    parser.add_argument('--lr_decay', type=float, default=1.0, help="learning rate decay per round")
+    parser.add_argument('--fl_alg', type=str, default='FedAvg', help="federated learning algorithm")
+    parser.add_argument('--mu', type=float, default=1.0, help="parameter for proximal local SGD")
 
     # model arguments
     parser.add_argument('--model', type=str, default='mlp', help='model name')
