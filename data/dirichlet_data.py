@@ -105,7 +105,7 @@ def _divide_dataset(args, _trainset, num_classes=10):
 
                 tmp = diri_dis.sample()
                 for cls in total_data.keys():
-                    tmp_set = random.sample(total_data[cls], min(len(total_data[cls]), int(nums * tmp[int(cls)] / 10)))
+                    tmp_set = random.sample(total_data[cls], min(len(total_data[cls]), int(nums * tmp[int(cls)] / args.split_num)))
 
                     if len(clients_data[client_idx]) + len(tmp_set) > nums:
                         tmp_set = tmp_set[:nums-len(clients_data[client_idx])]
