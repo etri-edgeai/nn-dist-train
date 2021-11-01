@@ -59,6 +59,10 @@ def parse_args():
                     help='number of validation dataset;',
                     type=int,
                     default=0)
+    parser.add_argument('--split-num', 
+                    help='split number to control non-iidness;',
+                    type=int,
+                    default=10)
     
     # non-iidness
     parser.add_argument('--non-iid', 
