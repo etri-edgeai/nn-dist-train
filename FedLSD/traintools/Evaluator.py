@@ -14,11 +14,157 @@ __all__ = ["Evaluator"]
 class Evaluator:
     """Evaluate statistics for analysis"""
 
-    def __init__(self):
+    def __init__((
+        self, cka=None, global_analysis=None, in_inter_angle=None, device="cuda:0"
+    ):
+        self.cka = cka
+        self.global_analysis = global_analysis
+        self.in_inter_angle = in_inter_angle
+        self.device = device
+        self.test_correct = None
 
+    def evaluation(
+        self,
+        model,
+        test_loader,
+        dist_global,
+        agg_global,
+        up_locals,
+        local_identities,
+        fed_round=None,
+    ):
+        eval_result = {}
 
-    def evaluation(self):
-        return
+        if fed_round == 0:
+            return eval_result
 
-    def global_evaluation(self):
-        return
+        # Evaluation on feature angles
+        if self.in_inter_angle.enabled:
+            (
+                dg_in,
+                dg_inter,
+                l_in,
+                l_inter,
+                l_inset_in,
+                l_inset_inter,
+                l_outset_in,
+                l_outset_inter,
+                stdev_list,
+            ) = feature_angle_inspector(
+                model,
+                test_loader,
+                model.state_dict(),
+                up_locals,
+                local_identities,
+                device="cuda:0",
+            )
+
+            (
+                l_in_std,
+                l_inter_std,
+                l_inset_in_std,
+                l_inset_inter_std,
+                l_outset_in_std,
+                l_outset_inter_std,
+            ) = stdev_list
+
+            in_inter_angle = {
+                "dg_in": dg_in,
+                "dg_inter": dg_inter,
+                "l_in": l_in,
+                "l_inter": l_inter,
+                "l_inset_in": l_inset_in,
+                "l_inset_inter": l_inset_inter,
+                "l_outset_in": l_outset_in,
+                "l_outset_inter": l_outset_inter,
+            }
+
+            wandb.log(in_inter_angle, step=fed_round)
+
+            in_inter_angle_stdev = {
+                "l_in_std": l_in_std,
+                "l_inter_std": l_inter_std,
+                "l_inset_in_std": l_inset_in_std,
+                "l_inset_inter_std": l_inset_inter_std,
+                "l_outset_in_std": l_outset_in_std,
+                "l_outset_inter_std": l_outset_inter_std,
+            }
+
+            wandb.log(in_inter_angle_stdev, step=fed_round)
+
+        # Evaluation on CKA
+        if (self.cka.enabled) and (fed_round % self.cka.period == 0):
+            cka_gl, cka_ll, cka_lg, cka_gg = cka_evaluator(
+                model,
+                test_loader,
+                dist_global=model.state_dict(),
+                agg_global=agg_global,
+                up_locals=up_locals,
+                mode=self.cka.mode,
+                device=self.device,
+            )
+
+            cka_result = {
+                "[CKA] DG -> L": cka_gl,
+                "[CKA] L vs L": cka_ll,
+                "[CKA] L -> AG": cka_lg,
+                "[CKA] DG -> AG": cka_gg,
+            }
+
+            wandb.log(cka_result, step=fed_round)
+            eval_result["cka"] = cka_result
+
+        return eval_result
+        
+    def global_evaluation(
+        self, model, clients_dataset, fed_round, test_loader=None, mode="forward"
+    ):
+        """Evaluation on prediction consistency"""
+
+        running_correct, running_size = 0, 0
+        if self.global_analysis.enabled:
+            model.to(self.device)
+            with torch.no_grad():
+                for local_set in clients_dataset:
+                    dataloader = torch.utils.data.DataLoader(local_set, batch_size=50)
+                    for data, target in dataloader:
+                        data, target = data.to(self.device), target.to(self.device)
+                        output = model(data)
+                        running_size += data.size(0)
+                        running_correct += (output.max(dim=1)[1] == target).sum().item()
+
+                gl_acc = round((running_correct / running_size) * 100, 2)
+
+            if mode == "forward":
+                wandb.log({"g_fwd_acc": gl_acc}, step=fed_round)
+
+            elif mode == "backward":
+                wandb.log({"g_bwd_acc": gl_acc}, step=fed_round)
+
+                correct_tensor = None
+
+                for data, target in test_loader:
+                    data, target = data.to(self.device), target.to(self.device)
+                    output = model(data)
+                    correct = output.max(dim=1)[1] == target
+                    correct_tensor = tensor_concater(correct_tensor, correct)
+
+                if self.test_correct is not None:
+                    global_analysis = {
+                        "mutual_correct": ((self.test_correct + correct_tensor) == 2)
+                        .sum()
+                        .item(),
+                        "mutual_incorrect": ((self.test_correct + correct_tensor) == 0)
+                        .sum()
+                        .item(),
+                        "switch_to_incorrect": ((self.test_correct > correct_tensor))
+                        .sum()
+                        .item(),
+                        "switch_to_correct": ((self.test_correct < correct_tensor))
+                        .sum()
+                        .item(),
+                    }
+                    wandb.log(global_analysis, step=fed_round)
+
+                self.test_correct = correct_tensor.int()
+
