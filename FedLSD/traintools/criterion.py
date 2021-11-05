@@ -28,13 +28,70 @@ class OverhaulLoss(nn.Module):
 
         # ------------------------------ Proposed Methods --------------------------------------- #
         elif self.mode == "LSD":
-            pass
+            # get DG(Distributed Global) model prediction
+            with torch.no_grad():
+                t_distill = torch.softmax(t_logits / self.temp, dim=1)
+
+            # FedLSD Loss
+            ce_loss = cross_entropy(logits, target, reduction="none")
+            lsd_loss = (self.temp ** 2) * cross_entropy(
+                logits / self.temp, t_distill, reduction="none"
+            )
+
+            loss = (1 - self.beta) * ce_loss + self.beta * lsd_loss
         
         elif self.mode == "LS-NTD":
-            pass
+            # get DG(Distributed Global) model prediction for not-true classes
+            with torch.no_grad():
+                hard_target = onehot(target, N=self.num_classes).float()
+                nt_mask = hard_target != 1
+                nt_t_logits = t_logits * nt_mask
+                nt_t_logits[
+                    nt_mask != 1
+                ] = -100000  # very small number to true class logits
+                nt_distill = torch.softmax(nt_t_logits / self.temp, dim=1)
+
+            ce_loss = cross_entropy(logits, target, reduction="none")
+
+            # FedLS-NTD Loss
+            nt_logits = logits * nt_mask  # get not-true class logits from local output
+            kd_loss = (self.temp ** 2) * cross_entropy(
+                nt_logits / self.temp, nt_distill, reduction="none"
+            )
+
+            loss = (1 - self.beta) * ce_loss + self.beta * kd_loss
+
         
         elif self.mode == "LSD_NTD":  # For analysis the effect of LSD vs. LS-NTD
-            pass
+            # get DG(Distributed Global) model prediction
+            with torch.no_grad():
+                t_distill = torch.softmax(t_logits / self.temp, dim=1)
+
+            # get CE Loss
+            ce_loss = cross_entropy(logits, target, reduction="none")
+
+            # get LSD Loss
+            lsd_loss = (self.temp ** 2) * cross_entropy(
+                logits / self.temp, t_distill, reduction="none"
+            )
+
+            # get DG(Distributed Global) model prediction for not-true classes
+            with torch.no_grad():
+                hard_target = onehot(target, N=self.num_classes).float()
+                nt_mask = hard_target != 1
+                nt_t_logits = t_logits * nt_mask
+                nt_t_logits[nt_mask != 1] = -100000
+                nt_distill = torch.softmax(nt_t_logits / self.temp, dim=1)
+
+            # get LS-NTD Loss
+            nt_logits = logits * nt_mask
+            ntd_loss = (self.temp ** 2) * cross_entropy(
+                nt_logits / self.temp, nt_distill, reduction="none"
+            )
+
+            loss = (1 - self.beta) * ce_loss + self.beta * (
+                (1 - self.lam) * lsd_loss + self.lam * ntd_loss
+            )
         # ------------------------------------------------------------------------------------------- #
 
         loss = loss.mean()
