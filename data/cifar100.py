@@ -50,8 +50,8 @@ def _preprocess_cifar_img(img, train):
     # scale img to range [0,1] to fit ToTensor api
     img = torch.div(img, 255.0)
     transoformed_img = torch.stack([_cifar100_transform
-        (i.type(torch.DoubleTensor).mean(),
-            i.type(torch.DoubleTensor).std(),
+        ((i.type(torch.DoubleTensor).mean().item(),),
+            (i.type(torch.DoubleTensor).std().item(),),
             train)
         (i.permute(2,0,1)) 
         for i in img])
@@ -82,7 +82,7 @@ def _get_dataloader(args, client_idx=None):
             client_id_test = client_ids_test[client_idx]
             test_x = np.vstack([train_h5[_EXAMPLE][client_id_test][_IMGAE][()]])
             test_y = np.vstack([train_h5[_EXAMPLE][client_id_test][_LABEL][()]]).squeeze()
-
+    
     # preprocess 
     train_x = _preprocess_cifar_img(torch.tensor(train_x), train=True)
     train_y = torch.tensor(train_y)
