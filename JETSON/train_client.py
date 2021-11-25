@@ -105,7 +105,14 @@ def main():
     if optimizer_weight is not None:
         local.optimizer.load_state_dict(optimizer_weight)
 
+    local_results = local.train()
+    print(local_results)
 
+    trained_optimizer_weight = copy.deepcopy(local.optimizer.state_dict())
+    trained_client_weight = copy.deepcopy(local.model.state_dict())
+    
+    torch.save(trained_optimizer_weight, './optimizer/optimizer.pth')
+    torch.save(trained_client_weight, './checkpoint/client_ckpt.pth')
 
 
 if __name__ == "__main__":
