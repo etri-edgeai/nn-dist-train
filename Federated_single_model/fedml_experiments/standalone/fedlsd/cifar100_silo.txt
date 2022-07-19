@@ -1,0 +1,49 @@
+
+wandb_relogin(){
+    wandb login --relogin $key
+    echo "re-login"
+}
+
+
+
+python3 ./main_fedntd.py \
+--model resnet \
+--depth 8 \
+--dataset cifar100 \
+--data_dir ./../../../data/cifar100 \
+--partition_method shard \
+--partition_alpha 0.1 \
+--batch_size 100 \
+--client_optimizer sgd \
+--lr 0.3 \
+--client_num_in_total 10 \
+--client_num_per_round 10 \
+--comm_round 500 \
+--gpu 4 \
+--ci 0 \
+--mu 0 \
+--decaylr 0.99 \
+--seed 0 \
+--criterion_mode LSD_NTD
+
+python3 ./main_fedntd.py \
+--model resnet \
+--depth 20 \
+--dataset cifar100 \
+--data_dir ./../../../data/cifar100 \
+--partition_method shard \
+--partition_alpha 0.1 \
+--batch_size 100 \
+--client_optimizer sgd \
+--lr 0.3 \
+--client_num_in_total 10 \
+--client_num_per_round 10 \
+--comm_round 500 \
+--gpu 4 \
+--ci 0 \
+--mu 0 \
+--decaylr 0.99 \
+--seed 0 \
+--criterion_mode LSD_NTD
+
+
