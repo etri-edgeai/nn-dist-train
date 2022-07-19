@@ -1,0 +1,94 @@
+python3 ./main_fedavg.py \
+--model resnet \
+--depth 2 \
+--dataset cifar10 \
+--data_dir ./../../../data/cifar10 \
+--partition_method shard \
+--partition_alpha 0.1 \
+--batch_size 10 \
+--client_optimizer sgd \
+--lr 0.03 \
+--client_num_in_total 100 \
+--client_num_per_round 10 \
+--comm_round 500 \
+--gpu 0 \
+--ci 0 \
+--mu 0 \
+--decaylr 0.99 \
+--seed 0
+
+python3 ./main_fedavg.py \
+--model resnet \
+--depth 8 \
+--dataset cifar10 \
+--data_dir ./../../../data/cifar10 \
+--partition_method shard \
+--partition_alpha 0.1 \
+--batch_size 10 \
+--client_optimizer sgd \
+--lr 0.03 \
+--client_num_in_total 100 \
+--client_num_per_round 10 \
+--comm_round 500 \
+--gpu 0 \
+--ci 0 \
+--mu 0 \
+--decaylr 0.99 \
+--seed 0 
+
+python3 ./main_fedavg.py \
+--model resnet \
+--depth 14 \
+--dataset cifar10 \
+--data_dir ./../../../data/cifar10 \
+--partition_method shard \
+--partition_alpha 0.1 \
+--batch_size 10 \
+--client_optimizer sgd \
+--lr 0.03 \
+--client_num_in_total 100 \
+--client_num_per_round 10 \
+--comm_round 500 \
+--gpu 0 \
+--ci 0 \
+--mu 0 \
+--decaylr 0.99 \
+--seed 0 
+
+python3 ./main_fedavg.py \
+--model resnet \
+--depth 20 \
+--dataset cifar10 \
+--data_dir ./../../../data/cifar10 \
+--partition_method shard \
+--partition_alpha 0.1 \
+--batch_size 10 \
+--client_optimizer sgd \
+--lr 0.03 \
+--client_num_in_total 100 \
+--client_num_per_round 10 \
+--comm_round 500 \
+--gpu 0 \
+--ci 0 \
+--mu 0 \
+--decaylr 0.99 \
+--seed 0 
+
+python3 ./main_fedavg.py \
+--model resnet \
+--depth 26 \
+--dataset cifar10 \
+--data_dir ./../../../data/cifar10 \
+--partition_method shard \
+--partition_alpha 0.1 \
+--batch_size 10 \
+--client_optimizer sgd \
+--lr 0.03 \
+--client_num_in_total 100 \
+--client_num_per_round 10 \
+--comm_round 500 \
+--gpu 0 \
+--ci 0 \
+--mu 0 \
+--decaylr 0.99 \
+--seed 0 
