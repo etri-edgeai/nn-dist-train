@@ -28,8 +28,10 @@ from fedml_api.model.linear.lr import LogisticRegression
 # from fedml_api.model.cv.resnet_gn import resnet18 ########
 from fedml_api.model.cv.vgg import *  ########
 
-from fedml_api.standalone.fedavg.fedavg_api import FedAvgAPI  ########
-from fedml_api.standalone.fedavg.my_model_trainer_classification import MyModelTrainer as MyModelTrainerCLS  #########
+from fedml_api.standalone.fedntd.fedntd_api import FedntdAPI  ########
+from fedml_api.standalone.fedntd.fed_ntd_classification import MyModelTrainer as MyModelTrainerCLS  #########
+from fedml_api.standalone.fedntd.criterion import *
+
 
 
 
@@ -109,15 +111,14 @@ def add_args(parser):
     parser.add_argument('--ci', type=int, default=0,
                         help='CI')
 
-    parser.add_argument('--mu', type=float, default=0,
-                        help='prox parameter')
-
     parser.add_argument('--decaylr', type=float, default=1,
                         help='decay factor')
 
     parser.add_argument('--seed', type=int, default=0,
                         help='seed number')
-    parser.add_argument('--criterion_mode', type=str, default='CE', help='criterion mode for fedntd algorithm')
+    parser.add_argument('--tau', type=int, default=3, help='ntd loss hyperparameter (tau)')
+    
+    parser.add_argument('--beta', type=int, default=1, help='ntd loss hyperparameter (beta)')
 
     return parser
 
@@ -193,7 +194,8 @@ def load_data(args, dataset_name):
         args.batch_size = args_batch_size
 
     dataset = [train_data_num, test_data_num, train_data_global, test_data_global,
-               train_data_local_num_dict, train_data_local_dict, test_data_local_dict, class_num]  ###################
+               train_data_local_num_dict, train_data_local_dict, test_data_local_dict, class_num]###################
+    
     return dataset
 
 
@@ -236,7 +238,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    parser = add_args(argparse.ArgumentParser(description='FedAvg-standalone'))
+    parser = add_args(argparse.ArgumentParser(description='Fedlsd-standalone'))
     args = parser.parse_args()
     logger.info(args)
     device = torch.device("cuda:" + str(args.gpu) if torch.cuda.is_available() else "cpu")
@@ -246,10 +248,10 @@ if __name__ == "__main__":
         project="fedlsd", entity="etri_2022_practice",
         name="Fedlsd-r" + str(args.comm_round) + "-m" + str(args.model) + str(args.depth) + "-e" + str(
             args.epochs) + "-lr" + str(args.lr) + "-t" + str(args.client_num_in_total) + "-d" + str(
-            args.dataset) + "-kind" + str(args.partition_method) + "-alpha" + str(args.partition_alpha) + "-prox" + str(
-            args.mu) + "-decay factor" + str(args.decaylr)+"-criterion mode" + str(args.criterion_mode),
+            args.dataset) + "-kind" + str(args.partition_method) + "-alpha" + str(args.partition_alpha) + "-decay factor" + str(args.decaylr)+"-tau" + str(args.tau)+"-beta" + str(args.beta),
         config=args
     )
+    
 
     # Set the random seed. The np.random seed determines the dataset partition.
     # The torch_manual_seed determines the initial weight.
@@ -281,5 +283,5 @@ if __name__ == "__main__":
     model_trainer = custom_model_trainer(args, model)  # select된 client에서 한 round 내의 local iteration 정의!!
     logging.info(model)
 
-    fedavgAPI = FedAvgAPI(dataset, device, args, model_trainer)
-    fedavgAPI.train()
+    fedntdAPI = FedntdAPI(dataset, device, args, model_trainer)
+    fedntdAPI.train()

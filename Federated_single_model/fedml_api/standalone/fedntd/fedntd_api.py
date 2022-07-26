@@ -6,10 +6,10 @@ import numpy as np
 import torch
 import wandb
 
-from fedml_api.standalone.fedavg.client import Client
+from fedml_api.standalone.fedntd.client import Client
 
 
-class FedAvgAPI(object):
+class FedntdAPI(object):
     def __init__(self, dataset, device, args, model_trainer):
         self.device = device
         self.args = args
@@ -27,13 +27,14 @@ class FedAvgAPI(object):
         self.test_data_local_dict = test_data_local_dict
 
         self.model_trainer = model_trainer #global 모델에서의 test 단계를 위한 것!!
-        self._setup_clients(train_data_local_num_dict, train_data_local_dict, test_data_local_dict, model_trainer)#initialuzation setting!!
+        self.class_num=class_num
+        self._setup_clients(train_data_local_num_dict, train_data_local_dict, test_data_local_dict, model_trainer, class_num)#initialuzation setting!!
 
-    def _setup_clients(self, train_data_local_num_dict, train_data_local_dict, test_data_local_dict, model_trainer):
+    def _setup_clients(self, train_data_local_num_dict, train_data_local_dict, test_data_local_dict, model_trainer, class_num):
         logging.info("############setup_clients (START)#############")
         for client_idx in range(self.args.client_num_per_round): #임의로 round에 참여하는 수만큼에 대해 client에 대해 Client Class 생성!! 숫자는 유지하고 round 바뀔때마다 data만 수정하는 방식!!
             c = Client(client_idx, train_data_local_dict[client_idx], test_data_local_dict[client_idx],
-                       train_data_local_num_dict[client_idx], self.args, self.device, model_trainer)
+                       train_data_local_num_dict[client_idx], self.args, self.device, model_trainer, class_num)
             #self.model_trainer가 들어가도 되지 않나? 싶음, 여기서 self.model_trainer로 하면 10개의 client 모두 동일한 instance의 trainer가 들어가는 상황!!이것을 피하기 위한 의도일 수도 있음!! 허나 local train하기 앞서 w_global hash를 self.model로 항상 지정해 놓고 하기에 self.model_trainer해도 상관 없을 것 같다.
             self.client_list.append(c)
         logging.info("############setup_clients (END)#############")

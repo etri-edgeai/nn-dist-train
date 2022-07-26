@@ -4,7 +4,7 @@ import logging
 class Client:
 
     def __init__(self, client_idx, local_training_data, local_test_data, local_sample_number, args, device,
-                 model_trainer):
+                 model_trainer, class_num):
         self.client_idx = client_idx
         self.local_training_data = local_training_data#정확히 client_idx에 해당하는 data만 가져온다!!`
         self.local_test_data = local_test_data#정확히 client_idx에 해당하는 data만 가져온다!!
@@ -14,6 +14,8 @@ class Client:
         self.args = args
         self.device = device
         self.model_trainer = model_trainer#local iteration동안 client에서 train하는 것!!
+        self.class_num= class_num
+
 
     def update_local_dataset(self, client_idx, local_training_data, local_test_data, local_sample_number):#client class를 update!! 이게 핵심이다. 매 round마다 client를 다르게 가져올 수 있는 이유!!
         self.client_idx = client_idx
@@ -26,7 +28,7 @@ class Client:
 
     def train(self, w_global):
         self.model_trainer.set_model_params(w_global)# current global model을 올린다!!
-        self.model_trainer.train(self.local_training_data, self.device, self.args)#local iteration 시행!!
+        self.model_trainer.train(self.local_training_data, self.device, self.args, self.class_num)#local iteration 시행!!
         weights = self.model_trainer.get_model_params()#local iteration이 끝난 후 param을 뽑아낸다!!
         return weights
 

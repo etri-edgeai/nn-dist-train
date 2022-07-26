@@ -8,7 +8,7 @@ wandb_relogin(){
 
 python3 ./main_fedntd.py \
 --model resnet \
---depth 8 \
+--depth 14 \
 --dataset cifar100 \
 --data_dir ./../../../data/cifar100 \
 --partition_method shard \
@@ -24,11 +24,11 @@ python3 ./main_fedntd.py \
 --decaylr 0.99 \
 --seed 0 \
 --tau 1 \
---beta 1 \
+--beta 1 
 
 python3 ./main_fedntd.py \
 --model resnet \
---depth 20 \
+--depth 26 \
 --dataset cifar100 \
 --data_dir ./../../../data/cifar100 \
 --partition_method shard \
@@ -44,6 +44,4 @@ python3 ./main_fedntd.py \
 --decaylr 0.99 \
 --seed 0 \
 --tau 1 \
---beta 1 \
-
-
+--beta 1 

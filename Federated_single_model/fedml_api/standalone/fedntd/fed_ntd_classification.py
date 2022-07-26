@@ -3,9 +3,10 @@ import logging
 import torch
 from torch import nn
 
-from copy import deepcopy
+import copy
 
-#criterion 주소
+from fedml_api.standalone.fedntd.criterion import *
+
 
 try:
     from fedml_core.trainer.model_trainer import ModelTrainer
@@ -13,29 +14,21 @@ except ImportError:
     from FedML.fedml_core.trainer.model_trainer import ModelTrainer
 
 
-class MyModelTrainer(ModelTrainer):  # 각 client마다 할당됨!!
+class MyModelTrainer(ModelTrainer):# 각 client마다 할당됨!!
+        
     def get_model_params(self):  # local 모델을 보내기 위함 !!
         return self.model.cpu().state_dict()
 
     def set_model_params(self, model_parameters):  # global model을 local에서 업로드 하기 위함!!
         self.model.load_state_dict(model_parameters)
+        
+        
 
-    def difference_models_norm_2(self, model_1, model_2):
-        """Return the norm 2 difference between the two model parameters
-        """
-
-        tensor_1 = list(model_1.parameters())
-        tensor_2 = list(model_2.parameters())
-
-        norm = sum([torch.sum((tensor_1[i] - tensor_2[i]) ** 2)
-                    for i in range(len(tensor_1))])
-
-        return norm
-
-    def train(self, train_data, device, args):
+    def train(self, train_data, device, args, class_num):
+        dg_model = copy.deepcopy(self.model)
+        dg_model.to(device)
         model = self.model
         model.to(device)
-        model_0 = deepcopy(model)
         model.train()
 
         # train and update
@@ -45,6 +38,10 @@ class MyModelTrainer(ModelTrainer):  # 각 client마다 할당됨!!
         else:
             optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, self.model.parameters()), lr=args.lr,
                                          weight_decay=args.wd, amsgrad=True)
+        
+
+                        
+        train_criterion= NTD_Loss(class_num, args.tau, args.beta)
 
         epoch_loss = []
         for epoch in range(args.epochs):
@@ -52,8 +49,9 @@ class MyModelTrainer(ModelTrainer):  # 각 client마다 할당됨!!
             for batch_idx, (x, labels) in enumerate(train_data):
                 x, labels = x.to(device), labels.to(device)
                 model.zero_grad()
-                log_probs = model(x)
-                loss = criterion(log_probs, labels,model_0)
+                log_probs, t_logits = model(x), dg_model(x)                    
+                        
+                loss = train_criterion(log_probs,labels,t_logits)
                 #                 print(args.mu/2 * self.difference_models_norm_2(model,model_0))
                 #loss += args.mu / 2 * self.difference_models_norm_2(model, model_0)
 
@@ -70,6 +68,11 @@ class MyModelTrainer(ModelTrainer):  # 각 client마다 할당됨!!
             epoch_loss.append(sum(batch_loss) / len(batch_loss))
             logging.info('Client Index = {}\tEpoch: {}\tLoss: {:.6f}'.format(
                 self.id, epoch, sum(epoch_loss) / len(epoch_loss)))
+            
+            
+            
+      
+    
 
     def test(self, test_data, device, args):
         model = self.model
