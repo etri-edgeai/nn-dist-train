@@ -52,7 +52,6 @@ class MyModelTrainer(ModelTrainer): #각 client마다 할당됨!!
                 model.zero_grad()
                 log_probs = model(x)
                 loss = criterion(log_probs, labels)
-#                 print(args.mu/2 * self.difference_models_norm_2(model,model_0))
                 loss+=args.mu/2 * self.difference_models_norm_2(model,model_0)
                 
                 loss.backward()
@@ -61,9 +60,7 @@ class MyModelTrainer(ModelTrainer): #각 client마다 할당됨!!
                 # torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
 
                 optimizer.step()
-                # logging.info('Update Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                #     epoch, (batch_idx + 1) * args.batch_size, len(train_data) * args.batch_size,
-                #            100. * (batch_idx + 1) / len(train_data), loss.item()))
+
                 batch_loss.append(loss.item())
             epoch_loss.append(sum(batch_loss) / len(batch_loss))
             logging.info('Client Index = {}\tEpoch: {}\tLoss: {:.6f}'.format(

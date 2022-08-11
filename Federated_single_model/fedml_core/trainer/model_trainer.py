@@ -25,7 +25,7 @@ class ModelTrainer(ABC):
         pass
 
     @abstractmethod
-    def train(self, train_data, device, args=None):
+    def train(self, train_data, device, class_num, args=None):
         pass
 
     @abstractmethod

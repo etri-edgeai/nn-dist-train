@@ -1,0 +1,1 @@
+{"Train/Acc": 0.14192, "round": 45, "_timestamp": 1657703263, "_runtime": 4951, "_step": 39, "Train/Loss": 3.614862497806549, "Test/Acc": 0.1389, "Test/Loss": 3.6002639889717103, "_wandb": {"runtime": 5008}}
