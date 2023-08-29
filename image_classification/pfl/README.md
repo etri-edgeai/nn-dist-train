@@ -21,7 +21,7 @@ Finally, change the directory.
 ```bash
 cd image_classification/pfl
 ```
-## Data
+## Data & Model
 
 We run PFL algorithms experiments on CIFAR100 using mobileNet.
 
