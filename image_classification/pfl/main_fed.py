@@ -74,7 +74,7 @@ if __name__ == '__main__':
             
     print(">>> Distributing client train data...")
         
-    traindata_cls_dict = record_net_data_stats(dict_users_train, np.array(dataset_train.tar_s))
+    traindata_cls_dict = record_net_data_stats(dict_users_train, np.array(dataset_train.targets))
     logging.info('Data statistics: %s' % str(traindata_cls_dict))
     
     print(">>> Distributing client test data...")    
