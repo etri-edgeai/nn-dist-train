@@ -59,7 +59,7 @@ def get_dataloader_cifar10(root, train=True, batch_size=50, dataidxs=None):
     if train:
         dataset =CIFAR10(root=root, train=True, transform=train_transform, download=False)
         if dataidxs is not None:
-            dataloader = DataLoader(DatasetSplit(dataset, dataidxs), batch_size=batch_size, shuffle=True)
+            dataloader = DataLoader(DatasetSplit(dataset, dataidxs), batch_size=batch_size, shuffle=False)
         else:
             dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
             
