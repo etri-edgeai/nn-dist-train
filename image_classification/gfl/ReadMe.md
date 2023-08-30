@@ -1,27 +1,38 @@
-# FedNTD (Federated Not-True Distillation)
+# Global Federated Learning (GFL) Algorithms Codebase
 
-This repository is the official PyTorch implementation of:
-
-[**"Preservation of Global Knowledge by Not-True Distillation in Federated Learning (NeurIPS 2022)"**](https://arxiv.org/abs/2106.03097).
-
-Our code structure is based on [FedML](https://doc.fedml.ai/) but refactored for simplicity.
+This repository is designed mainly for research, and pytorch implementation of GFL algorithms.  
 
 We implemented various FL algorithms in our framework: 
-- **FedCurv**, **FedAvgM**, **Scaffold**, **Fedprox**, **MOON**, **FedNova**, **FedDyn**, and **FedNTD (Ours)**.
+- **FedAVG**, **Scaffold**, **Fedprox**, **FedNova**, **FedEXP**, and **FedNTD (Ours)**.
+## Installation
 
-## Requirements
+First check that the requirements are satisfied:</br>
+Python 3.7.16</br>
+pytorch 1.12.0</br>
+torchvision 0.13.0</br>
+numpy 1.21.5</br>
+matplotlib 3.5.3</br>
+Pillow 9.4.0</br>
 
-- This codebase is written for `python3` (used `python 3.8.8` while implementing).
-- We use Pytorch version of `1.9.0` and `10.2`, `11.0` CUDA version.
-- To install necessary python packages,  
-    ```
-    pip install -r requirements.txt
-    ```
-- The logs are uploaded to the wandb server. If you do not have a wandb account, just install and use as offline mode. 
-  ```
-  pip install wandb
-  wandb off
-  ```
+The next step is to clone the repository:
+```bash
+git clone https://github.com/etri-edgeai/nn-dist-train.git
+```
+Finally, change the directory.
+```bash
+cd image_classification/gfl
+```
+
+
+The logs are uploaded to the wandb server. If you do not have a wandb account, just install and use as offline mode.
+```
+pip install wandb
+wandb off
+```
+## Data & Model
+
+We run GFL algorithms experiments on (CIFAR10, VGG11) and (CIFAR100, mobileNet).
+
 
 ## How to Run Codes?
 
@@ -49,22 +60,88 @@ There are two ways to change the configurations:
 - `--seed`: random seed
 
 
-## Reference Github
+## Script for running example
 
-We refer to the following repositories:
-- https://github.com/FedML-AI/FedML (For overall code structure)
-- https://github.com/JYWa/FedNova
-- https://github.com/QinbinLi/MOON
-- https://github.com/BayesWatch/cinic-10
+###  (CIFAR10, VGG11) Experiment
+- FedAVG
+	- Shard Setting
+		- Run `sh fedavg_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedavg_cifar10_lda.sh`.
+
+- FedNTD 
+	- Shard Setting
+		- Run `sh fedntd_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedntd_cifar10_lda.sh`.
 
 
-## Citing this work
+- Scaffold
+	- Shard Setting
+		- Run `sh scaffold_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh scaffold_cifar10_lda.sh`.
 
-```
-@article{lee2021preservation,
-  title={Preservation of the global knowledge by not-true self knowledge distillation in federated learning},
-  author={Lee, Gihun and Shin, Yongjin and Jeong, Minchan and Yun, Se-Young},
-  journal={arXiv preprint arXiv:2106.03097},
-  year={2021}
-}
-```
+	
+	
+- FedEXP
+	- Shard Setting
+		- Run `sh fedexp_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedexp_cifar10_lda.sh`.
+
+###  (CIFAR100, mobileNet) Experiment
+- FedAVG
+	- Shard Setting
+		- Run `sh fedavg_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedavg_cifar100_lda.sh`.
+
+- Scaffold
+	- Shard Setting
+		- Run `sh scaffold_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh scaffold_cifar100_lda.sh`.
+
+	
+- FedNTD 
+	- Shard Setting
+		- Run `sh fedntd_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedntd_cifar100_lda.sh`.
+	
+- FedEXP
+	- Shard Setting
+		- Run `sh fedexp_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedexp_cifar100_lda.sh`.
+
+
+## Experiment Results
+Below is an example of experimental results conducted in the (CIFAR10, VGG11) setting:
+
+We utilized momentum SGD with an initial learning rate of 0.01, setting the momentum to 0.9, and applying a weight decay of 1e-5.
+
+All experiments were carried out over 320 rounds to comprehensively evaluate model performance and convergence behavior. To ensure effective convergence during training, we decreased the learning rate by 0.1 at both the halfway mark and three-quarters of the federated learning rounds.
+
+
+
+ 
+| Algorithm              | shard  2  | shard  5  | shard  10 | lda  0.1 | lda  0.5 | lda  1.0 |
+|------------------------|------------|------------|------------|----------|----------|----------|
+| FedAVG             | 65.42      | 79.95      | 83.18      | 61.5    | 80.98    | 82.1    |
+| **FedNTD (Ours)**           | 70.63      | 80.22      | 82.78      | 68.44    | 81.53    | 82.17    |
+
+
+
+
+## Contact
+Feel free to contact us if you have any questions:)
+
+- Seongyoon Kim: curisam@kaist.ac.kr
+
+
+# Acknowledgements
+
+This codebase was adapted from https://doc.fedml.ai/ and https://github.com/Lee-Gihun/FedNTD/.
+
