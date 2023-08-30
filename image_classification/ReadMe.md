@@ -3,13 +3,14 @@
 
 In the realm of the image classification task, Federated Learning (FL) is broadly categorized into two branches: **Global Federated Learning (GFL)** and **Personalized Federated Learning (PFL)**. The objectives of each branch are as follows:
 
+<img src="./gfl_pfl.png" width="1200"/`>
+
 ## Global Federated Learning (GFL)
 
 
-Global Federated Learning (GFL) aims to enhance the performance of a single global model across decentralized clients by addressing data heterogeneity arising from diverse user behaviors. 
-
+Global Federated Learning (GFL) aims to create a single model that can well label input data for all clients.
 
 ## Personalized Federated Learning (PFL)
 
 
-Personalized Federated Learning (PFL) focuses on training personalized models for individual clients, adapting to their specific data distributions and tasks.
+Personalized Federated Learning (PFL) focuses on creating multiple models optimized for each  clients, adapting to their specific data distributions and tasks.
