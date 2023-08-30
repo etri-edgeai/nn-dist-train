@@ -4,8 +4,6 @@ This repository is the official PyTorch implementation of:
 
 [**"Preservation of Global Knowledge by Not-True Distillation in Federated Learning (NeurIPS 2022)"**](https://arxiv.org/abs/2106.03097).
 
-<img src="./assets/fedntd.png" width="1200"/>
-
 Our code structure is based on [FedML](https://doc.fedml.ai/) but refactored for simplicity.
 
 We implemented various FL algorithms in our framework: 
