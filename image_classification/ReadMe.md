@@ -3,7 +3,7 @@
 
 In the realm of the image classification task, Federated Learning (FL) is broadly categorized into two branches: **Global Federated Learning (GFL)** and **Personalized Federated Learning (PFL)**. The objectives of each branch are as follows:
 
-<img src="./gfl_pfl.png" width="1200"/`>
+<img src="./gfl_pfl.PNG" width="1200"/`>
 
 ## Global Federated Learning (GFL)
 
