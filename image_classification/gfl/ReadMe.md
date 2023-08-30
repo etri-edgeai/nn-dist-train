@@ -18,7 +18,7 @@ The next step is to clone the repository:
 ```bash
 git clone https://github.com/etri-edgeai/nn-dist-train.git
 ```
-Finally, change the directory.
+Then, change the directory.
 ```bash
 cd image_classification/gfl
 ```
@@ -33,7 +33,11 @@ wandb off
 
 We run GFL algorithms experiments on (CIFAR10, VGG11) and (CIFAR100, mobileNet).
 
+Before starting the implementation, first download cifar10 and cifar100 using the following method:
 
+```
+sh generate_cifar.sh
+```
 ## How to Run Codes?
 
 The configuration skeleton for each algorithm is in `./config/*.json`. 
