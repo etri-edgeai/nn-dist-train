@@ -18,6 +18,10 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from PIL import Image
+from client import Client_lsd, Client_ntd, Client_pav
+from server import Server
+from utils import set_random_seed
+from data_utils import Data
 
 mp.set_start_method('spawn', force=True)
 sys.setrecursionlimit(10000)
@@ -65,21 +69,6 @@ def train():
     args = parser.parse_args()
     print(args)
     
-    if args.strategy == 'fedntd':
-        sys.path.append('fed_ReID_ntd')
-    elif args.strategy == 'fedpav':
-        sys.path.append('fed_ReID_pav')
-    elif args.strategy == 'fedlsd':
-        sys.path.append('fed_ReID_lsd')
-    else:
-        raise ValueError('Invalid strategy name')
-    
-    from client import Client
-    from server import Server
-    from utils import set_random_seed
-    from data_utils import Data
-
-
     use_cuda = torch.cuda.is_available()
     device = torch.device("cuda:{}".format(args.gpu_ids) if use_cuda else "cpu")
     set_random_seed(1)
@@ -90,7 +79,7 @@ def train():
     clients = {}
     if args.strategy == 'fedpav':
         for cid in data.client_list:#data.client_list: 리스트 안에 dataset name 나열!! cid는 dataset name!!
-            clients[cid] = Client(
+            clients[cid] = Client_pav(
                 cid, 
                 data, 
                 device, 
@@ -101,9 +90,22 @@ def train():
                 args.batch_size, 
                 args.drop_rate, 
                 args.stride)
-    else:
+    elif args.strategy == 'fedntd':
         for cid in data.client_list:#data.client_list: 리스트 안에 dataset name 나열!! cid는 dataset name!!
-            clients[cid] = Client(
+            clients[cid] = Client_ntd(
+                cid, 
+                data, 
+                device, 
+                args.project_dir, 
+                args.model_name, 
+                args.local_epoch, 
+                args.lr, 
+                args.batch_size, 
+                args.drop_rate, 
+                args.stride, args.tau, args.beta)
+    elif args.strategy == 'fedlsd':
+        for cid in data.client_list:#data.client_list: 리스트 안에 dataset name 나열!! cid는 dataset name!!
+            clients[cid] = Client_lsd(
                 cid, 
                 data, 
                 device, 
