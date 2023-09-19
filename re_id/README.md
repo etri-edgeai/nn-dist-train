@@ -99,7 +99,4 @@ Remember to save the log file for later use!
 }
 ```
 
-## Maintainers
-* Weiming Zhuang, Nanyang Technological University. [:octocat:](https://github.com/weimingwill)
-* Xin Gan, Nanyang Technological University. [:octocat:](https://github.com/codergan)
-* Daiying Yin, Nanyang Technological University. (Contributor)
+ 
