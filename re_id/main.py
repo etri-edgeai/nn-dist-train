@@ -116,6 +116,19 @@ def train():
                 args.batch_size, 
                 args.drop_rate, 
                 args.stride, args.tau, args.beta)
+    elif args.strategy == 'moon':
+        for cid in data.client_list:#data.client_list: 리스트 안에 dataset name 나열!! cid는 dataset name!!
+            clients[cid] = Client_moon(
+                cid, 
+                data, 
+                device, 
+                args.project_dir, 
+                args.model_name, 
+                args.local_epoch, 
+                args.lr, 
+                args.batch_size, 
+                args.drop_rate, 
+                args.stride)
 
     server = Server(
         clients, 
