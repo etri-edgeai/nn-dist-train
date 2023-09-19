@@ -340,7 +340,7 @@ class Client_moon():
         self.model.classifier.classifier = self.classifier #client model에서 feature-extractor, classifier 연결!!
         self.model = self.model.to(self.device)
 
-        optimizer = get_optimizer(self.model, lr)
+        optimizer = get_optimizer2(self.model, lr)
         scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
         
         criterion = nn.CrossEntropyLoss()

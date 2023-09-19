@@ -74,6 +74,18 @@ Remember to save the log file for later use!
     ```
     python main.py --cdw --kd --regularization
     ```
+* Run Federated Not-True Distillation (FedNTD): 
+    ```
+    python main.py --strategy fedntd
+    ```
+* Run Federated Local Self-Distillation (FedLSD): 
+    ```
+    python main.py --strategy fedlsd
+    ```
+* Run Model-contrastive federated learning (MOON): 
+    ```
+    python main.py --strategy moon
+    ```
 
     
 ## Citation
