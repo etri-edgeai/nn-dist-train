@@ -18,7 +18,7 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from PIL import Image
-from client import Client_lsd, Client_ntd, Client_pav
+from client import Client_lsd, Client_ntd, Client_pav, Client_moon
 from server import Server
 from utils import set_random_seed
 from data_utils import Data
@@ -62,7 +62,7 @@ parser.add_argument('--regularization', action='store_true', help='use regulariz
 parser.add_argument('--tau', type=int, default=3, help='ntd loss hyperparameter (tau)')
 parser.add_argument('--beta', type=int, default=1, help='ntd loss hyperparameter (beta)')
 
-parser.add_argument('--strategy', default='fedntd', type=str, help='federated strategy')
+parser.add_argument('--strategy', default='fedpav', type=str, help='federated strategy')
 
 
 def train():
