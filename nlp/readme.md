@@ -19,3 +19,11 @@ python main_lm.py --data cola --model bert-large-uncased --n_cpu 1.0 --n_gpus 2 
 ```
 python main_lm.py --data cola --model bert-large-uncased --n_cpu 1.0 --n_gpus 2 --frac_fit 1.0 --epoch 2 --batch_size 16 --batch_accum 2 --lang_mix 0.99 --n_iterations 5 --lr 1e-5 --seed 5 > ./log/bert-large/cola/iid5.txt
 ```
+
+## explain of each api
+
+--data : which data you want to run
+
+--model : which model you'll use
+
+--n_cpu: how many cpu cores are allocated for each client
