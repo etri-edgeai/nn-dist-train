@@ -10,3 +10,5 @@ pip install -r requirements.txt
 python preprocess/qasc.py
 python preprocess/rte.py
 ```
+
+## running standard fine-tuning code
