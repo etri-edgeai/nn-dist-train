@@ -34,3 +34,5 @@ python main_lm.py --data cola --model bert-large-uncased --n_cpu 1.0 --n_gpus 2 
 
 --epoch: how many iterations each client run (local iteration)
 
+--batch_size + --batch_accum: batch size of each client (batch size * batch accum = actual batch size)
+
