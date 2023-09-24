@@ -27,3 +27,7 @@ python main_lm.py --data cola --model bert-large-uncased --n_cpu 1.0 --n_gpus 2 
 --model : which model you'll use
 
 --n_cpu: how many cpu cores are allocated for each client
+
+--n_gpu: how many gpus are used to run this entire code
+
+
