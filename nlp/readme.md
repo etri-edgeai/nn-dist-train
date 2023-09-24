@@ -39,5 +39,11 @@ python main_lm.py --data mnli --model t5-base --n_cpu 1.0 --n_gpus 2 --frac_fit 
 
 --batch_size + --batch_accum: batch size of each client (batch size * batch accum = actual batch size)
 
---lang_mix: 0.0 for non-iid, 0.99 for iid and 0.99 --centralized for standard finetuning 
+--lang_mix: 0.0 for non-iid, 0.99 for iid and 0.99 --centralized for standard finetuning
+
+--n_iteration: how many averaging happen (global epoch)
+
+--lr: learning rate
+
+--seed: seed
 
