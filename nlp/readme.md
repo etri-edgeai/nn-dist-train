@@ -5,7 +5,8 @@ pip install -r requirements.txt
 ```
 
 ## Example to Run
-### Prepare the GLUE datasets
+### Preprocess datasets
 ```
 python preprocess/qasc.py
+python preprocess/rte.py
 ```
