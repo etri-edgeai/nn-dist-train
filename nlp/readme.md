@@ -32,4 +32,5 @@ python main_lm.py --data cola --model bert-large-uncased --n_cpu 1.0 --n_gpus 2 
 
 --frac_fit: client selection ratio
 
+--epoch: how many iterations each client run (local iteration)
 
