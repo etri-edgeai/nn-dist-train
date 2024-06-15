@@ -3,14 +3,31 @@ from .models import *
 __all__ = ["create_models"]
 
 MODELS = {
-    "fedavg_cifar": fedavgnet.FedAvgNetCIFAR,
     "mobile": mobilenet.MobileNetCifar,
-    "vgg": vgg.vgg11
+    "mobile_sphere": mobilenet.MobileNetCifar_Sphere,
+    "mobile_etf": mobilenet.MobileNetCifar_ETF,
+    "mobile_ncp": mobilenet.MobileNetCifar_NCP,
+    "mobile_dr": mobilenet.MobileNetCifar_DR,
+    
+    
+    "tiny_mobile": mobilenet.MobileNettiny,
+    "tiny_mobile_sphere": mobilenet.MobileNettiny_Sphere,
+    "tiny_mobile_etf": mobilenet.MobileNettiny_ETF,
+    "tiny_mobile_ncp": mobilenet.MobileNettiny_NCP,
+    "tiny_mobile_dr": mobilenet.MobileNettiny_DR,
+    
+    
+    "vgg": vgg.vgg11,
+    "vgg_sphere": vgg.vgg11_Sphere,
+    "vgg_etf": vgg.vgg11_ETF,
+    "vgg_ncp": vgg.vgg11_NCP,
+    "vgg_dr": vgg.vgg11_DR,    
 }
 
 NUM_CLASSES = {
     "cifar10": 10,
     "cifar100": 100,
+    "tinyimagenet": 200
 }
 
 

@@ -11,6 +11,7 @@ import pickle
 
 from .cifar10.loader import get_all_targets_cifar10, get_dataloader_cifar10
 from .cifar100.loader import get_all_targets_cifar100, get_dataloader_cifar100
+from .tinyimagenet.loader import get_all_targets_tinyimagenet, get_dataloader_tinyimagenet
 
 __all__ = ["data_distributer"]
 
@@ -23,11 +24,14 @@ logger.setLevel(logging.INFO)
 DATA_INSTANCES = {
     "cifar10": get_all_targets_cifar10,
     "cifar100": get_all_targets_cifar100,
+    "tinyimagenet": get_all_targets_tinyimagenet
+    
 }
 
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
+    "tinyimagenet": get_dataloader_tinyimagenet    
 }
 
 
@@ -47,34 +51,32 @@ def data_distributer(
     all_targets_train = DATA_INSTANCES[dataset_name](root)
     all_targets_test = DATA_INSTANCES[dataset_name](root, train=False)
     
-    
     num_classes = len(np.unique(all_targets_train))
     net_dataidx_map_test = None
 
     local_info = {
-        i: {"datasize": 0, "train_idxs": None, "test_idxs": None} for i in range(n_clients)
+        i: {"datasize": 0, "train_idxs": None, "test_idxs": None, "class_frequency": None} for i in range(n_clients)
     }
     
     print(partition)
 
-    if partition.method == "iid":
-        net_dataidx_map = iid_partition(all_targets_train, n_clients)
-        net_dataidx_map_test = iid_partition(all_targets_test, n_clients)
+#     if partition.method == "iid":
+#         net_dataidx_map = iid_partition(all_targets_train, n_clients)
+#         net_dataidx_map_test = iid_partition(all_targets_test, n_clients)
         
-    elif partition.method == "sharding" or partition.method == "sharding_new":
-        print('here')
-        net_dataidx_map, rand_set_all = sharding_partition(all_targets_train, n_clients, partition.shard_per_user)
-        net_dataidx_map_test, rand_set_all = sharding_partition(all_targets_test, n_clients, partition.shard_per_user, rand_set_all=rand_set_all)
+#     elif partition.method == "sharding":
+#         net_dataidx_map, rand_set_all = sharding_partition(all_targets_train, n_clients, partition.shard_per_user)
+#         net_dataidx_map_test, rand_set_all = sharding_partition(all_targets_test, n_clients, partition.shard_per_user, rand_set_all=rand_set_all)
         
-    elif partition.method == "lda":
-        net_dataidx_map = lda_partition(all_targets_train, n_clients, partition.alpha)
+#     elif partition.method == "lda":
+#         net_dataidx_map = lda_partition(all_targets_train, n_clients, partition.alpha)
         
-    else:
-        raise NotImplementedError
+#     else:
+#         raise NotImplementedError
         
     #Use the given setting
     if partition.method == "iid":
-        dict_save_path = 'train_tools/preprocessing/dict_users_10_iid.pkl'
+        dict_save_path = 'train_tools/preprocessing/dict_users_{}_iid.pkl'.format(num_classes)
         with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
             net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
     
@@ -84,14 +86,7 @@ def data_distributer(
         with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
             net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
             
-    elif partition.method == "sharding_new":
-        dict_save_path = 'train_tools/preprocessing/dict_users_10_2_new.pkl'
-
-        with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
-            net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
-
-            
-    elif partition.method == "lda":    
+    elif partition.method == "lda":
         dict_save_path = 'train_tools/preprocessing/dict_users_lda_{}_{}.pkl'.format(partition.alpha, num_classes)
 
         with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
@@ -104,11 +99,15 @@ def data_distributer(
     traindata_cls_dict = record_net_data_stats(net_dataidx_map, all_targets_train)
     
     logging.info('Data statistics: %s' % str(traindata_cls_dict))
+    
     traindata_cls_counts = net_dataidx_map_counter(net_dataidx_map, all_targets_train)
-
+    traindata_cls_frequency = record_net_data_stats_total(net_dataidx_map, all_targets_train)
     for client_idx, dataidxs in net_dataidx_map.items():
         local_info[client_idx]["datasize"] = len(dataidxs)
         local_info[client_idx]["train_idxs"] = dataidxs
+        
+    for client_idx, class_frequency in traindata_cls_frequency.items():
+        local_info[client_idx]["class_frequency"] = class_frequency
         
     if partition.method == "sharding":
         for client_idx, dataidxs in net_dataidx_map_test.items():
@@ -119,23 +118,29 @@ def data_distributer(
     
     test_loader["global"]=DATA_LOADERS[dataset_name](root=root, train=False, batch_size=100, dataidxs=None)
     
-    if net_dataidx_map_test is not None:
+
+    if partition.method == "sharding":
         test_loader["local"]={}
         for i in range(n_clients):
             test_loader["local"][i]=DATA_LOADERS[dataset_name](root=root, train=False, batch_size=100, dataidxs=local_info[i]["test_idxs"])
             
-
+#     import ipdb; ipdb.set_trace(context=15)
 
     data_distributed = {
         "local": local_info,
         "data_map": traindata_cls_counts,
         "num_classes": num_classes,
         "data_name": dataset_name,
-        "test_loader": test_loader 
+        "test_loader": test_loader,
+        "average_train_num": int(len(all_targets_train)/n_clients),
+        "batch_size": batch_size
             
     }
 
+
     return data_distributed
+
+
 
 
 
@@ -278,3 +283,22 @@ def record_net_data_stats(net_dataidx_map, all_targets):
         tmp = {unq[i]: unq_cnt[i] for i in range(len(unq))}#tmp에는 unq가 key unq_count가 value가 되게 기재!!
         net_cls_counts[net_i] = tmp
     return net_cls_counts #각 client가 어떤 label을 몇개씩 가지고 있는지 통계량 기재!!
+
+
+def record_net_data_stats_total(net_dataidx_map, all_targets):
+    
+    total_num_classes = len(np.unique(all_targets))
+    
+    net_cls_frequency = {}
+
+    for net_i, dataidx in net_dataidx_map.items():
+        # 해당 클라이언트가 가진 데이터의 레이블 빈도 계산
+        unq, unq_cnt = np.unique(all_targets[dataidx], return_counts=True)
+        # 레이블과 빈도를 딕셔너리로 매핑
+        tmp = {cls: 0 for cls in range(total_num_classes)}  # 모든 레이블에 대해 빈도 0으로 초기화
+        tmp.update({unq[i]: unq_cnt[i] for i in range(len(unq))})  # 실제 레이블 빈도 업데이트
+
+        net_cls_frequency[net_i] = tmp  # total_counts가 0이면 정규화하지 않음
+
+    return net_cls_frequency
+
