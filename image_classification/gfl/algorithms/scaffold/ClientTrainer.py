@@ -10,6 +10,7 @@ from algorithms.scaffold.utils import *
 
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
+from train_tools.preprocessing.tinyimagenet.loader import get_dataloader_tinyimagenet
 
 
 __all__ = ["ClientTrainer"]
@@ -18,6 +19,8 @@ __all__ = ["ClientTrainer"]
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
+    "tinyimagenet": get_dataloader_tinyimagenet
+    
 }
 
 
@@ -42,9 +45,16 @@ class ClientTrainer(BaseClientTrainer):
         root = os.path.join("./data", self.data_name)
         self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=50, dataidxs=self.train_idxs)  
         
-        for _ in range(self.local_epochs):
-            for data, targets in self.trainloader:
+        
+        if self.test_idxs is None: #LDA Setting
+            for _ in range(self.average_iteration*self.local_epochs):
+                dataiter = iter(self.trainloader)
+                data, targets = next(dataiter)
                 self._scaffold_step(data, targets)
+        else: #Sharding Setting
+            for _ in range(self.local_epochs):
+                for data, targets in self.trainloader:
+                     self._scaffold_step(data, targets)
 
         # update control variates for scaffold algorithm
         c_i_plus, c_update_amount = self._update_control_variate()

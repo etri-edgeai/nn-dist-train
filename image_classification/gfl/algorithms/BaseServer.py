@@ -9,7 +9,7 @@ from .measures import *
 
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
-
+from train_tools.preprocessing.tinyimagenet.loader import get_dataloader_tinyimagenet
 
 __all__ = ["BaseServer"]
 
@@ -17,6 +17,7 @@ __all__ = ["BaseServer"]
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
+    "tinyimagenet": get_dataloader_tinyimagenet    
 }
 
 
@@ -73,7 +74,6 @@ class BaseServer:
             
             # Get aggregated weights & update global
             ag_weights = self._aggregation(updated_local_weights, client_sizes)
-
             # Update global weights and evaluate statistics
             self._update_and_evaluate(ag_weights, round_results, round_idx, start_time)
             
@@ -125,38 +125,84 @@ class BaseServer:
         """Assign local client datasets."""
         self.client.datasize = self.data_distributed["local"][client_idx]["datasize"]
         self.client.train_idxs = self.data_distributed["local"][client_idx]["train_idxs"]
+        
+        self.client.class_frequency= torch.tensor(list(self.data_distributed["local"][client_idx]["class_frequency"].values())).to(self.device)
+        
         self.client.test_idxs = self.data_distributed["local"][client_idx]["test_idxs"]
+        
         self.client.data_name= self.data_distributed["data_name"]
+        self.client.average_train_num= self.data_distributed["average_train_num"]
+        self.client.batch_size=self.data_distributed["batch_size"]
+        self.client.average_iteration=int(self.client.average_train_num/self.client.batch_size)
+        
+        
+#     def _aggregation(self, w, ns):
+#         """Average locally trained model parameters"""
+        
+#         if self.data_distributed["test_loader"]["local"]==None:#lda setting
+        
+#             prop = torch.tensor(ns, dtype=torch.float)
+#             prop /= torch.sum(prop)
+#             w_avg = copy.deepcopy(w[0])
+#             for k in w_avg.keys():
+#                 w_avg[k] = w_avg[k] * prop[0]
 
+#             for k in w_avg.keys():
+#                 for i in range(1, len(w)):
+#                     w_avg[k] += w[i][k] * prop[i]
+
+        
+#         else:
+#             w_avg = copy.deepcopy(w[0])
+#             for k in w_avg.keys():
+#                 for i in range(1, len(w)):
+#                     w_avg[k] += w[i][k] 
+
+#             for k in w_avg.keys():
+#                 w_avg[k] = torch.div(w_avg[k], len(w))##global model의 state_dict!!
+                
+                
+
+#         return copy.deepcopy(w_avg)
+    
+    
     def _aggregation(self, w, ns):
         """Average locally trained model parameters"""
         
-        if self.data_distributed["test_loader"]["local"]==None:#lda setting
-        
-            prop = torch.tensor(ns, dtype=torch.float)
-            prop /= torch.sum(prop)
+        w_avg=None
+        train_size = torch.tensor(ns, dtype=torch.float)
+#         import ipdb; ipdb.set_trace(context=15)
+        if self.data_distributed["test_loader"]["local"]==None:#LDA setting
             w_avg = copy.deepcopy(w[0])
             for k in w_avg.keys():
-                w_avg[k] = w_avg[k] * prop[0]
+                w_avg[k] = w_avg[k] * train_size[0]
 
             for k in w_avg.keys():
                 for i in range(1, len(w)):
-                    w_avg[k] += w[i][k] * prop[i]
-
-        
-        else:
+                    w_avg[k] += w[i][k] * train_size[i]
+                    
+        else:#Sharding setting
+                    
             w_avg = copy.deepcopy(w[0])
+            
             for k in w_avg.keys():
                 for i in range(1, len(w)):
                     w_avg[k] += w[i][k] 
-
+                    
+        #Aggregation
+#         import ipdb; ipdb.set_trace(context=15)            
+        if self.data_distributed["test_loader"]["local"]==None:#LDA setting     
+            for k in w_avg.keys():
+                w_avg[k] = torch.div(w_avg[k], sum(train_size))##global model의 state_dict!!
+            
+        else:
             for k in w_avg.keys():
                 w_avg[k] = torch.div(w_avg[k], len(w))##global model의 state_dict!!
-                 
-
+                
+                
+        
+        
         return copy.deepcopy(w_avg)
-    
-    
 
     def _results_updater(self, round_results, local_results):#round_results: 해당 client이전의 selected된 client들의 statistic 기술한 dictionary, local_results: 업데이트할 client에서 얻어진 local model의 train acc(local data 기준) (light version!!)
         """Combine local results as clean format"""
@@ -237,6 +283,13 @@ class BaseServer:
 #         }
 #         wandb.log(local_results, step=round_idx)#local model statistic
 
+        # Local round results
+        local_results = {
+            "local_train_acc": np.mean(round_results["train_acc"])
+        }
+        wandb.log(local_results, step=round_idx)#local model statistic
+
+
         # Server round results
         server_results = {"server_test_acc": self.server_results["test_accuracy"][-1]}
         wandb.log(server_results, step=round_idx)#global model statistic
@@ -244,6 +297,7 @@ class BaseServer:
         wandb.log(server_best_results, step=round_idx)#global model statistic
 
     def _update_and_evaluate(self, ag_weights, round_results, round_idx, start_time):
+
         """Evaluate experiment statistics."""
 
         # Update Global Server Model
@@ -251,21 +305,21 @@ class BaseServer:
 
         # Measure Accuracy Statistics
         
-        
         if self.data_distributed["test_loader"]["local"] is None:
+
             self.testloader=self.data_distributed["test_loader"]["global"]
-            
             test_acc = evaluate_model(
                 self.model, self.testloader, device=self.device
             )#.measures/predictions.py에 있음
+            
+
         else:
             acc_test_local = np.zeros(self.n_clients)
             for client in range(self.n_clients):
                 self.testloader=self.data_distributed["test_loader"]["local"][client]
                 acc_test_local[client]=evaluate_model(self.model, self.testloader, device=self.device)
+
             test_acc=acc_test_local.mean()
-
-
             
         self.server_results["test_accuracy"].append(test_acc)
         
@@ -287,7 +341,7 @@ class BaseServer:
         round_elapse = time.time() - start_time
 
         # Log and Print
-        self._wandb_logging(round_results, round_idx)#local_train_loss 띄움(light version)
+        self._wandb_logging(round_results, round_idx)#local_train_accuracy 띄움(light version)
         
         
         self._print_stats(round_results, test_acc, round_idx, round_elapse, self.server_results["best_accuracy"][-1])

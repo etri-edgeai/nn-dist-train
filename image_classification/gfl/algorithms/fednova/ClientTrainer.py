@@ -44,15 +44,32 @@ class ClientTrainer(BaseClientTrainer):
         local_size = self.datasize
         root = os.path.join("./data", self.data_name)
         self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=50, dataidxs=self.train_idxs)  
+        if self.test_idxs is None: #LDA Setting
+            for _ in range(self.local_epochs):
+                for data, targets in self.trainloader:
+                    self._nova_step(data, targets)
 
-        for _ in range(self.local_epochs):
-            for data, targets in self.trainloader:
-                self._nova_step(data, targets)
+            # update control variates for scaffold algorithm
+            aidi = self._update_control_variate()
 
-        # update control variates for scaffold algorithm
-        aidi = self._update_control_variate()
+            local_results = self._get_local_stats()
 
-        local_results = self._get_local_stats()
+        else:
+            for _ in range(self.local_epochs):
+                for data, targets in self.trainloader:
+                    self.optimizer.zero_grad()
+
+                    # forward pass
+                    data, targets = data.to(self.device), targets.to(self.device)
+                    
+                    self._nova_step(data, targets)
+
+            # update control variates for scaffold algorithm
+            aidi = self._update_control_variate()
+
+            local_results = self._get_local_stats()
+                    
+            
 
         return local_results, local_size, aidi
 

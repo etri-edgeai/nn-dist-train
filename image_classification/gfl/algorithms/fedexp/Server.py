@@ -7,7 +7,7 @@ import torch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), "../../")))
 
-from algorithms.fedavg.ClientTrainer import ClientTrainer
+from algorithms.fedexp.ClientTrainer import ClientTrainer
 from algorithms.BaseServer import BaseServer
 
 __all__ = ["Server"]
