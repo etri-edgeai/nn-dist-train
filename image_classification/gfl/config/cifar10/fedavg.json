@@ -17,7 +17,7 @@
         "scenario": {
             "n_rounds": 320,
             "sample_ratio": 0.1,
-            "local_epochs": 15,
+            "local_epochs": 10,
             "device": "cuda:0"
         },
         "model":{
@@ -32,11 +32,11 @@
             "name": "multistep",
             "params": {"gamma":0.1, "milestones": [160, 240]}
         },
-        "seed": 0
+        "seed": 1000
     },
     "wandb_setups":{
-        "project": "NeurIPS2023",
-        "group": "plain",
+        "project": "NeurIPS_FedDR",
+        "group": "fedavg",
         "name": "fedavg"
     }
 }

@@ -11,10 +11,8 @@
     },
     "train_setups":{
         "algo": {
-            "name": "fedexp",
-            "params": {
-		    "eps": 0.001
-	    }
+            "name": "feddr",
+            "params": {}
         },
         "scenario": {
             "n_rounds": 320,
@@ -23,11 +21,11 @@
             "device": "cuda:0"
         },
         "model":{
-            "name": "mobile",
+            "name": "mobile_dr",
             "params": {}
         },
         "optimizer":{
-            "params": {"lr": 0.1, "momentum":0.9, "weight_decay": 1e-5}
+            "params": {"lr": 5.0, "momentum":0.9, "weight_decay": 1e-5}
         },
         "scheduler":{
             "enabled": true,
@@ -38,7 +36,7 @@
     },
     "wandb_setups":{
         "project": "NeurIPS_FedDR",
-        "group": "fedexp",
-        "name": "fedexp"
+        "group": "feddr",
+        "name": "feddr"
     }
 }
