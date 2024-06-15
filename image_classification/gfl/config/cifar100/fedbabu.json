@@ -11,10 +11,8 @@
     },
     "train_setups":{
         "algo": {
-            "name": "fedexp",
-            "params": {
-		    "eps": 0.001
-	    }
+            "name": "fedbabu",
+            "params": {}
         },
         "scenario": {
             "n_rounds": 320,
@@ -38,7 +36,7 @@
     },
     "wandb_setups":{
         "project": "NeurIPS_FedDR",
-        "group": "fedexp",
-        "name": "fedexp"
+        "group": "fedbabu",
+        "name": "fedbabu"
     }
 }
