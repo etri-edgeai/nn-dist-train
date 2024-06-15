@@ -17,6 +17,8 @@ DATA_LOADERS = {
     "cifar100": get_dataloader_cifar100,
 }
 
+
+
 class ClientTrainer(BaseClientTrainer):
     def __init__(self, criterion, **kwargs):
         super(ClientTrainer, self).__init__(**kwargs)
@@ -39,9 +41,13 @@ class ClientTrainer(BaseClientTrainer):
         local_size = self.datasize
         root = os.path.join("./data", self.data_name)
         self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=50, dataidxs=self.train_idxs)  
+        
+        if self.test_idxs is None: #LDA Setting
+            
+            for _ in range(self.average_iteration*self.local_epochs):
+                dataiter = iter(self.trainloader)
+                data, targets = next(dataiter)
 
-        for _ in range(self.local_epochs):
-            for data, targets in self.trainloader:
                 self.optimizer.zero_grad()
 
                 # forward pass
@@ -53,7 +59,24 @@ class ClientTrainer(BaseClientTrainer):
                 loss.backward()
                 self.optimizer.step()
 
-        local_results = self._get_local_stats()
+            local_results = self._get_local_stats()
+            
+            
+        else:
+            for _ in range(self.local_epochs):
+                for data, targets in self.trainloader:
+                    self.optimizer.zero_grad()
+
+                    # forward pass
+                    data, targets = data.to(self.device), targets.to(self.device)
+                    logits, dg_logits = self.model(data), self._get_dg_logits(data)
+                    loss = self.criterion(logits, targets, dg_logits)
+
+                    # backward pass
+                    loss.backward()
+                    self.optimizer.step()
+
+            local_results = self._get_local_stats()
 
         return local_results, local_size
 

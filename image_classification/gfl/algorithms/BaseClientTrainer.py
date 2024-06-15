@@ -14,13 +14,15 @@ import os
 
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
-
+from train_tools.preprocessing.tinyimagenet.loader import get_dataloader_tinyimagenet
 __all__ = ["BaseClientTrainer"]
 
 
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
+    "tinyimagenet": get_dataloader_tinyimagenet
+    
 }
 
 
@@ -43,9 +45,14 @@ class BaseClientTrainer:
         self.datasize = None # client index에 맞게 채워질 예정
         self.num_classes = num_classes
         self.train_idxs = None # client index에 맞게 채워질 예정
+        
+        self.class_frequency=None
+        
         self.test_idxs = None # client index에 맞게 채워질 예정
         self.data_name = None
-
+        self.average_train_num=None
+        self.batch_size=None
+        self.average_iteration=None
     def train(self):
         """Local training"""
         self.model.train()
@@ -56,13 +63,15 @@ class BaseClientTrainer:
         epoch_loss = []
         
         root = os.path.join("./data", self.data_name)
-        self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=50, dataidxs=self.train_idxs)  
-        
-        for _ in range(self.local_epochs):
-            batch_loss=[]
-            for data, targets in self.trainloader:
+        self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=self.batch_size, dataidxs=self.train_idxs)
+#         import ipdb; ipdb.set_trace(context=15)
+        if self.test_idxs is None: #LDA Setting
+            for _ in range(self.average_iteration*self.local_epochs):
+                dataiter = iter(self.trainloader)
+                data, targets = next(dataiter)
+
                 self.optimizer.zero_grad()
-                
+
                 # forward pass
                 data, targets = data.to(self.device), targets.to(self.device)
                 output = self.model(data)
@@ -72,13 +81,30 @@ class BaseClientTrainer:
                 loss.backward()
 
                 self.optimizer.step()
-                batch_loss.append(loss.item())
-            epoch_loss.append(sum(batch_loss)/len(batch_loss))
+                
+                
+        else: #Sharding Setting
+            for _ in range(self.local_epochs):
+                batch_loss=[]
+                for data, targets in self.trainloader:
+                    self.optimizer.zero_grad()
+
+                    # forward pass
+                    data, targets = data.to(self.device), targets.to(self.device)
+                    output = self.model(data)
+                    loss = self.criterion(output, targets)
+
+                    # backward pass
+                    loss.backward()
+
+                    self.optimizer.step()
+                    batch_loss.append(loss.item())
+                epoch_loss.append(sum(batch_loss)/len(batch_loss))
+
         local_results = self._get_local_stats()
         
     
         return local_results, local_size
-
 
     def _get_local_stats(self):
         local_results = {}
@@ -111,10 +137,9 @@ class BaseClientTrainer:
                                      {'params': head_params, 'lr': server_optimizer_info['lr']}],
                                     momentum=server_optimizer_info['momentum'],
                                     weight_decay=server_optimizer_info['weight_decay'])
-       
         
         
-
+        
     def upload_local(self):
         """Uploads local model's parameters"""
         local_weights = copy.deepcopy(self.model.state_dict())
@@ -124,11 +149,16 @@ class BaseClientTrainer:
     def reset(self):
         """Clean existing setups"""
         self.datasize = None
-        
         self.train_idxs = None 
+        
+        self.class_frequency=None
+        
         self.test_idxs = None 
         self.data_name = None
-        
+        self.average_train_num=None
+        self.batch_size=None
+        self.average_iteration=None
+
         
         self.trainloader = None
         self.testloader = None

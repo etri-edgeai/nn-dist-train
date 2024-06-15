@@ -28,6 +28,8 @@ def flatten_grads(model):
     """
     all_grads = []
     for name, param in model.named_parameters():
+        if name == "classifier.weight":
+            param.grad=torch.zeros_like(param)
         all_grads.append(param.grad.view(-1))
     return torch.cat(all_grads)
 

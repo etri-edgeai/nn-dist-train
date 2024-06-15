@@ -23,11 +23,18 @@ torch.set_printoptions(10)
 ALGO = {
     "fedavg": algorithms.fedavg.Server,
     "fedexp": algorithms.fedexp.Server,    
-    "fedprox": algorithms.fedprox.Server,
+    "scaffold": algorithms.scaffold.Server,
+    "fedbabu": algorithms.fedbabu.Server,
+    "fedetf": algorithms.fedetf.Server,
+    "spherefed": algorithms.spherefed.Server,
+    "fedncp": algorithms.fedncp.Server, 
+    "feddr": algorithms.feddr.Server,   
     "fedntd": algorithms.fedntd.Server,
     "fednova": algorithms.fednova.Server,
-    "scaffold": algorithms.scaffold.Server,
+    "fedprox": algorithms.fedprox.Server,
+    
 }
+
 
 SCHEDULER = {
     "step": lr_scheduler.StepLR,
@@ -45,7 +52,7 @@ def _get_setups(args):
     
     # Distribute the data to clients
     data_distributed = data_distributer(**args.data_setups)#datasetter.py에 있는 fct, Server Class의 attribute로 들어간다.
-#  {""local": local_info,"data_map": data_map,"num_classes": num_classes, "data_name": dataset_name} 형태!!
+#  {""local": local_info,"data_map": traindata_cls_counts,"num_classes": num_classes, "data_name": dataset_name, "test_loader": test_loader, "average_train_num": int(len(all_targets_train)/n_clients), "batch_size": batch_size} 형태!!
 
     # Fix randomness for experiment
     _random_seeder(args.train_setups.seed)
@@ -65,7 +72,7 @@ def _get_setups(args):
     if args.train_setups.scheduler.enabled:
         scheduler = SCHEDULER[args.train_setups.scheduler.name](
             optimizer, **args.train_setups.scheduler.params
-        )#{'name': 'step'}, {'gamma': 0.99, 'step_size': 1}, Server Class의 attribute로 들어간다.
+        )#{'name': 'multistep'}, {'gamma': 0.1, "milestones": [160, 240]}, Server Class의 attribute로 들어간다.
 
     # Algorith-specific global server container
     algo_params = args.train_setups.algo.params #{}, Server Class의 attribute로 들어간다.

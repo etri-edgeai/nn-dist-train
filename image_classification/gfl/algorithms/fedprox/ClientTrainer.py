@@ -41,24 +41,47 @@ class ClientTrainer(BaseClientTrainer):
         local_size = self.datasize
         root = os.path.join("./data", self.data_name)
         self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=50, dataidxs=self.train_idxs)  
+        if self.test_idxs is None: #LDA Setting
+            for _ in range(self.local_epochs):
+                for data, targets in self.trainloader:
+                    self.optimizer.zero_grad()
 
-        for _ in range(self.local_epochs):
-            for data, targets in self.trainloader:
-                self.optimizer.zero_grad()
+                    # forward pass
+                    data, targets = data.to(self.device), targets.to(self.device)
+                    output = self.model(data)
+                    loss = self.criterion(output, targets)
 
-                # forward pass
-                data, targets = data.to(self.device), targets.to(self.device)
-                output = self.model(data)
-                loss = self.criterion(output, targets)
+                    # Add proximal loss term
+                    loss += self._proximal_term(self.dg_model, self.model, self.mu)
 
-                # Add proximal loss term
-                loss += self._proximal_term(self.dg_model, self.model, self.mu)
+                    # backward pass
+                    loss.backward()
+                    self.optimizer.step()
 
-                # backward pass
-                loss.backward()
-                self.optimizer.step()
+            local_results = self._get_local_stats()
+            
+            
+        else:
+            for _ in range(self.local_epochs):
+                for data, targets in self.trainloader:
+                    self.optimizer.zero_grad()
 
-        local_results = self._get_local_stats()
+                    # forward pass
+                    data, targets = data.to(self.device), targets.to(self.device)
+                    
+                    output = self.model(data)
+                    loss = self.criterion(output, targets)
+
+                    # Add proximal loss term
+                    loss += self._proximal_term(self.dg_model, self.model, self.mu)
+
+                    # backward pass
+                    loss.backward()
+                    self.optimizer.step()
+
+            local_results = self._get_local_stats()
+                    
+            
 
         return local_results, local_size
 
