@@ -49,7 +49,7 @@ class Client_lsd():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % 3 == 0:
+            if epoch % self.local_epoch == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             else:
@@ -151,7 +151,7 @@ class Client_pav():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % 3 == 0:
+            if epoch % self.local_epoch == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             else:
@@ -258,7 +258,7 @@ class Client_ntd():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % 3 == 0:
+            if epoch % self.local_epoch == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             else:
@@ -382,7 +382,7 @@ class Client_moon():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % 3 == 0:
+            if epoch % self.local_epoch == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             else:
