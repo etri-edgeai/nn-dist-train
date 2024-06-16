@@ -442,9 +442,9 @@ class Client_moon():
                 #logits /= temperature
                 #labels_new = torch.zeros(inputs.size(0)).cuda().long()
 
-                loss1 = criterion(outputs, labels)
-                loss2 = mu * criterion(logits, labels_new)
-                loss = loss1 + loss2
+                #loss1 = criterion(outputs, labels)
+                #loss2 = mu * criterion(logits, labels_new)
+                #loss = loss1 + loss2
 
                 # print(labels)
                 # print(logits)
