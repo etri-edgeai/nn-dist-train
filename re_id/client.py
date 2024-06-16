@@ -415,7 +415,8 @@ class Client_moon():
                     - loss1: cross-entropy loss
                     - loss2: contrastive loss
                 """
-                pro1, outputs = self.model(inputs)
+                #pro1, outputs = self.model(inputs)
+                pro1 = self.pro1_model(inputs)
                 pro2, _ = global_model(inputs)
                 _, preds = torch.max(outputs.data, 1)
 
