@@ -377,6 +377,13 @@ class Client_moon():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
+            for epoch in range(self.local_epochs):
+            if epoch % 3 == 0:
+                optimizer = get_optimizer1(self.model, lr)
+                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
+            else:
+                optimizer = get_optimizer2(self.model, lr)
+                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             print('Epoch {}/{}, lr {}'.format(epoch, self.local_epoch - 1, optimizer.param_groups[0]['lr']))
             print('-' * 10)
 
