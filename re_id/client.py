@@ -418,11 +418,12 @@ class Client_moon():
                 #pro1, outputs = self.model(inputs)
                 pro1 = self.pro1_model(inputs)
                 p_logits = self.model(inputs)
-                pro2, _ = global_model(inputs)
+                #pro2, _ = global_model(inputs)
+                pro2 = global_model(inputs)
                 _, preds = torch.max(outputs.data, 1)
 
                 posi = cos(pro1, pro2)          # positive pairs [b]
-                logits = posi.reshape(-1, 1)    # [b, 1]
+                #logits = posi.reshape(-1, 1)    # [b, 1]
 
                 pro3, _ = prev_model(inputs)
                 nega = cos(pro1, pro3)
