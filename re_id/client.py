@@ -425,11 +425,19 @@ class Client_moon():
                 posi = cos(pro1, pro2)          # positive pairs [b]
                 #logits = posi.reshape(-1, 1)    # [b, 1]
 
-                pro3, _ = prev_model(inputs)
+                pro3 = prev_model(inputs)
                 nega = cos(pro1, pro3)
-                logits = torch.cat((logits, nega.reshape(-1,1)), dim=1)
+                b_logits = torch.cat((posi.reshape(-1,1), nega.reshape(-1,1)), dim=1)
 
                 # prev_model.to('cpu')
+                b_logits /= temperature
+                b_labels = torch.zeros(inputs.size(0)).to(self.device).long()
+
+                b_loss = mu * criterion(b_logits, b_labels)
+
+
+                ce_loss=criterion(p_logits, labels)
+                loss = ce_loss + b_loss
 
                 logits /= temperature
                 labels_new = torch.zeros(inputs.size(0)).cuda().long()
