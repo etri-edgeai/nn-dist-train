@@ -48,7 +48,7 @@ class Client_lsd():
         dg_model=copy.deepcopy(self.model)
 
         print('Client', self.cid, 'start training')
-        for epoch in range(self.local_epochs):
+        for epoch in range(self.local_epoch):
             if epoch % 3 == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
@@ -377,7 +377,6 @@ class Client_moon():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            for epoch in range(self.local_epochs):
             if epoch % 3 == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
