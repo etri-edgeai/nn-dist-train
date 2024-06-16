@@ -417,6 +417,7 @@ class Client_moon():
                 """
                 #pro1, outputs = self.model(inputs)
                 pro1 = self.pro1_model(inputs)
+                p_logits = self.model(inputs)
                 pro2, _ = global_model(inputs)
                 _, preds = torch.max(outputs.data, 1)
 
