@@ -252,7 +252,6 @@ class Client_ntd():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            for epoch in range(self.local_epoch):
             if epoch % 3 == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
