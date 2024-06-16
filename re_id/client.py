@@ -356,6 +356,10 @@ class Client_moon():
         self.model.load_state_dict(federated_model) #feature-extractor part!!
         self.pro1_model = copy.deepcopy(self.model)
         self.pro1_model.to(self.device)
+        global_model = copy.deepcopy(self.model)
+        for param in global_model.parameters():
+            param.requires_grad = False
+        global_model.to(self.device)
         self.model.classifier.classifier = self.classifier #client model에서 feature-extractor, classifier 연결!!
         self.model = self.model.to(self.device)
         
