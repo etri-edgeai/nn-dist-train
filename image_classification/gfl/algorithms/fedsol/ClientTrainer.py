@@ -10,7 +10,16 @@ from algorithms.fedsol.optimizer import SAM
 from algorithms.BaseClientTrainer import BaseClientTrainer
 from algorithms.fedsol.optim_utils import *
 
+from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
+from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
+
+
 __all__ = ["ClientTrainer"]
+
+DATA_LOADERS = {
+    "cifar10": get_dataloader_cifar10,
+    "cifar100": get_dataloader_cifar100,
+}
 
 
 class ClientTrainer(BaseClientTrainer):
