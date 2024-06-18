@@ -6,9 +6,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), "../../")))
 
-from algorithms.optimizer import SAM
+from algorithms.fedsol.optimizer import SAM
 from algorithms.BaseClientTrainer import BaseClientTrainer
-from algorithms.optim_utils import *
+from algorithms.fedsol.optim_utils import *
 
 __all__ = ["ClientTrainer"]
 
