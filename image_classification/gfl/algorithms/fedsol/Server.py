@@ -5,7 +5,7 @@ import os, sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), "../../")))
 
-from algorithms.fedsol_fixed.ClientTrainer import ClientTrainer
+from algorithms.fedsol.ClientTrainer import ClientTrainer
 from algorithms.BaseServer import BaseServer
 from algorithms.measures import *
 
