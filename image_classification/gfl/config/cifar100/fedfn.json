@@ -25,7 +25,7 @@
             "params": {}
         },
         "optimizer":{
-            "params": {"lr": 0.1, "momentum":0.9, "weight_decay": 1e-5}
+            "params": {"lr": 0.5, "momentum":0.9, "weight_decay": 1e-5}
         },
         "scheduler":{
             "enabled": true,

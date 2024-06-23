@@ -32,6 +32,7 @@ ALGO = {
     "fedntd": algorithms.fedntd.Server,
     "fednova": algorithms.fednova.Server,
     "fedprox": algorithms.fedprox.Server,
+    "fedfn": algorithms.fedfn.Server
     
 }
 
