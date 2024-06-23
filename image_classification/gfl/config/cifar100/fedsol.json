@@ -12,7 +12,7 @@
     "train_setups":{
         "algo": {
             "name": "fedsol",
-            "params": {}
+            "params": {"rho": 1.0, "perturb_head": true, "perturb_body": true}
         },
         "scenario": {
             "n_rounds": 320,
@@ -21,11 +21,11 @@
             "device": "cuda:0"
         },
         "model":{
-            "name": "mobile_sol",
+            "name": "mobile",
             "params": {}
         },
         "optimizer":{
-            "params": {"lr": 5.0, "momentum":0.9, "weight_decay": 1e-5}
+            "params": {"lr": 0.1, "momentum":0.9, "weight_decay": 1e-5}
         },
         "scheduler":{
             "enabled": true,
