@@ -11,3 +11,4 @@ from .fedetf import *
 from .fedncp import *
 from .feddr import *
 from .fedfn import *
+from .fedsol import *
