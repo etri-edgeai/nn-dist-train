@@ -106,7 +106,6 @@ def assign_grads(model, grads):
     return model
 
 
-import torch.nn as nn
 from torch.nn.modules.batchnorm import _BatchNorm
 
 

@@ -1,11 +1,15 @@
 import torch
-import copy
+import torch.nn as nn
+import torch.nn.functional as F
 import os
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), "../../")))
 
 from algorithms.BaseClientTrainer import BaseClientTrainer
+
+from algorithms.fedsol.optimizer import SAM
+from algorithms.fedsol.optim_utils import *
 
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
@@ -18,20 +22,21 @@ DATA_LOADERS = {
 }
 
 
-
 class ClientTrainer(BaseClientTrainer):
-    def __init__(self, criterion, **kwargs):
+    def __init__(self, **kwargs):
         super(ClientTrainer, self).__init__(**kwargs)
         """
         ClientTrainer class contains local data and local-specific information.
         After local training, upload weights to the Server.
         """
-        self.criterion = criterion
+        self.sam_optimizer = None
+        self.rho = self.algo_params.rho
+        self.perturb_head = self.algo_params.perturb_head
+        self.perturb_body = self.algo_params.perturb_body
+        self.KLDiv = nn.KLDivLoss(reduction="batchmean")
 
     def train(self):
         """Local training"""
-
-        # Keep global model's weights
         self._keep_global()
 
         self.model.train()
@@ -41,7 +46,6 @@ class ClientTrainer(BaseClientTrainer):
         local_size = self.datasize
         root = os.path.join("./data", self.data_name)
         self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=50, dataidxs=self.train_idxs)
-        
         if self.test_idxs is None: #LDA Setting
             for _ in range(self.local_epochs):
                 for data, targets in self.trainloader:
@@ -84,7 +88,7 @@ class ClientTrainer(BaseClientTrainer):
                     self.sam_optimizer.second_step(zero_grad=True)
 
             local_results = self._get_local_stats()
-        
+            
         else:
             for _ in range(self.local_epochs):
                 for data, targets in self.trainloader:
@@ -126,8 +130,7 @@ class ClientTrainer(BaseClientTrainer):
                     ).backward()  # make sure to do a full forward pass
                     self.sam_optimizer.second_step(zero_grad=True)
 
-            local_results = self._get_local_stats()    
-            
+            local_results = self._get_local_stats()            
 
         return local_results, local_size
 
@@ -159,4 +162,3 @@ class ClientTrainer(BaseClientTrainer):
         dg_logits = self.dg_model(data)
 
         return dg_logits
-
