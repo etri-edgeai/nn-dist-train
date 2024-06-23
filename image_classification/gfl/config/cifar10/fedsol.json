@@ -22,7 +22,7 @@
         },
         "model":{
             "name": "vgg",
-            "params": {}
+            "params": {"rho": 1.0, "perturb_head": true, "perturb_body": true}
         },
         "optimizer":{
             "params": {"lr": 0.05, "momentum":0.9, "weight_decay": 1e-5}
