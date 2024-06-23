@@ -35,7 +35,7 @@
         "seed": 1000
     },
     "wandb_setups":{
-        "project": "NeurIPS_FedDRR",
+        "project": "NeurIPS_FedDR",
         "group": "fedfn",
         "name": "fedfn"
     }
