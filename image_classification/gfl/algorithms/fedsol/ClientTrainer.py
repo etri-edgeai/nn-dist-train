@@ -137,7 +137,15 @@ class ClientTrainer(BaseClientTrainer):
     def download_global(self, server_weights, server_optimizer):
         """Load model & Optimizer"""
         self.model.load_state_dict(server_weights)
-        self.optimizer.load_state_dict(server_optimizer)
+        server_optimizer_info=server_optimizer['param_groups'][0]
+    
+        body_params = [p for name, p in self.model.named_parameters() if 'classifier' not in name]
+        head_params = [p for name, p in self.model.named_parameters() if 'classifier' in name]
+    
+        self.optimizer= torch.optim.SGD([{'params': body_params, 'lr': server_optimizer_info['lr']},
+                                     {'params': head_params, 'lr': server_optimizer_info['lr']}],
+                                    momentum=server_optimizer_info['momentum'],
+                                    weight_decay=server_optimizer_info['weight_decay'])
         self.sam_optimizer = self._get_sam_optimizer(self.optimizer)
 
     def _get_sam_optimizer(self, base_optimizer):

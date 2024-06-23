@@ -9,7 +9,15 @@ from algorithms.fedsol.ClientTrainer import ClientTrainer
 from algorithms.BaseServer import BaseServer
 from algorithms.measures import *
 
+from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
+from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
+
 __all__ = ["Server"]
+
+DATA_LOADERS = {
+    "cifar10": get_dataloader_cifar10,
+    "cifar100": get_dataloader_cifar100,
+}
 
 
 class Server(BaseServer):
@@ -40,66 +48,24 @@ class Server(BaseServer):
 
         for round_idx in range(self.n_rounds):
 
-            # Initial Model Statistics
-            if round_idx == 0:
-                global_results = evaluate_model_on_loaders(
-                    self.server_model, self.global_loaders, self.device
-                )
-                self.server_results = self._results_updater(
-                    self.server_results, global_results
-                )
-
             start_time = time.time()
 
             # Make local sets to distributed to clients
             sampled_clients = self._client_sampling(round_idx)
-            history_dict = {"client_history": sampled_clients}
-            self.server_results = self._results_updater(
-                self.server_results, history_dict
-            )
+            self.server_results["client_history"].append(sampled_clients)
 
             # Client training stage to upload weights & stats
-            (
-                updated_local_weights,
-                client_sizes,
-                round_local_results,
-            ) = self._clients_training(sampled_clients)
+            updated_local_weights, client_sizes, round_results = self._clients_training(
+                sampled_clients
+            )
 
             # Get aggregated weights & update global
             ag_weights = self._aggregation(updated_local_weights, client_sizes)
-            self.server_model.load_state_dict(ag_weights)
 
-            # Evaluate server statistics
-            global_results = evaluate_model_on_loaders(
-                self.server_model, self.global_loaders, self.device, "Global"
-            )
-            self.server_results = self._results_updater(
-                self.server_results, global_results
-            )
+            self._update_and_evaluate(ag_weights, round_results, round_idx, start_time)
 
-            # Print results and logging
-            print(
-                f"\n[Round {round_idx+1}/{self.n_rounds}] (Elapsed {round(time.time()-start_time, 1)}s)"
-            )
-            self._print_stats_with_logging(global_results, round_idx)
-            self._print_stats_with_logging(round_local_results, round_idx)
-
-            # Change learning rate
-            if self.scheduler is not None:
-                self.scheduler.step()
-
-            # if (round_idx + 1) % 10 == 0:
-            # if True:
-            #     if round_idx == self.n_rounds - 1:
-            #         sampled_clients = np.arange(self.n_clients)
-
-            #     _, _, round_local_results = self._clients_training(
-            #         sampled_clients, finetune=True
-            #     )
-            #     self._print_stats_with_logging(round_local_results, round_idx + 1)
-
-            if (round_idx + 1) % 100 == 0:
-                self._save_server_model(round_idx)
+            # if (round_idx + 1) % 100 == 0:
+            #     self._save_server_model(round_idx)
 
     def _clients_training(self, sampled_clients, finetune=False):
         """Conduct local training and get trained local models' weights"""
@@ -107,7 +73,7 @@ class Server(BaseServer):
         updated_local_weights, client_sizes = [], []
         round_local_results = {}
 
-        server_weights = self.server_model.state_dict()
+        server_weights = self.model.state_dict()
         server_optimizer = self.optimizer.state_dict()
 
         # Client training stage
@@ -120,15 +86,11 @@ class Server(BaseServer):
             self.client.download_global(server_weights, server_optimizer)
 
             # Local training
-            if finetune:
-                local_results = self.client.finetune()
+            local_results, local_size = self.client.train()
 
-            else:
-                local_results, local_size = self.client.train()
-
-                # Upload locals
-                updated_local_weights.append(self.client.upload_local())
-                client_sizes.append(local_size)
+            # Upload locals
+            updated_local_weights.append(self.client.upload_local())
+            client_sizes.append(local_size)
 
             # Update results
             round_local_results = self._results_updater(
