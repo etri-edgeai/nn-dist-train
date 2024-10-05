@@ -130,6 +130,12 @@ We provide example implementation scripts for CIFAR-10 and CIFAR-100.
 		- Run `sh fedgela_cifar10_shard.sh`.
 	- LDA Setting
 		- Run `sh fedgela_cifar10_lda.sh`.	
+		
+- FedFN
+	- Shard Setting
+		- Run `sh fedfn_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedfn_cifar10_lda.sh`.
 - FedDr+
 	- Shard Setting
 		- Run `sh feddr_cifar10_shard.sh`.
@@ -202,7 +208,12 @@ We provide example implementation scripts for CIFAR-10 and CIFAR-100.
 		- Run `sh fedgela_cifar100_shard.sh`.
 	- LDA Setting
 		- Run `sh fedgela_cifar100_lda.sh`.	
-
+		- 
+- FedFN
+	- Shard Setting
+		- Run `sh fedfn_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedfn_cifar100_lda.sh`.
 - FedDr+
 	- Shard Setting
 		- Run `sh feddr_cifar100_shard.sh`.
