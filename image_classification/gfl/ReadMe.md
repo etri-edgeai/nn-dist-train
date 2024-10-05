@@ -3,7 +3,7 @@
 This repository is designed mainly for research, and pytorch implementation of GFL algorithms.  
 
 We implemented various FL algorithms in our framework: 
-- **FedAVG**, **Scaffold**, **Fedprox**, **FedNova**, **FedEXP**, and **FedNTD (Ours)**.
+- **FedAVG**, **FedProx**,  **Scaffold**, **MOON**, **FedNTD**, **FedEXP**, **FedSOL**, **FedBABU**, **SphereFed**, **FedETF**, **FedGELA**, and **FedDr+ (Ours)**.
 ## Installation
 
 First check that the requirements are satisfied:</br>
@@ -14,14 +14,6 @@ numpy 1.21.5</br>
 matplotlib 3.5.3</br>
 Pillow 9.4.0</br>
 
-The next step is to clone the repository:
-```bash
-git clone https://github.com/etri-edgeai/nn-dist-train.git
-```
-Then, change the directory.
-```bash
-cd image_classification/gfl
-```
 
 
 The logs are uploaded to the wandb server. If you do not have a wandb account, just install and use as offline mode.
@@ -31,13 +23,18 @@ wandb off
 ```
 ## Data & Model
 
-We run GFL algorithms experiments on (CIFAR10, VGG11) and (CIFAR100, mobileNet).
+We run GFL algorithms experiments on (CIFAR-10, VGG-11), (CIFAR-100, MobileNet), and (ImageNet-100, ResNet-18).
 
-Before starting the implementation, first download cifar10 and cifar100 using the following method:
+Before starting the implementation, first download CIFAR-10 and CIFAR-100 using the following method:
 
 ```
 sh generate_cifar.sh
 ```
+
+For the ImageNet-100 dataset, the code was executed by directly downloading it from the following Kaggle link:
+
+[ImageNet-100 Dataset on Kaggle](https://www.kaggle.com/datasets/ambityga/imagenet100)
+
 ## How to Run Codes?
 
 The configuration skeleton for each algorithm is in `./config/*.json`. 
@@ -66,6 +63,8 @@ There are two ways to change the configurations:
 
 ## Script for running example
 
+We provide example implementation scripts for CIFAR-10 and CIFAR-100.
+
 ###  (CIFAR10, VGG11) Experiment
 - FedAVG
 	- Shard Setting
@@ -73,26 +72,70 @@ There are two ways to change the configurations:
 	- LDA Setting
 		- Run `sh fedavg_cifar10_lda.sh`.
 
+- FedProx 
+	- Shard Setting
+		- Run `sh fedprox_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedprox_cifar10_lda.sh`.
+- Scaffold
+	- Shard Setting
+		- Run `sh scaffold_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh scaffold_cifar10_lda.sh`.		
+
+- MOON
+	- Shard Setting
+		- Run `sh moon_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh moon_cifar10_lda.sh`.		
+
 - FedNTD 
 	- Shard Setting
 		- Run `sh fedntd_cifar10_shard.sh`.
 	- LDA Setting
 		- Run `sh fedntd_cifar10_lda.sh`.
 
-
-- Scaffold
-	- Shard Setting
-		- Run `sh scaffold_cifar10_shard.sh`.
-	- LDA Setting
-		- Run `sh scaffold_cifar10_lda.sh`.
-
-	
-	
 - FedEXP
 	- Shard Setting
 		- Run `sh fedexp_cifar10_shard.sh`.
 	- LDA Setting
 		- Run `sh fedexp_cifar10_lda.sh`.
+
+- FedSOL
+	- Shard Setting
+		- Run `sh fedsol_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedsol_cifar10_lda.sh`.
+		
+- FedBABU
+	- Shard Setting
+		- Run `sh fedbabu_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedbabu_cifar10_lda.sh`.
+
+- SphereFed
+	- Shard Setting
+		- Run `sh spherefed_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh spherefed_cifar10_lda.sh`.
+
+- FedETF
+	- Shard Setting
+		- Run `sh fedetf_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedetf_cifar10_lda.sh`.	
+	
+- FedGELA
+	- Shard Setting
+		- Run `sh fedgela_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh fedgela_cifar10_lda.sh`.	
+- FedDr+
+	- Shard Setting
+		- Run `sh feddr_cifar10_shard.sh`.
+	- LDA Setting
+		- Run `sh feddr_cifar10_lda.sh`.
+		
 
 ###  (CIFAR100, mobileNet) Experiment
 - FedAVG
@@ -101,51 +144,78 @@ There are two ways to change the configurations:
 	- LDA Setting
 		- Run `sh fedavg_cifar100_lda.sh`.
 
+- FedProx 
+	- Shard Setting
+		- Run `sh fedprox_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedprox_cifar100_lda.sh`.
 - Scaffold
 	- Shard Setting
 		- Run `sh scaffold_cifar100_shard.sh`.
 	- LDA Setting
-		- Run `sh scaffold_cifar100_lda.sh`.
+		- Run `sh scaffold_cifar100_lda.sh`.		
 
-	
+- MOON
+	- Shard Setting
+		- Run `sh moon_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh moon_cifar100_lda.sh`.		
+
 - FedNTD 
 	- Shard Setting
 		- Run `sh fedntd_cifar100_shard.sh`.
 	- LDA Setting
 		- Run `sh fedntd_cifar100_lda.sh`.
-	
+
 - FedEXP
 	- Shard Setting
 		- Run `sh fedexp_cifar100_shard.sh`.
 	- LDA Setting
 		- Run `sh fedexp_cifar100_lda.sh`.
 
+- FedSOL
+	- Shard Setting
+		- Run `sh fedsol_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedsol_cifar100_lda.sh`.
+		
+- FedBABU
+	- Shard Setting
+		- Run `sh fedbabu_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedbabu_cifar100_lda.sh`.
 
-## Experiment Results
-Below is an example of experimental results conducted in the (CIFAR10, VGG11) setting:
+- SphereFed
+	- Shard Setting
+		- Run `sh spherefed_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh spherefed_cifar100_lda.sh`.
 
-We utilized momentum SGD with an initial learning rate of 0.01, setting the momentum to 0.9, and applying a weight decay of 1e-5.
+- FedETF
+	- Shard Setting
+		- Run `sh fedetf_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedetf_cifar100_lda.sh`.
 
-All experiments were carried out over 320 rounds to comprehensively evaluate model performance and convergence behavior. To ensure effective convergence during training, we decreased the learning rate by 0.1 at both the halfway mark and three-quarters of the federated learning rounds.
+- FedGELA
+	- Shard Setting
+		- Run `sh fedgela_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh fedgela_cifar100_lda.sh`.	
+
+- FedDr+
+	- Shard Setting
+		- Run `sh feddr_cifar100_shard.sh`.
+	- LDA Setting
+		- Run `sh feddr_cifar100_lda.sh`.
 
 
 
- 
-| Algorithm              | shard  2  | shard  5  | shard  10 | lda  0.1 | lda  0.5 | lda  1.0 |
-|------------------------|------------|------------|------------|----------|----------|----------|
-| FedAVG             | 65.42      | 79.95      | 83.18      | 61.5    | 80.98    | 82.1    |
-| **FedNTD (Ours)**           | 70.63      | 80.22      | 82.78      | 68.44    | 81.53    | 82.17    |
+## FL Scenario
 
-
-
-
-## Contact
-Feel free to contact us if you have any questions:)
-
-- Seongyoon Kim: curisam@kaist.ac.kr
+We utilized momentum SGD with an initial learning rate of 0.01, setting the momentum to 0.9, and applying a weight decay of 1e-5. All experiments were carried out over 320 rounds to comprehensively evaluate model performance and convergence behavior. To ensure effective convergence during training, we decreased the learning rate by 0.1 at both the halfway mark and three-quarters of the federated learning rounds.
 
 
 # Acknowledgements
 
 This codebase was adapted from https://doc.fedml.ai/ and https://github.com/Lee-Gihun/FedNTD/.
-

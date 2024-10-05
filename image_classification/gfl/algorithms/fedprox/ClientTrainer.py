@@ -9,13 +9,17 @@ from algorithms.BaseClientTrainer import BaseClientTrainer
 
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
-
+from train_tools.preprocessing.tinyimagenet.loader import get_dataloader_tinyimagenet
+from train_tools.preprocessing.imagenet.loader import get_dataloader_imagenet
 
 __all__ = ["ClientTrainer"]
 
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
+    "tinyimagenet": get_dataloader_tinyimagenet,
+    "imagenet": get_dataloader_imagenet
+    
 }
 
 class ClientTrainer(BaseClientTrainer):
@@ -42,24 +46,23 @@ class ClientTrainer(BaseClientTrainer):
         root = os.path.join("./data", self.data_name)
         self.trainloader=DATA_LOADERS[self.data_name](root=root, train=True, batch_size=50, dataidxs=self.train_idxs)  
         if self.test_idxs is None: #LDA Setting
-            for _ in range(self.local_epochs):
-                for data, targets in self.trainloader:
-                    self.optimizer.zero_grad()
+            for _ in range(self.local_epochs*self.local_epochs):
+                dataiter = iter(self.trainloader)
+                data, targets = next(dataiter)
+                
+                self.optimizer.zero_grad()
 
-                    # forward pass
-                    data, targets = data.to(self.device), targets.to(self.device)
-                    output = self.model(data)
-                    loss = self.criterion(output, targets)
+                # forward pass
+                data, targets = data.to(self.device), targets.to(self.device)
+                output = self.model(data)
+                loss = self.criterion(output, targets)
 
-                    # Add proximal loss term
-                    loss += self._proximal_term(self.dg_model, self.model, self.mu)
+                # Add proximal loss term
+                loss += self._proximal_term(self.dg_model, self.model, self.mu)
 
-                    # backward pass
-                    loss.backward()
-                    self.optimizer.step()
-
-            local_results = self._get_local_stats()
-            
+                # backward pass
+                loss.backward()
+                self.optimizer.step()
             
         else:
             for _ in range(self.local_epochs):
@@ -79,7 +82,7 @@ class ClientTrainer(BaseClientTrainer):
                     loss.backward()
                     self.optimizer.step()
 
-            local_results = self._get_local_stats()
+        local_results = self._get_local_stats()
                     
             
 

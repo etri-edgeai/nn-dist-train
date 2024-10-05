@@ -15,14 +15,15 @@ import os
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
 from train_tools.preprocessing.tinyimagenet.loader import get_dataloader_tinyimagenet
+from train_tools.preprocessing.imagenet.loader import get_dataloader_imagenet
 __all__ = ["BaseClientTrainer"]
 
 
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
-    "tinyimagenet": get_dataloader_tinyimagenet
-    
+    "tinyimagenet": get_dataloader_tinyimagenet,
+    "imagenet": get_dataloader_imagenet,    
 }
 
 
@@ -68,7 +69,21 @@ class BaseClientTrainer:
         if self.test_idxs is None: #LDA Setting
             for _ in range(self.average_iteration*self.local_epochs):
                 dataiter = iter(self.trainloader)
-                data, targets = next(dataiter)
+                
+                try:
+                    data, targets = next(dataiter)
+                except StopIteration:
+                    break
+                
+                
+                
+                
+#                 data, targets = next(dataiter)
+                
+                
+                
+                
+                
 
                 self.optimizer.zero_grad()
 
