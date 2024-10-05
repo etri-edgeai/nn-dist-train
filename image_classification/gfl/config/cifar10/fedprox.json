@@ -12,7 +12,7 @@
     "train_setups":{
         "algo": {
             "name": "fedprox",
-            "params": {"mu": 1.0}
+            "params": {"mu": 0.001}
         },
         "scenario": {
             "n_rounds": 320,
@@ -35,8 +35,8 @@
         "seed": 0
     },
     "wandb_setups":{
-        "project": "NeurIPS2023",
-        "group": "plain",
+        "project": "NeurIPS_FedDR",
+        "group": "fedprox",
         "name": "fedprox"
     }
 }

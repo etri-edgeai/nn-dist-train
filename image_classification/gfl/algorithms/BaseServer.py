@@ -10,6 +10,7 @@ from .measures import *
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
 from train_tools.preprocessing.tinyimagenet.loader import get_dataloader_tinyimagenet
+from train_tools.preprocessing.imagenet.loader import get_dataloader_imagenet
 
 __all__ = ["BaseServer"]
 
@@ -17,7 +18,8 @@ __all__ = ["BaseServer"]
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
-    "tinyimagenet": get_dataloader_tinyimagenet    
+    "tinyimagenet": get_dataloader_tinyimagenet,
+    "imagenet": get_dataloader_imagenet     
 }
 
 
@@ -129,7 +131,6 @@ class BaseServer:
         self.client.class_frequency= torch.tensor(list(self.data_distributed["local"][client_idx]["class_frequency"].values())).to(self.device)
         
         self.client.test_idxs = self.data_distributed["local"][client_idx]["test_idxs"]
-        
         self.client.data_name= self.data_distributed["data_name"]
         self.client.average_train_num= self.data_distributed["average_train_num"]
         self.client.batch_size=self.data_distributed["batch_size"]

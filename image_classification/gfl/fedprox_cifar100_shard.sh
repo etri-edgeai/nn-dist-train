@@ -6,3 +6,4 @@ python main.py --config_path ./config/cifar100/fedprox.json --partition_s 50 --d
 python main.py --config_path ./config/cifar100/fedprox.json --partition_s 100 --device cuda:5 --seed 100
 
 
+

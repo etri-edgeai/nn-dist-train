@@ -92,6 +92,6 @@ class Server(BaseServer):
     def _get_state_dict_2norm(self, state_dict):
         norm2 = 0
         for k in state_dict.keys():
-            norm2 += torch.norm(state_dict[k]) ** 2
+            norm2 += torch.norm(state_dict[k].float()) ** 2
 
         return math.sqrt(norm2)

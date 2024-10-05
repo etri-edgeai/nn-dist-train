@@ -12,13 +12,13 @@
     "train_setups":{
         "algo": {
             "name": "fedprox",
-            "params": {"mu": 1.0}
+            "params": {"mu": 0.001}
         },
         "scenario": {
             "n_rounds": 320,
             "sample_ratio": 0.1,
             "local_epochs": 3,
-            "device": "cuda:0"
+            "device": "cuda:1"
         },
         "model":{
             "name": "mobile",
@@ -32,11 +32,11 @@
             "name": "multistep",
             "params": {"gamma":0.1, "milestones": [160, 240]}
         },
-        "seed": 0
+        "seed": 1000
     },
     "wandb_setups":{
-        "project": "NeurIPS2023",
-        "group": "plain",
+        "project": "NeurIPS_FedDR",
+        "group": "fedprox",
         "name": "fedprox"
     }
 }

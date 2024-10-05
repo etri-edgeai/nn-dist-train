@@ -7,3 +7,8 @@ python main.py --config_path ./config/cifar10/fedavg.json --partition_method lda
 
 
 
+
+
+
+
+

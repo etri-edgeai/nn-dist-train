@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 from collections import Counter
+import sys
 
 import random
 import numpy as np
@@ -12,6 +13,7 @@ import pickle
 from .cifar10.loader import get_all_targets_cifar10, get_dataloader_cifar10
 from .cifar100.loader import get_all_targets_cifar100, get_dataloader_cifar100
 from .tinyimagenet.loader import get_all_targets_tinyimagenet, get_dataloader_tinyimagenet
+from .imagenet.loader import get_all_targets_imagenet, get_dataloader_imagenet
 
 __all__ = ["data_distributer"]
 
@@ -24,14 +26,16 @@ logger.setLevel(logging.INFO)
 DATA_INSTANCES = {
     "cifar10": get_all_targets_cifar10,
     "cifar100": get_all_targets_cifar100,
-    "tinyimagenet": get_all_targets_tinyimagenet
+    "tinyimagenet": get_all_targets_tinyimagenet,
+    "imagenet": get_all_targets_imagenet
     
 }
 
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
-    "tinyimagenet": get_dataloader_tinyimagenet    
+    "tinyimagenet": get_dataloader_tinyimagenet,
+    "imagenet": get_dataloader_imagenet,    
 }
 
 
@@ -60,37 +64,56 @@ def data_distributer(
     
     print(partition)
 
-#     if partition.method == "iid":
-#         net_dataidx_map = iid_partition(all_targets_train, n_clients)
-#         net_dataidx_map_test = iid_partition(all_targets_test, n_clients)
-        
-#     elif partition.method == "sharding":
-#         net_dataidx_map, rand_set_all = sharding_partition(all_targets_train, n_clients, partition.shard_per_user)
-#         net_dataidx_map_test, rand_set_all = sharding_partition(all_targets_test, n_clients, partition.shard_per_user, rand_set_all=rand_set_all)
-        
-#     elif partition.method == "lda":
-#         net_dataidx_map = lda_partition(all_targets_train, n_clients, partition.alpha)
-        
-#     else:
-#         raise NotImplementedError
-        
-    #Use the given setting
     if partition.method == "iid":
-        dict_save_path = 'train_tools/preprocessing/dict_users_{}_iid.pkl'.format(num_classes)
-        with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
-            net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
-    
-    elif partition.method == "sharding":    
-        dict_save_path = 'train_tools/preprocessing/dict_users_{}_{}.pkl'.format(num_classes, partition.shard_per_user)
-
-        with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
-            net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
-            
+        net_dataidx_map = iid_partition(all_targets_train, n_clients)
+        net_dataidx_map_test = iid_partition(all_targets_test, n_clients)
+        
+    elif partition.method == "sharding":
+        net_dataidx_map, rand_set_all = sharding_partition(all_targets_train, n_clients, partition.shard_per_user)
+        net_dataidx_map_test, rand_set_all = sharding_partition(all_targets_test, n_clients, partition.shard_per_user, rand_set_all=rand_set_all)
+        
     elif partition.method == "lda":
-        dict_save_path = 'train_tools/preprocessing/dict_users_lda_{}_{}.pkl'.format(partition.alpha, num_classes)
+        net_dataidx_map = lda_partition(all_targets_train, n_clients, partition.alpha)
+        
+    else:
+        raise NotImplementedError
+        
+    
+    if dataset_name =='imagenet':           
+    
+        if partition.method == "lda":
+            dict_save_path = 'train_tools/preprocessing/imagenet_dict_users_lda_{}_{}.pkl'.format(partition.alpha, num_classes)
+            with open(dict_save_path, 'wb') as handle:
+                pickle.dump((net_dataidx_map), handle)
+                
+                
+        elif partition.method == "sharding":
+            dict_save_path = 'train_tools/preprocessing/imagenet_dict_users_sharding_{}_{}.pkl'.format(partition.shard_per_user, num_classes)
+            with open(dict_save_path, 'wb') as handle:
+                pickle.dump((net_dataidx_map, net_dataidx_map_test), handle)
+        
+        
+    else:
+        
+        #Use the given setting
+        if partition.method == "iid":
+            dict_save_path = 'train_tools/preprocessing/dict_users_{}_iid.pkl'.format(num_classes)
+            with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
+                net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
 
-        with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
-            net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
+        elif partition.method == "sharding":    
+            dict_save_path = 'train_tools/preprocessing/dict_users_{}_{}.pkl'.format(num_classes, partition.shard_per_user)
+
+            with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
+                net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
+
+        elif partition.method == "lda":
+            dict_save_path = 'train_tools/preprocessing/dict_users_lda_{}_{}.pkl'.format(partition.alpha, num_classes)
+
+            with open(dict_save_path, 'rb') as handle:#기존 pretrained되었을 때 쓰였던 클라이언트 구성으로 덮어씌운다.
+                net_dataidx_map, net_dataidx_map_test = pickle.load(handle)
+                
+                
         
     print(">>> Distributing client train data...")
     
@@ -124,7 +147,6 @@ def data_distributer(
         for i in range(n_clients):
             test_loader["local"][i]=DATA_LOADERS[dataset_name](root=root, train=False, batch_size=100, dataidxs=local_info[i]["test_idxs"])
             
-#     import ipdb; ipdb.set_trace(context=15)
 
     data_distributed = {
         "local": local_info,

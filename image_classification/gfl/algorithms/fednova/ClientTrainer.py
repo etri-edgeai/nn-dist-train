@@ -9,12 +9,17 @@ from algorithms.fednova.utils import *
 
 from train_tools.preprocessing.cifar10.loader import get_dataloader_cifar10
 from train_tools.preprocessing.cifar100.loader import get_dataloader_cifar100
+from train_tools.preprocessing.tinyimagenet.loader import get_dataloader_tinyimagenet
+from train_tools.preprocessing.imagenet.loader import get_dataloader_imagenet
 
 __all__ = ["ClientTrainer"]
 
 DATA_LOADERS = {
     "cifar10": get_dataloader_cifar10,
     "cifar100": get_dataloader_cifar100,
+    "tinyimagenet": get_dataloader_tinyimagenet,
+    "imagenet": get_dataloader_imagenet
+    
 }
 
 class ClientTrainer(BaseClientTrainer):

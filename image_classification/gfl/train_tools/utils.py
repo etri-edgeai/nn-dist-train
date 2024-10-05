@@ -19,6 +19,22 @@ MODELS = {
     "tiny_mobile_fn": mobilenet.MobileNettiny_Sphere,
     
     
+    "imagenet_mobile": mobilenet.MobileNetImageNet,
+    "imagenet_mobile_sphere": mobilenet.MobileNetImageNet_Sphere,
+    "imagenet_mobile_etf": mobilenet.MobileNetImageNet_ETF,
+    "imagenet_mobile_ncp": mobilenet.MobileNetImageNet_NCP,
+    "imagenet_mobile_dr": mobilenet.MobileNetImageNet_DR,
+    "imagenet_mobile_fn": mobilenet.MobileNetImageNet_Sphere,
+    
+    
+    "imagenet_res18": resnet.Res18ImageNet,
+    "imagenet_res18_sphere": resnet.Res18ImageNet_Sphere,
+    "imagenet_res18_etf": resnet.Res18ImageNet_ETF,
+    "imagenet_res18_ncp": resnet.Res18ImageNet_NCP,
+    "imagenet_res18_dr": resnet.Res18ImageNet_DR,
+    "imagenet_res18_fn": resnet.Res18ImageNet_Sphere,    
+    
+    
     "vgg": vgg.vgg11,
     "vgg_sphere": vgg.vgg11_Sphere,
     "vgg_etf": vgg.vgg11_ETF,
@@ -31,7 +47,8 @@ MODELS = {
 NUM_CLASSES = {
     "cifar10": 10,
     "cifar100": 100,
-    "tinyimagenet": 200
+    "tinyimagenet": 200,
+    "imagenet": 100,    
 }
 
 
