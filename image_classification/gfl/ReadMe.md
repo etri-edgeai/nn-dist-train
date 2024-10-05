@@ -9,7 +9,8 @@ We implemented various FL algorithms in our framework:
 - **MOON** ([Paper Link](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9578660), presented at **CVPR 2021**),
 - **FedNTD** ([Paper Link](https://openreview.net/pdf?id=qw3MZb1Juo), presented at **NeurIPS 2022**),
 - **FedEXP** ([Paper Link](https://openreview.net/pdf?id=IPrzNbddXV), presented at **ICLR 2023**),
-
+- **FedSOL** ([Paper Link](https://openaccess.thecvf.com/content/CVPR2024/papers/Lee_FedSOL_Stabilized_Orthogonal_Learning_with_Proximal_Restrictions_in_Federated_Learning_CVPR_2024_paper.pdf), presented at **CVPR 2024**),
+- 
 ## Installation
 
 First check that the requirements are satisfied:</br>
