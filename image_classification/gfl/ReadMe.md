@@ -4,7 +4,10 @@ This repository is designed mainly for research, and pytorch implementation of G
 
 We implemented various FL algorithms in our framework: 
 - **FedAVG** ([Paper Link](https://proceedings.mlr.press/v54/mcmahan17a/mcmahan17a.pdf), presented at **AISTATS 2017**),
-- **FedProx**, **Scaffold**, **MOON**, **FedNTD**, **FedEXP**, **FedSOL**, **FedBABU**, **SphereFed**, **FedETF**, **FedGELA**, and **FedDr+ (Ours)**.
+- **FedProx** ([Paper Link](https://proceedings.mlsys.org/paper_files/paper/2020/file/1f5fe83998a09396ebe6477d9475ba0c-Paper.pdf), presented at **MLSys 2020**),
+- **Scaffold** ([Paper Link](https://proceedings.mlr.press/v119/karimireddy20a/karimireddy20a.pdf), presented at **ICML 2020**),
+- **MOON** ([Paper Link](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9578660), presented at **CVPR 2021**),
+- **FedNTD** ([Paper Link](https://openreview.net/pdf?id=qw3MZb1Juo), presented at **NeurIPS 2022**),
 
 
 ## Installation
