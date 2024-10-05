@@ -8,7 +8,6 @@ We implemented various FL algorithms in our framework:
 - **Scaffold** ([Paper Link](https://proceedings.mlr.press/v119/karimireddy20a/karimireddy20a.pdf), presented at **ICML 2020**),
 - **MOON** ([Paper Link](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9578660), presented at **CVPR 2021**),
 - **FedNTD** ([Paper Link](https://openreview.net/pdf?id=qw3MZb1Juo), presented at **NeurIPS 2022**),
-- **FedProx**, **Scaffold**, **MOON**, **FedNTD**, **FedEXP**, **FedSOL**, **FedBABU**, **SphereFed**, **FedETF**, **FedGELA**, and **FedDr+ (Ours)**.
 
 
 ## Installation
