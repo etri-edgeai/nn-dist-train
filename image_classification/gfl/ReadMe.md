@@ -3,7 +3,10 @@
 This repository is designed mainly for research, and pytorch implementation of GFL algorithms.  
 
 We implemented various FL algorithms in our framework: 
-- **FedAVG**, **FedProx**,  **Scaffold**, **MOON**, **FedNTD**, **FedEXP**, **FedSOL**, **FedBABU**, **SphereFed**, **FedETF**, **FedGELA**, and **FedDr+ (Ours)**.
+- **FedAVG** ([Paper Link](https://proceedings.mlr.press/v54/mcmahan17a/mcmahan17a.pdf), presented at **AISTATS 2017**),
+- **FedProx**, **Scaffold**, **MOON**, **FedNTD**, **FedEXP**, **FedSOL**, **FedBABU**, **SphereFed**, **FedETF**, **FedGELA**, and **FedDr+ (Ours)**.
+
+
 ## Installation
 
 First check that the requirements are satisfied:</br>
