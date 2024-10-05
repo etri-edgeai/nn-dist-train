@@ -11,7 +11,7 @@ We implemented various FL algorithms in our framework:
 - **FedEXP** ([Paper Link](https://openreview.net/pdf?id=IPrzNbddXV), presented at **ICLR 2023**),
 - **FedSOL** ([Paper Link](https://openaccess.thecvf.com/content/CVPR2024/papers/Lee_FedSOL_Stabilized_Orthogonal_Learning_with_Proximal_Restrictions_in_Federated_Learning_CVPR_2024_paper.pdf), presented at **CVPR 2024**),
 - **FedBABU** ([Paper Link](https://openreview.net/pdf?id=HuaYQfggn5u), presented at **ICLR 2022**),
-- 
+- **SphereFed** ([Paper Link](https://link.springer.com/chapter/10.1007/978-3-031-19809-0_10), presented at **ECCV 2022**),  
 ## Installation
 
 First check that the requirements are satisfied:</br>
