@@ -1,6 +1,6 @@
 # Edge.AI - Distributed Learning Subsystem 
 
-This repository is designed mainly for research, and pytorch implementation of various **federated learning (FL)** area.
+This repository is designed mainly for research, and pytorch implementation of various **Federated learning (FL)** area.
 
 ## Target FL Task 
 - **Image Classification**
