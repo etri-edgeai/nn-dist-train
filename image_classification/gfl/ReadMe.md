@@ -14,6 +14,7 @@ We implemented various FL algorithms in our framework:
 - **SphereFed** ([Paper Link](https://link.springer.com/chapter/10.1007/978-3-031-19809-0_10), presented at **ECCV 2022**),
 - **FedETF** ([Paper Link](https://openaccess.thecvf.com/content/ICCV2023/papers/Li_No_Fear_of_Classifier_Biases_Neural_Collapse_Inspired_Federated_Learning_ICCV_2023_paper.pdf), presented at **ICCV 2023**),
 - **FedGELA** ([Paper Link](https://openreview.net/pdf?id=wwmKVO8bsR), presented at **NeurIPS 2023**),
+- **FedDr+ (Ours)** ([Paper Link](https://openreview.net/pdf?id=FOi26eD2lQ), presented at **FedKDD 2024**).
 ## Installation
 
 First check that the requirements are satisfied:</br>
