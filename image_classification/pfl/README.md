@@ -6,10 +6,10 @@ This repository is designed mainly for research, and pytorch implementation of P
 We implemented various FL algorithms in our framework: 
 - **FedPer** ([Paper Link](https://arxiv.org/abs/1912.00818)),
 - **FedRep** ([Paper Link](https://proceedings.mlr.press/v139/collins21a/collins21a.pdf), presented at **ICML 2021**),
-- **Per-FedAVG** ([Paper Link](https://proceedings.neurips.cc/paper/2020/file/24389bfe4fe2eba8bf9aa9203a44cdad-Paper.pdf), presented at **NeurIps 2020**),
+- **Per-FedAVG** ([Paper Link](https://proceedings.neurips.cc/paper/2020/file/24389bfe4fe2eba8bf9aa9203a44cdad-Paper.pdf), presented at **NeurIPS 2020**),
 - **FedAVG-FT** ([Paper Link](https://proceedings.mlr.press/v54/mcmahan17a/mcmahan17a.pdf), presented at **AISTATS 2017**),
 - **FedBABU-FT** ([Paper Link](https://openreview.net/pdf?id=HuaYQfggn5u), presented at **ICLR 2022**),
-- **FedFN-FT (Ours)** ([Paper Link](https://openreview.net/pdf?id=4apX9Kcxie), presented at **NeurIps Workshop 2023**).
+- **FedFN-FT (Ours)** ([Paper Link](https://openreview.net/pdf?id=4apX9Kcxie), presented at **NeurIPS Workshop 2023**).
 
 
 ## Installation
