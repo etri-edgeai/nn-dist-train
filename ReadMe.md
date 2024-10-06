@@ -16,7 +16,7 @@ Feel free to contact us if you have any questions:)
 - Seongyoon Kim: curisam@kaist.ac.kr
 - Woojin Chung: gartland@kaist.ac.kr
 - Yongjin Yang: dyyjkd@kaist.ac.kr
-- Shinhyeok Hwang: shinhyuk1001@kaist.ac.kr (Intern)
+- Sungwoo Cho: peter8256@kaist.ac.kr (Intern)
 
 
 # Acknowledgements
