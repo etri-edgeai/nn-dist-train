@@ -10,7 +10,7 @@ This repository is designed mainly for research, and pytorch implementation of v
 - **Re-Identification**
 - **NLP (Multi-Lingual Problem)**
 
-## Contact (Active Member of 2023)
+## Contact 
 Feel free to contact us if you have any questions:)
 
 - Seongyoon Kim: curisam@kaist.ac.kr
