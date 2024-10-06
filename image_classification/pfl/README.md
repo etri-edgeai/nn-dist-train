@@ -1,7 +1,16 @@
-
 # Personalized Federated Learning (PFL) Algorithms Codebase
 
-This repository is designed mainly for research, and pytorch implementation of PFL algorithms.  
+This repository is designed mainly for research, and pytorch implementation of PFL algorithms.   
+
+
+We implemented various FL algorithms in our framework: 
+- **FedPer** ([Paper Link](https://arxiv.org/abs/1912.00818)),
+- **FedRep** ([Paper Link](https://proceedings.mlr.press/v139/collins21a/collins21a.pdf), presented at **ICML 2021**),
+- **Per-FedAVG** ([Paper Link](https://proceedings.neurips.cc/paper/2020/file/24389bfe4fe2eba8bf9aa9203a44cdad-Paper.pdf), presented at **NeurIps 2020**),
+- **FedAVG-FT** ([Paper Link](https://proceedings.mlr.press/v54/mcmahan17a/mcmahan17a.pdf), presented at **AISTATS 2017**),
+- **FedBABU-FT** ([Paper Link](https://openreview.net/pdf?id=HuaYQfggn5u), presented at **ICLR 2022**),
+- **FedFN-FT (Ours)** ([Paper Link](https://openreview.net/pdf?id=4apX9Kcxie), presented at **NeurIps Workshop 2023**).
+
 
 ## Installation
 
@@ -80,3 +89,4 @@ Feel free to contact us if you have any questions:)
 # Acknowledgements
 
 This codebase was adapted from https://github.com/pliang279/LG-FedAvg and https://github.com/jhoon-oh/FedBABU.
+
