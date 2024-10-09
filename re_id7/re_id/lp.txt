@@ -1,0 +1,1283 @@
+Namespace(gpu_ids='7', model_name='ft_ResNet50', project_dir='.', data_dir='data', datasets='Market,DukeMTMC-reID,cuhk03-np-detected,cuhk01,MSMT17,viper,prid,3dpes,ilids', train_all=False, stride=2, lr=0.05, drop_rate=0.5, local_epoch=1, batch_size=32, num_of_clients=9, erasing_p=0, color_jitter=False, which_epoch='last', multi=False, multiple_scale='1', test_dir='all', cdw=False, kd=False, regularization=False, tau=3, beta=1, strategy='fedpav')
+Train dataset sizes: {'Market': 12936, 'DukeMTMC-reID': 15820, 'cuhk03-np-detected': 6598, 'cuhk01': 1552, 'MSMT17': 31580, 'viper': 506, 'prid': 2996, '3dpes': 360, 'ilids': 199}
+Train class sizes: {'Market': 751, 'DukeMTMC-reID': 702, 'cuhk03-np-detected': 767, 'cuhk01': 485, 'MSMT17': 1041, 'viper': 316, 'prid': 285, '3dpes': 93, 'ilids': 59}
+Dataset:Market
+Query Sizes: 3368
+Gallery Sizes: 19732
+Dataset:DukeMTMC-reID
+Query Sizes: 2228
+Gallery Sizes: 17661
+Dataset:cuhk03-np-detected
+Query Sizes: 1400
+Gallery Sizes: 5332
+Dataset:cuhk01
+Query Sizes: 972
+Gallery Sizes: 972
+Dataset:MSMT17
+Query Sizes: 11659
+Gallery Sizes: 82161
+Dataset:viper
+Query Sizes: 316
+Gallery Sizes: 316
+Dataset:prid
+Query Sizes: 100
+Gallery Sizes: 649
+Dataset:3dpes
+Query Sizes: 246
+Gallery Sizes: 316
+Dataset:ilids
+Query Sizes: 98
+Gallery Sizes: 130
+=====training start!========
+==========
+Round Number 0
+==========
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 5.4957 Acc: 0.0868
+Client cuhk03-np-detected Training complete in 0m 14s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 4.7334 Acc: 0.1833
+Client DukeMTMC-reID Training complete in 0m 20s
+Client ilids start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.8579 Acc: 0.0990
+Client ilids Training complete in 0m 3s
+Client Market start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 5.1014 Acc: 0.1228
+Client Market Training complete in 0m 16s
+Client cuhk01 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 5.7820 Acc: 0.0365
+Client cuhk01 Training complete in 0m 7s
+Client MSMT17 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 4.7941 Acc: 0.1811
+Client MSMT17 Training complete in 0m 43s
+Client 3dpes start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 4.0557 Acc: 0.1051
+Client 3dpes Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.5577 Acc: 0.2782
+Client prid Training complete in 0m 9s
+Client viper start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 5.7445 Acc: 0.0042
+Client viper Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 0, AVG Train Loss among clients of lost epoch: 4.791377
+==========
+Round Number 1
+==========
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.4448 Acc: 0.3107
+Client DukeMTMC-reID Training complete in 0m 20s
+Client 3dpes start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.6855 Acc: 0.4403
+Client 3dpes Training complete in 0m 4s
+Client Market start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.6454 Acc: 0.2515
+Client Market Training complete in 0m 16s
+Client cuhk01 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.4942 Acc: 0.3737
+Client cuhk01 Training complete in 0m 8s
+Client viper start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 4.4964 Acc: 0.2667
+Client viper Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 1.6841 Acc: 0.6163
+Client prid Training complete in 0m 8s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.3799 Acc: 0.3005
+Client cuhk03-np-detected Training complete in 0m 13s
+Client ilids start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.9645 Acc: 0.4740
+Client ilids Training complete in 0m 4s
+Client MSMT17 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.5537 Acc: 0.3072
+Client MSMT17 Training complete in 0m 43s
+==============================
+number of clients used: 9
+Train Epoch: 1, AVG Train Loss among clients of lost epoch: 3.260933
+==========
+Round Number 2
+==========
+Client cuhk01 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.5114 Acc: 0.5540
+Client cuhk01 Training complete in 0m 7s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.0193 Acc: 0.3779
+Client DukeMTMC-reID Training complete in 0m 20s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.6098 Acc: 0.4305
+Client cuhk03-np-detected Training complete in 0m 13s
+Client Market start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.2176 Acc: 0.3106
+Client Market Training complete in 0m 16s
+Client viper start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.7506 Acc: 0.4333
+Client viper Training complete in 0m 4s
+Client MSMT17 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.2287 Acc: 0.3505
+Client MSMT17 Training complete in 0m 45s
+Client prid start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 1.2323 Acc: 0.7080
+Client prid Training complete in 0m 9s
+Client ilids start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.4049 Acc: 0.6302
+Client ilids Training complete in 0m 3s
+Client 3dpes start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.0933 Acc: 0.5568
+Client 3dpes Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 2, AVG Train Loss among clients of lost epoch: 2.674201
+==========
+Round Number 3
+==========
+Client cuhk01 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 1.9257 Acc: 0.6803
+Client cuhk01 Training complete in 0m 7s
+Client prid start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 1.0353 Acc: 0.7544
+Client prid Training complete in 0m 8s
+Client viper start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.1756 Acc: 0.5687
+Client viper Training complete in 0m 4s
+Client Market start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.9382 Acc: 0.3472
+Client Market Training complete in 0m 16s
+Client MSMT17 start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 3.0580 Acc: 0.3796
+Client MSMT17 Training complete in 0m 44s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.8311 Acc: 0.4100
+Client DukeMTMC-reID Training complete in 0m 20s
+Client ilids start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.0364 Acc: 0.6562
+Client ilids Training complete in 0m 4s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 2.2356 Acc: 0.5006
+Client cuhk03-np-detected Training complete in 0m 13s
+Client 3dpes start training
+Epoch 0/0, lr 0.05
+----------
+train Loss: 1.7648 Acc: 0.6761
+Client 3dpes Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 3, AVG Train Loss among clients of lost epoch: 2.333438
+==========
+Round Number 4
+==========
+Client viper start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.6266 Acc: 0.6750
+Client viper Training complete in 0m 4s
+Client cuhk01 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.5678 Acc: 0.7604
+Client cuhk01 Training complete in 0m 7s
+Client ilids start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.8033 Acc: 0.7240
+Client ilids Training complete in 0m 3s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.6878 Acc: 0.4318
+Client DukeMTMC-reID Training complete in 0m 20s
+Client 3dpes start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.4337 Acc: 0.7500
+Client 3dpes Training complete in 0m 4s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.9723 Acc: 0.5432
+Client cuhk03-np-detected Training complete in 0m 14s
+Client Market start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.8251 Acc: 0.3727
+Client Market Training complete in 0m 16s
+Client prid start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.8995 Acc: 0.7876
+Client prid Training complete in 0m 8s
+Client MSMT17 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.9488 Acc: 0.3957
+Client MSMT17 Training complete in 0m 44s
+==============================
+number of clients used: 9
+Train Epoch: 4, AVG Train Loss among clients of lost epoch: 2.084976
+==========
+Start Tesing!
+==========
+We use the scale: [1.0]
+torch.Size([3368, 512])
+Market Rank@1:0.105701 Rank@5:0.213183 Rank@10:0.285629 mAP:0.031580
+---------------
+
+ft_ResNet50
+Market
+torch.Size([2228, 512])
+DukeMTMC-reID Rank@1:0.107271 Rank@5:0.204219 Rank@10:0.260772 mAP:0.037237
+---------------
+
+ft_ResNet50
+DukeMTMC-reID
+torch.Size([1400, 512])
+cuhk03-np-detected Rank@1:0.012143 Rank@5:0.037857 Rank@10:0.056429 mAP:0.011081
+---------------
+
+ft_ResNet50
+cuhk03-np-detected
+torch.Size([972, 512])
+cuhk01 Rank@1:0.130658 Rank@5:0.242798 Rank@10:0.317901 mAP:0.125188
+---------------
+
+ft_ResNet50
+cuhk01
+torch.Size([11659, 512])
+MSMT17 Rank@1:0.032764 Rank@5:0.070332 Rank@10:0.096406 mAP:0.008133
+---------------
+
+ft_ResNet50
+MSMT17
+torch.Size([316, 512])
+viper Rank@1:0.056962 Rank@5:0.161392 Rank@10:0.256329 mAP:0.090178
+---------------
+
+ft_ResNet50
+viper
+torch.Size([100, 512])
+prid Rank@1:0.040000 Rank@5:0.100000 Rank@10:0.140000 mAP:0.059559
+---------------
+
+ft_ResNet50
+prid
+torch.Size([246, 512])
+3dpes Rank@1:0.317073 Rank@5:0.483740 Rank@10:0.617886 mAP:0.197725
+---------------
+
+ft_ResNet50
+3dpes
+torch.Size([98, 512])
+ilids Rank@1:0.295918 Rank@5:0.622449 Rank@10:0.714286 mAP:0.266679
+---------------
+
+ft_ResNet50
+ilids
+==========
+Round Number 5
+==========
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.8485 Acc: 0.5730
+Client cuhk03-np-detected Training complete in 0m 14s
+Client MSMT17 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.8950 Acc: 0.4012
+Client MSMT17 Training complete in 0m 44s
+Client Market start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.7167 Acc: 0.3857
+Client Market Training complete in 0m 16s
+Client viper start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.2116 Acc: 0.7646
+Client viper Training complete in 0m 4s
+Client ilids start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.5528 Acc: 0.7760
+Client ilids Training complete in 0m 4s
+Client cuhk01 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.2575 Acc: 0.8184
+Client cuhk01 Training complete in 0m 7s
+Client 3dpes start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.1873 Acc: 0.7955
+Client 3dpes Training complete in 0m 3s
+Client prid start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.7728 Acc: 0.8065
+Client prid Training complete in 0m 8s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.6123 Acc: 0.4471
+Client DukeMTMC-reID Training complete in 0m 20s
+==============================
+number of clients used: 9
+Train Epoch: 5, AVG Train Loss among clients of lost epoch: 1.894941
+==========
+Round Number 6
+==========
+Client MSMT17 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.8612 Acc: 0.4082
+Client MSMT17 Training complete in 0m 43s
+Client 3dpes start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.0983 Acc: 0.8352
+Client 3dpes Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.7092 Acc: 0.8347
+Client prid Training complete in 0m 8s
+Client ilids start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.3040 Acc: 0.8177
+Client ilids Training complete in 0m 4s
+Client cuhk01 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.0861 Acc: 0.8392
+Client cuhk01 Training complete in 0m 7s
+Client Market start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.6177 Acc: 0.4056
+Client Market Training complete in 0m 16s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.5512 Acc: 0.4585
+Client DukeMTMC-reID Training complete in 0m 20s
+Client viper start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.8746 Acc: 0.8562
+Client viper Training complete in 0m 4s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.7267 Acc: 0.5904
+Client cuhk03-np-detected Training complete in 0m 13s
+==============================
+number of clients used: 9
+Train Epoch: 6, AVG Train Loss among clients of lost epoch: 1.758758
+==========
+Round Number 7
+==========
+Client prid start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.6925 Acc: 0.8280
+Client prid Training complete in 0m 9s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.6645 Acc: 0.5986
+Client cuhk03-np-detected Training complete in 0m 14s
+Client 3dpes start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.9786 Acc: 0.8580
+Client 3dpes Training complete in 0m 4s
+Client MSMT17 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.8152 Acc: 0.4158
+Client MSMT17 Training complete in 0m 44s
+Client ilids start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.2342 Acc: 0.8177
+Client ilids Training complete in 0m 4s
+Client Market start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.5772 Acc: 0.4164
+Client Market Training complete in 0m 16s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.4972 Acc: 0.4601
+Client DukeMTMC-reID Training complete in 0m 20s
+Client cuhk01 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.9613 Acc: 0.8685
+Client cuhk01 Training complete in 0m 8s
+Client viper start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.6735 Acc: 0.8688
+Client viper Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 7, AVG Train Loss among clients of lost epoch: 1.677128
+==========
+Round Number 8
+==========
+Client ilids start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.0730 Acc: 0.8750
+Client ilids Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.6620 Acc: 0.8333
+Client prid Training complete in 0m 8s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.5584 Acc: 0.6224
+Client cuhk03-np-detected Training complete in 0m 14s
+Client cuhk01 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.8370 Acc: 0.8867
+Client cuhk01 Training complete in 0m 8s
+Client Market start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.5446 Acc: 0.4163
+Client Market Training complete in 0m 16s
+Client viper start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 1.3827 Acc: 0.9104
+Client viper Training complete in 0m 4s
+Client MSMT17 start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.7892 Acc: 0.4156
+Client MSMT17 Training complete in 0m 43s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 2.4626 Acc: 0.4695
+Client DukeMTMC-reID Training complete in 0m 20s
+Client 3dpes start training
+Epoch 0/0, lr 0.0495
+----------
+train Loss: 0.8218 Acc: 0.8636
+Client 3dpes Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 8, AVG Train Loss among clients of lost epoch: 1.570136
+==========
+Round Number 9
+==========
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 1.4845 Acc: 0.6491
+Client cuhk03-np-detected Training complete in 0m 14s
+Client ilids start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.9029 Acc: 0.9062
+Client ilids Training complete in 0m 4s
+Client MSMT17 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.7681 Acc: 0.4214
+Client MSMT17 Training complete in 0m 43s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.4483 Acc: 0.4689
+Client DukeMTMC-reID Training complete in 0m 20s
+Client Market start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.4751 Acc: 0.4297
+Client Market Training complete in 0m 16s
+Client viper start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 1.1417 Acc: 0.9458
+Client viper Training complete in 0m 4s
+Client 3dpes start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.7830 Acc: 0.8835
+Client 3dpes Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6375 Acc: 0.8454
+Client prid Training complete in 0m 9s
+Client cuhk01 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.7816 Acc: 0.9023
+Client cuhk01 Training complete in 0m 7s
+==============================
+number of clients used: 9
+Train Epoch: 9, AVG Train Loss among clients of lost epoch: 1.491411
+==========
+Start Tesing!
+==========
+We use the scale: [1.0]
+torch.Size([3368, 512])
+Market Rank@1:0.116390 Rank@5:0.227138 Rank@10:0.294537 mAP:0.034204
+---------------
+
+ft_ResNet50
+Market
+torch.Size([2228, 512])
+DukeMTMC-reID Rank@1:0.099641 Rank@5:0.205566 Rank@10:0.263914 mAP:0.038228
+---------------
+
+ft_ResNet50
+DukeMTMC-reID
+torch.Size([1400, 512])
+cuhk03-np-detected Rank@1:0.012143 Rank@5:0.035714 Rank@10:0.052143 mAP:0.010815
+---------------
+
+ft_ResNet50
+cuhk03-np-detected
+torch.Size([972, 512])
+cuhk01 Rank@1:0.136831 Rank@5:0.264403 Rank@10:0.338477 mAP:0.128613
+---------------
+
+ft_ResNet50
+cuhk01
+torch.Size([11659, 512])
+MSMT17 Rank@1:0.034051 Rank@5:0.071275 Rank@10:0.099923 mAP:0.008409
+---------------
+
+ft_ResNet50
+MSMT17
+torch.Size([316, 512])
+viper Rank@1:0.053797 Rank@5:0.177215 Rank@10:0.246835 mAP:0.088790
+---------------
+
+ft_ResNet50
+viper
+torch.Size([100, 512])
+prid Rank@1:0.050000 Rank@5:0.100000 Rank@10:0.150000 mAP:0.066988
+---------------
+
+ft_ResNet50
+prid
+torch.Size([246, 512])
+3dpes Rank@1:0.284553 Rank@5:0.451219 Rank@10:0.593496 mAP:0.186036
+---------------
+
+ft_ResNet50
+3dpes
+torch.Size([98, 512])
+ilids Rank@1:0.285714 Rank@5:0.591837 Rank@10:0.734694 mAP:0.274215
+---------------
+
+ft_ResNet50
+ilids
+==========
+Round Number 10
+==========
+Client ilids start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.8459 Acc: 0.9010
+Client ilids Training complete in 0m 4s
+Client viper start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 1.0367 Acc: 0.9333
+Client viper Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6020 Acc: 0.8474
+Client prid Training complete in 0m 9s
+Client MSMT17 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.7646 Acc: 0.4219
+Client MSMT17 Training complete in 0m 44s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 1.4423 Acc: 0.6482
+Client cuhk03-np-detected Training complete in 0m 13s
+Client cuhk01 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6973 Acc: 0.9128
+Client cuhk01 Training complete in 0m 7s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.4247 Acc: 0.4759
+Client DukeMTMC-reID Training complete in 0m 19s
+Client Market start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.4737 Acc: 0.4336
+Client Market Training complete in 0m 16s
+Client 3dpes start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.7909 Acc: 0.8807
+Client 3dpes Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 10, AVG Train Loss among clients of lost epoch: 1.453116
+==========
+Round Number 11
+==========
+Client ilids start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.7702 Acc: 0.9115
+Client ilids Training complete in 0m 4s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 1.4479 Acc: 0.6496
+Client cuhk03-np-detected Training complete in 0m 13s
+Client MSMT17 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.7351 Acc: 0.4294
+Client MSMT17 Training complete in 0m 43s
+Client prid start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6129 Acc: 0.8458
+Client prid Training complete in 0m 8s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.3919 Acc: 0.4807
+Client DukeMTMC-reID Training complete in 0m 20s
+Client cuhk01 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6989 Acc: 0.9062
+Client cuhk01 Training complete in 0m 7s
+Client Market start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.4388 Acc: 0.4329
+Client Market Training complete in 0m 16s
+Client viper start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.9715 Acc: 0.9458
+Client viper Training complete in 0m 4s
+Client 3dpes start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6147 Acc: 0.9318
+Client 3dpes Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 11, AVG Train Loss among clients of lost epoch: 1.409093
+==========
+Round Number 12
+==========
+Client ilids start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6832 Acc: 0.9375
+Client ilids Training complete in 0m 4s
+Client cuhk01 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6200 Acc: 0.9206
+Client cuhk01 Training complete in 0m 8s
+Client MSMT17 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.7342 Acc: 0.4269
+Client MSMT17 Training complete in 0m 44s
+Client 3dpes start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6447 Acc: 0.8920
+Client 3dpes Training complete in 0m 4s
+Client viper start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.8497 Acc: 0.9667
+Client viper Training complete in 0m 4s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 1.3906 Acc: 0.6593
+Client cuhk03-np-detected Training complete in 0m 14s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.3756 Acc: 0.4817
+Client DukeMTMC-reID Training complete in 0m 20s
+Client prid start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6175 Acc: 0.8444
+Client prid Training complete in 0m 9s
+Client Market start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.4292 Acc: 0.4353
+Client Market Training complete in 0m 16s
+==============================
+number of clients used: 9
+Train Epoch: 12, AVG Train Loss among clients of lost epoch: 1.371623
+==========
+Round Number 13
+==========
+Client ilids start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.7041 Acc: 0.9323
+Client ilids Training complete in 0m 4s
+Client viper start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.7856 Acc: 0.9604
+Client viper Training complete in 0m 4s
+Client cuhk01 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.5899 Acc: 0.9212
+Client cuhk01 Training complete in 0m 7s
+Client MSMT17 start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.7473 Acc: 0.4245
+Client MSMT17 Training complete in 0m 44s
+Client Market start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.4135 Acc: 0.4407
+Client Market Training complete in 0m 16s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 2.3792 Acc: 0.4864
+Client DukeMTMC-reID Training complete in 0m 20s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 1.4099 Acc: 0.6543
+Client cuhk03-np-detected Training complete in 0m 14s
+Client 3dpes start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.6307 Acc: 0.9006
+Client 3dpes Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.049005
+----------
+train Loss: 0.5623 Acc: 0.8548
+Client prid Training complete in 0m 8s
+==============================
+number of clients used: 9
+Train Epoch: 13, AVG Train Loss among clients of lost epoch: 1.358055
+==========
+Round Number 14
+==========
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3771 Acc: 0.4842
+Client DukeMTMC-reID Training complete in 0m 20s
+Client MSMT17 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.7224 Acc: 0.4299
+Client MSMT17 Training complete in 0m 45s
+Client Market start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.4406 Acc: 0.4337
+Client Market Training complete in 0m 16s
+Client viper start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.7138 Acc: 0.9833
+Client viper Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5754 Acc: 0.8609
+Client prid Training complete in 0m 8s
+Client 3dpes start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5373 Acc: 0.9290
+Client 3dpes Training complete in 0m 4s
+Client cuhk01 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5872 Acc: 0.9186
+Client cuhk01 Training complete in 0m 8s
+Client ilids start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.6897 Acc: 0.9271
+Client ilids Training complete in 0m 4s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 1.4087 Acc: 0.6512
+Client cuhk03-np-detected Training complete in 0m 14s
+==============================
+number of clients used: 9
+Train Epoch: 14, AVG Train Loss among clients of lost epoch: 1.339130
+==========
+Start Tesing!
+==========
+We use the scale: [1.0]
+torch.Size([3368, 512])
+Market Rank@1:0.109561 Rank@5:0.225059 Rank@10:0.298100 mAP:0.034239
+---------------
+
+ft_ResNet50
+Market
+torch.Size([2228, 512])
+DukeMTMC-reID Rank@1:0.105027 Rank@5:0.209156 Rank@10:0.262567 mAP:0.037719
+---------------
+
+ft_ResNet50
+DukeMTMC-reID
+torch.Size([1400, 512])
+cuhk03-np-detected Rank@1:0.011429 Rank@5:0.030714 Rank@10:0.051429 mAP:0.010407
+---------------
+
+ft_ResNet50
+cuhk03-np-detected
+torch.Size([972, 512])
+cuhk01 Rank@1:0.132716 Rank@5:0.258230 Rank@10:0.336420 mAP:0.126527
+---------------
+
+ft_ResNet50
+cuhk01
+torch.Size([11659, 512])
+MSMT17 Rank@1:0.034823 Rank@5:0.075564 Rank@10:0.101810 mAP:0.008715
+---------------
+
+ft_ResNet50
+MSMT17
+torch.Size([316, 512])
+viper Rank@1:0.060127 Rank@5:0.189873 Rank@10:0.262658 mAP:0.097867
+---------------
+
+ft_ResNet50
+viper
+torch.Size([100, 512])
+prid Rank@1:0.050000 Rank@5:0.110000 Rank@10:0.150000 mAP:0.070100
+---------------
+
+ft_ResNet50
+prid
+torch.Size([246, 512])
+3dpes Rank@1:0.308943 Rank@5:0.483740 Rank@10:0.593496 mAP:0.191325
+---------------
+
+ft_ResNet50
+3dpes
+torch.Size([98, 512])
+ilids Rank@1:0.326531 Rank@5:0.642857 Rank@10:0.693878 mAP:0.290206
+---------------
+
+ft_ResNet50
+ilids
+==========
+Round Number 15
+==========
+Client MSMT17 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.7182 Acc: 0.4310
+Client MSMT17 Training complete in 0m 43s
+Client cuhk01 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5365 Acc: 0.9238
+Client cuhk01 Training complete in 0m 8s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 1.3787 Acc: 0.6663
+Client cuhk03-np-detected Training complete in 0m 14s
+Client Market start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3916 Acc: 0.4452
+Client Market Training complete in 0m 16s
+Client ilids start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.6395 Acc: 0.9271
+Client ilids Training complete in 0m 4s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3670 Acc: 0.4848
+Client DukeMTMC-reID Training complete in 0m 20s
+Client 3dpes start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5249 Acc: 0.9233
+Client 3dpes Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5397 Acc: 0.8649
+Client prid Training complete in 0m 8s
+Client viper start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.6482 Acc: 0.9833
+Client viper Training complete in 0m 4s
+==============================
+number of clients used: 9
+Train Epoch: 15, AVG Train Loss among clients of lost epoch: 1.304922
+==========
+Round Number 16
+==========
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 1.3052 Acc: 0.6796
+Client cuhk03-np-detected Training complete in 0m 14s
+Client ilids start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.6440 Acc: 0.9323
+Client ilids Training complete in 0m 4s
+Client 3dpes start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5290 Acc: 0.9205
+Client 3dpes Training complete in 0m 4s
+Client MSMT17 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.7192 Acc: 0.4308
+Client MSMT17 Training complete in 0m 43s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3673 Acc: 0.4860
+Client DukeMTMC-reID Training complete in 0m 20s
+Client prid start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5372 Acc: 0.8659
+Client prid Training complete in 0m 8s
+Client cuhk01 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.4974 Acc: 0.9375
+Client cuhk01 Training complete in 0m 7s
+Client viper start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.6343 Acc: 0.9750
+Client viper Training complete in 0m 4s
+Client Market start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3902 Acc: 0.4438
+Client Market Training complete in 0m 16s
+==============================
+number of clients used: 9
+Train Epoch: 16, AVG Train Loss among clients of lost epoch: 1.291526
+==========
+Round Number 17
+==========
+Client viper start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5990 Acc: 0.9771
+Client viper Training complete in 0m 4s
+Client 3dpes start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5102 Acc: 0.9205
+Client 3dpes Training complete in 0m 4s
+Client cuhk01 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5080 Acc: 0.9310
+Client cuhk01 Training complete in 0m 7s
+Client Market start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3702 Acc: 0.4547
+Client Market Training complete in 0m 16s
+Client ilids start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.6450 Acc: 0.8698
+Client ilids Training complete in 0m 4s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 1.2979 Acc: 0.6817
+Client cuhk03-np-detected Training complete in 0m 14s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3450 Acc: 0.4899
+Client DukeMTMC-reID Training complete in 0m 20s
+Client prid start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5107 Acc: 0.8696
+Client prid Training complete in 0m 9s
+Client MSMT17 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.7234 Acc: 0.4294
+Client MSMT17 Training complete in 0m 43s
+==============================
+number of clients used: 9
+Train Epoch: 17, AVG Train Loss among clients of lost epoch: 1.278827
+==========
+Round Number 18
+==========
+Client cuhk01 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.4860 Acc: 0.9349
+Client cuhk01 Training complete in 0m 7s
+Client MSMT17 start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.7206 Acc: 0.4305
+Client MSMT17 Training complete in 0m 43s
+Client Market start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3816 Acc: 0.4500
+Client Market Training complete in 0m 17s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 1.3514 Acc: 0.6728
+Client cuhk03-np-detected Training complete in 0m 14s
+Client 3dpes start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5907 Acc: 0.8778
+Client 3dpes Training complete in 0m 4s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 2.3633 Acc: 0.4850
+Client DukeMTMC-reID Training complete in 0m 20s
+Client viper start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5191 Acc: 0.9854
+Client viper Training complete in 0m 4s
+Client ilids start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5579 Acc: 0.9323
+Client ilids Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.04851495
+----------
+train Loss: 0.5554 Acc: 0.8542
+Client prid Training complete in 0m 8s
+==============================
+number of clients used: 9
+Train Epoch: 18, AVG Train Loss among clients of lost epoch: 1.280670
+==========
+Round Number 19
+==========
+Client cuhk01 start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 0.4988 Acc: 0.9284
+Client cuhk01 Training complete in 0m 8s
+Client Market start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 2.3766 Acc: 0.4512
+Client Market Training complete in 0m 16s
+Client ilids start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 0.5093 Acc: 0.9271
+Client ilids Training complete in 0m 4s
+Client DukeMTMC-reID start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 2.3483 Acc: 0.4889
+Client DukeMTMC-reID Training complete in 0m 20s
+Client 3dpes start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 0.4885 Acc: 0.9205
+Client 3dpes Training complete in 0m 4s
+Client viper start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 0.5309 Acc: 0.9750
+Client viper Training complete in 0m 4s
+Client prid start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 0.5222 Acc: 0.8653
+Client prid Training complete in 0m 9s
+Client cuhk03-np-detected start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 1.3174 Acc: 0.6770
+Client cuhk03-np-detected Training complete in 0m 14s
+Client MSMT17 start training
+Epoch 0/0, lr 0.0480298005
+----------
+train Loss: 2.6973 Acc: 0.4316
+Client MSMT17 Training complete in 0m 44s
+==============================
+number of clients used: 9
+Train Epoch: 19, AVG Train Loss among clients of lost epoch: 1.254370
+==========
+Start Tesing!
+==========
+We use the scale: [1.0]
+torch.Size([3368, 512])
+Market Rank@1:0.110451 Rank@5:0.227732 Rank@10:0.298100 mAP:0.033669
+---------------
+
+ft_ResNet50
+Market
+torch.Size([2228, 512])
+DukeMTMC-reID Rank@1:0.106822 Rank@5:0.200628 Rank@10:0.268402 mAP:0.038377
+---------------
+
+ft_ResNet50
+DukeMTMC-reID
+torch.Size([1400, 512])
+cuhk03-np-detected Rank@1:0.015000 Rank@5:0.033571 Rank@10:0.055000 mAP:0.011435
+---------------
+
+ft_ResNet50
+cuhk03-np-detected
+torch.Size([972, 512])
+cuhk01 Rank@1:0.128601 Rank@5:0.256173 Rank@10:0.331276 mAP:0.124765
+---------------
+
+ft_ResNet50
+cuhk01
+torch.Size([11659, 512])
+MSMT17 Rank@1:0.035852 Rank@5:0.078051 Rank@10:0.103525 mAP:0.008793
+---------------
+
+ft_ResNet50
+MSMT17
+torch.Size([316, 512])
+viper Rank@1:0.060127 Rank@5:0.183544 Rank@10:0.294304 mAP:0.096479
+---------------
+
+ft_ResNet50
+viper
+torch.Size([100, 512])
+prid Rank@1:0.040000 Rank@5:0.100000 Rank@10:0.160000 mAP:0.059433
+---------------
+
+ft_ResNet50
+prid
+torch.Size([246, 512])
+3dpes Rank@1:0.308943 Rank@5:0.479675 Rank@10:0.609756 mAP:0.195526
+---------------
+
+ft_ResNet50
+3dpes
+torch.Size([98, 512])
+ilids Rank@1:0.285714 Rank@5:0.571429 Rank@10:0.714286 mAP:0.278535
+---------------
+
+ft_ResNet50
+ilids
