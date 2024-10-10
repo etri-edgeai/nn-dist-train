@@ -1,6 +1,6 @@
 # Parameter Averaging Laws for Multitask Language Models
 
-[Neurips 2023 FL workshop] This is the official codebase of [Parameter Averaging Laws for Multitask Language Models] (https://openreview.net/forum?id=qQ2qXFu05s). The repository provides the code of our main experiment. 
+[Neurips 2023 FL workshop] This is the official codebase of **[Parameter Averaging Laws for Multitask Language Models] (https://openreview.net/forum?id=qQ2qXFu05s)**. The repository provides the code of our main experiment. 
 
 Short Description of Paper: Parameter-averaging, a method for merging multiple models, has shown promise in improving performance without needing extra space or retraining. However, the conditions for its success are not yet well-defined. This study empirically examines key factors, such as computational budget, data diversity, and vocabulary size, and their role in boosting representation power and the effectiveness of parameter-averaging. Our results show that parameter-averaging enhances generalization across both in-domain and out-of-domain data. To reduce costs, we propose partial averaging, allowing selective model participation, which outperforms fine-tuning in models with strong representation. We also find that data heterogeneity becomes less impactful as representation power increases, offering insights into optimizing parameter-averaging for improved model performance.
 
