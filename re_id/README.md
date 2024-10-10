@@ -1,63 +1,54 @@
-# FedReID
-Code for ACMMM 2020 oral paper - **[Performance Optimization for Federated Person Re-identification via Benchmark Analysis](https://arxiv.org/abs/2008.11560)**
+# Federated Learning for Re-ID task
 
 Personal re-identification is an important computer vision task, but its development is constrained by the increasing privacy concerns. Federated learning is a privacy-preserving machine learning technique that learns a shared model across decentralized clients. In this work, we implement federated learning to person re-identification (**FedReID**) and optimize its performance affected by **statistical heterogeneity** in the real-world scenario. 
 
-Algorithm: Federated Partial Averaging (FedPav)
+This repository is designed mainly for research, and pytorch implementation of federated learning algorithm on personal re-id task. 
 
-<img src="images/fedpav-new.png" width="700">
+Implemented algorithm are as follows: 
+
+- **FedPAV** ([Paper Link](https://dl.acm.org/doi/pdf/10.1145/3531013), presented at **ACMMM 2020**),
+- **FedDKD (Ours)** ([Paper Link](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003117176), presented at **KIISE 2022**),
+- **FedCON (Ours)** ([Paper Link](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003117176), presented at **KIISE 2024**).
+- **FedCON+ (Ours)** (Proposed in 2024).
+
+
 
 ## Prerequisite
 * Install the libraries listed in requirements.txt
     ```
     pip install -r requirements.txt
     ```
+## Dataset 
+* Get the pre-processed dataset which is done by cap-ntu FedReID team (https://github.com/cap-ntu/FedReID). Dataset consist of 9 popular person ReID datasets
 
-## Datasets preparation
-
-> **🎉 We are now releasing the processed datasets.** (April, 2022)
->
-> Please [email us](weiming001@e.ntu.edu.sg) (cc [this email](wingalong@gmail.com) in case it is filtered as spam) to request for the datasets with:
-> 1. A short self-introduction.
-> 2. The purposes of using these datasets.
->
-> *⚠️ Further distribution of the datasets are prohibited.*
-
-**We use 9 popular ReID datasets for the benchmark.**
-<img src="images/datasets.png" width="700">
-
-
-### Dataset Preprocess From Scratch
-
-You can obtain the datasets from [awesome-reid-dataset](https://github.com/NEU-Gou/awesome-reid-dataset)
-
-Dataset folder structure after preprocessing is provided [here](data_preprocess/README.md)
-
-You can follow the following steps to preprocess datasets:
-
-1. Download all datasets to `data_preprocess/data` folder. 
-2. We provide the Json files for spliting the small datasets. (We haven't officially release the `split.json` files. Please send an email with short introduction to request for them.)
-3. Run the following script to prepare all datasets:
-    ```
-    python prepare_all_datasets.py
-    ```
-4. Move the `data` folder to the root directory.
-    ```
-    move data_preprocess/data ./
-    ```
-5. For federated-by-identity scenario:
-    ```
-    python split_id_data.py
-    ```
-6. For federated-by-camera scenario:
-    ```
-    python split_camera_data.py
-    ```
-7. For merging all datasets to do merge training, you can use `rename_dataset.py` and `mix_datasets.py`.
-
+## Arguments for running code 
+- `--gpu_ids`: Specify GPU IDs for training (e.g., `0`, `0,1,2`, `0,2`).
+- `--model_name`: Set the model architecture (e.g., `ft_ResNet50`).
+- `--project_dir`: Define the project directory path (default: `./`).
+- `--data_dir`: Specify the training data directory path (default: `data`).
+- `--datasets`: List of datasets to be used, separated by commas (e.g., `Market`, `DukeMTMC-reID`, `cuhk01`, `MSMT17`).
+- `--train_all`: Flag to use all available training data (default: `True`).
+- `--stride`: Set the stride for training (default: `2`).
+- `--lr`: Learning rate for model training (default: `0.05`).
+- `--drop_rate`: Dropout rate for the model (default: `0.5`).
+- `--local_epoch`: Number of local epochs in federated setting (default: `2`).
+- `--batch_size`: Batch size for local model updates (default: `32`).
+- `--num_of_clients`: Number of federated clients (default: `9`).
+- `--erasing_p`: Probability of random erasing during training (default: `0`, in range `[0, 1]`).
+- `--color_jitter`: Flag to enable color jitter during training.
+- `--which_epoch`: Select the specific epoch to test (e.g., `0`, `1`, `2`, `3`... or `last`).
+- `--multi`: Flag to use multiple query options during evaluation.
+- `--multiple_scale`: Flag for applying multiple scaling during testing (default: `1`, e.g., `1,1.1,1.2`).
+- `--test_dir`: Directory path for test data (default: `all`).
+- `--cdw`: Enable cosine distance weighting for model aggregation (default: `False`).
+- `--kd`: Flag for enabling knowledge distillation during training (default: `False`).
+- `--regularization`: Enable regularization during knowledge distillation (default: `False`).
+- - `--tau`: NTD loss hyperparameter controlling the weight of loss term (default: `3`).
+- `--beta`: NTD loss hyperparameter affecting regularization (default: `1`).
+- `--strategy`: The federated strategy to use (default: `fedpav`).
 
 ## Run the experiments
-Remember to save the log file for later use!
+For running experiment with cross-silo setting (every client participate in every round), please use following code. 
 * Run Federated Partial Averaging (FedPav): 
     ```
     python main.py
@@ -76,15 +67,17 @@ Remember to save the log file for later use!
     ```
 * Run Federated Not-True Distillation (FedNTD): 
     ```
-    python main.py --strategy fedntd
+    python main.py --strategy feddkd
     ```
-* Run Federated Local Self-Distillation (FedLSD): 
     ```
-    python main.py --strategy fedlsd
+* Run Model-contrastive federated learning (FedCON): 
     ```
-* Run Model-contrastive federated learning (MOON): 
+    python main.py --strategy fedcon
     ```
-    python main.py --strategy moon
+
+* Run Model-contrastive federated learning (FedCON+): 
+    ```
+    python main.py --strategy fedcon_plus
     ```
 
     
