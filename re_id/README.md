@@ -43,7 +43,7 @@ Implemented algorithm are as follows:
 - `--cdw`: Enable cosine distance weighting for model aggregation (default: `False`).
 - `--kd`: Flag for enabling knowledge distillation during training (default: `False`).
 - `--regularization`: Enable regularization during knowledge distillation (default: `False`).
-- - `--tau`: NTD loss hyperparameter controlling the weight of loss term (default: `3`).
+- `--tau`: NTD loss hyperparameter controlling the weight of loss term (default: `3`).
 - `--beta`: NTD loss hyperparameter affecting regularization (default: `1`).
 - `--strategy`: The federated strategy to use (default: `fedpav`).
 
