@@ -81,3 +81,4 @@ For running experiment with cross-silo setting (every client participate in ever
 |3DPeS      | 0.5894    | 0.6301    | 0.626   | 0.6545        |
 |iLIDS-VID  | 0.7449    | 0.7347    | 0.7653  | 0.8061        |
 
+(3) indicates the number of local epoch (which is 3) when running algorithm. 
