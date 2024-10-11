@@ -38,8 +38,8 @@ class Client_lsd():
         self.model.classifier.classifier = self.classifier #client model에서 feature-extractor, classifier 연결!!
         self.model = self.model.to(self.device)
 
-        #optimizer = get_optimizer1(self.model, lr)
-        #scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
+        optimizer = get_optimizer1(self.model, lr)
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
         class_num= self.data.train_class_sizes[self.cid]
         criterion = LSD_Loss(class_num, self.tau, self.beta)
 
@@ -49,12 +49,6 @@ class Client_lsd():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % self.local_epoch == 0:
-                optimizer = get_optimizer1(self.model, lr)
-                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
-            else:
-                optimizer = get_optimizer2(self.model, lr)
-                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             print('Epoch {}/{}, lr {}'.format(epoch, self.local_epoch - 1, optimizer.param_groups[0]['lr']))
             print('-' * 10)
 
@@ -129,10 +123,15 @@ class Client_pav():
         
         self.dataset_sizes = self.data.train_dataset_sizes[cid]
         self.train_loader = self.data.train_loaders[cid]
-        self.full_model = get_model(self.data.train_class_sizes[cid], drop_rate, stride).to(self.device) #output: model
+        self.full_model = get_model(self.data.train_class_sizes[cid], drop_rate, stride).to(self.device)#output: model
+        #self.freeze_pretrained_layers()
         self.classifier = self.full_model.classifier.classifier #model의 classifier 부분!!
         self.full_model.classifier.classifier = nn.Sequential() #empty!!
         self.model = self.full_model #self.full_model 중 feature extrator만 해당!!
+
+    def freeze_pretrained_layers(self):
+        for param in self.full_model.model.parameters():
+            param.requires_grad = False
 
     def train(self, federated_model, use_cuda, lr):
         self.y_err = []
@@ -143,6 +142,7 @@ class Client_pav():
         self.model = self.model.to(self.device)
 
         #optimizer = get_optimizer2(self.model, lr)
+
         #scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
         
         criterion = nn.CrossEntropyLoss()
@@ -151,7 +151,7 @@ class Client_pav():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % self.local_epoch == 0:
+            if epoch % 3 == 0:
                 optimizer = get_optimizer1(self.model, lr)
                 scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             else:
@@ -247,8 +247,8 @@ class Client_ntd():
         self.model.classifier.classifier = self.classifier #client model에서 feature-extractor, classifier 연결!!
         self.model = self.model.to(self.device)
 
-        #optimizer = get_optimizer2(self.model, lr)
-        #scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
+        optimizer = get_optimizer2(self.model, lr)
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
         class_num= self.data.train_class_sizes[self.cid]
         criterion = NTD_Loss(class_num, self.tau, self.beta)
 
@@ -258,12 +258,6 @@ class Client_ntd():
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % self.local_epoch == 0:
-                optimizer = get_optimizer1(self.model, lr)
-                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
-            else:
-                optimizer = get_optimizer2(self.model, lr)
-                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             print('Epoch {}/{}, lr {}'.format(epoch, self.local_epoch - 1, optimizer.param_groups[0]['lr']))
             print('-' * 10)
 
@@ -356,15 +350,16 @@ class Client_moon():
         self.model.load_state_dict(federated_model) #feature-extractor part!!
         self.pro1_model = copy.deepcopy(self.model)
         self.pro1_model.to(self.device)
+
         global_model = copy.deepcopy(self.model)
         for param in global_model.parameters():
             param.requires_grad = False
         global_model.to(self.device)
-        self.model.classifier.classifier = self.classifier #client model에서 feature-extractor, classifier 연결!!
+        self.model.classifier.classifier = self.classifier 
         self.model = self.model.to(self.device)
-        
-        #optimizer = get_optimizer2(self.model, lr)
-        #scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
+
+        optimizer = get_optimizer2(self.model, lr)
+        scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1) #40 epoch마다 lr decay인데 local epoch수는 1이라 의미 없는듯
         
         criterion = nn.CrossEntropyLoss()
 
@@ -373,21 +368,11 @@ class Client_moon():
         mu = 5              # 0 / 0.1 / 1 / 5 / 10
         temperature = 0.5   # 0.1 / 0.5 / 1.0
 
-        global_model = copy.deepcopy(self.model)
-        for param in global_model.parameters():
-            param.requires_grad = False
-        global_model.to(self.device)
 
         since = time.time()
 
         print('Client', self.cid, 'start training')
         for epoch in range(self.local_epoch):
-            if epoch % self.local_epoch == 0:
-                optimizer = get_optimizer1(self.model, lr)
-                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
-            else:
-                optimizer = get_optimizer2(self.model, lr)
-                scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
             print('Epoch {}/{}, lr {}'.format(epoch, self.local_epoch - 1, optimizer.param_groups[0]['lr']))
             print('-' * 10)
 
@@ -420,21 +405,24 @@ class Client_moon():
                     - loss1: cross-entropy loss
                     - loss2: contrastive loss
                 """
-                #pro1, outputs = self.model(inputs)
                 pro1 = self.pro1_model(inputs)
                 p_logits = self.model(inputs)
-                #pro2, _ = global_model(inputs)
+                #print('pro1:',pro1.shape)
+                #print(global_model(inputs))
                 pro2 = global_model(inputs)
-                _, preds = torch.max(outputs.data, 1)
+                #print('pro2:',pro2.shape)
+                _, preds = torch.max(p_logits.data, 1)
 
                 posi = cos(pro1, pro2)          # positive pairs [b]
-                #logits = posi.reshape(-1, 1)    # [b, 1]
+
 
                 pro3 = prev_model(inputs)
+                #print('pro3:',pro3.shape)
                 nega = cos(pro1, pro3)
                 b_logits = torch.cat((posi.reshape(-1,1), nega.reshape(-1,1)), dim=1)
 
                 # prev_model.to('cpu')
+
                 b_logits /= temperature
                 b_labels = torch.zeros(inputs.size(0)).to(self.device).long()
 
@@ -443,13 +431,6 @@ class Client_moon():
 
                 ce_loss=criterion(p_logits, labels)
                 loss = ce_loss + b_loss
-
-                #logits /= temperature
-                #labels_new = torch.zeros(inputs.size(0)).cuda().long()
-
-                #loss1 = criterion(outputs, labels)
-                #loss2 = mu * criterion(logits, labels_new)
-                #loss = loss1 + loss2
 
                 # print(labels)
                 # print(logits)

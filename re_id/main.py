@@ -28,7 +28,7 @@ sys.setrecursionlimit(10000)
 version =  torch.__version__
 
 parser = argparse.ArgumentParser(description='Training')
-parser.add_argument('--gpu_ids',default='0', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
+parser.add_argument('--gpu_ids',default='1', type=str,help='gpu_ids: e.g. 0  0,1,2  0,2')
 parser.add_argument('--model_name',default='ft_ResNet50', type=str, help='output model name')
 parser.add_argument('--project_dir',default='.', type=str, help='project path')
 parser.add_argument('--data_dir',default='data',type=str, help='training dir path')
@@ -39,7 +39,7 @@ parser.add_argument('--lr', default=0.05, type=float, help='learning rate')
 parser.add_argument('--drop_rate', default=0.5, type=float, help='drop rate')
 
 # arguments for federated setting
-parser.add_argument('--local_epoch', default=1, type=int, help='number of local epochs')
+parser.add_argument('--local_epoch', default=2, type=int, help='number of local epochs')
 parser.add_argument('--batch_size', default=32, type=int, help='batch size')
 parser.add_argument('--num_of_clients', default=9, type=int, help='number of clients')
 
@@ -62,7 +62,7 @@ parser.add_argument('--regularization', action='store_true', help='use regulariz
 parser.add_argument('--tau', type=int, default=3, help='ntd loss hyperparameter (tau)')
 parser.add_argument('--beta', type=int, default=1, help='ntd loss hyperparameter (beta)')
 
-parser.add_argument('--strategy', default='fedpav', type=str, help='federated strategy')
+parser.add_argument('--strategy', default='moon', type=str, help='federated strategy')
 
 
 def train():
@@ -90,7 +90,7 @@ def train():
                 args.batch_size, 
                 args.drop_rate, 
                 args.stride)
-    elif args.strategy == 'fedntd':
+    elif args.strategy == 'feddkd':
         for cid in data.client_list:#data.client_list: 리스트 안에 dataset name 나열!! cid는 dataset name!!
             clients[cid] = Client_ntd(
                 cid, 
@@ -116,7 +116,7 @@ def train():
                 args.batch_size, 
                 args.drop_rate, 
                 args.stride, args.tau, args.beta)
-    elif args.strategy == 'moon':
+    elif args.strategy == 'fedcon':
         for cid in data.client_list:#data.client_list: 리스트 안에 dataset name 나열!! cid는 dataset name!!
             clients[cid] = Client_moon(
                 cid, 
@@ -147,17 +147,17 @@ def train():
         os.makedirs(dir_name)
 
     print("=====training start!========")
-    rounds = 800
+    rounds = 101
     for i in range(rounds):
         print('='*10)
         print("Round Number {}".format(i))
         print('='*10)
         server.train(i, args.cdw, use_cuda) #추후에 args.cdw 인자 없애도 될 것 같음!!
-        save_path = os.path.join(dir_name, 'federated_model.pth')
+        save_path = os.path.join(dir_name, 'lp-ft.pth')
 #         torch.save(server.federated_model.cpu().state_dict(), save_path)
         torch.save(server.federated_model, save_path)
 
-        if (i+1)%100 == 0:
+        if (i+1)%10 == 0:
 #             server.test(use_cuda)
             server.test()
 

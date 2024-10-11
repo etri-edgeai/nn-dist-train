@@ -79,7 +79,9 @@ class ft_net(nn.Module):
         super(ft_net, self).__init__()
        
         model_ft = models.resnet50(pretrained=True)
-        # model_ft=torch.load('saved_res50.pkl')
+        #model_ft = models.resnet50(pretrained=False)
+        #lp=torch.load('model/ft_ResNet50/federated_model.pth')
+        #model_ft.load_state_dict(lp, strict=False)
         # avg pooling to global pooling
         if stride == 1:
             model_ft.layer4[0].downsample[0].stride = (1,1)
