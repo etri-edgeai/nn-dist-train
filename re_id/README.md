@@ -66,3 +66,18 @@ For running experiment with cross-silo setting (every client participate in ever
     ```
     python main.py --strategy fedcon_plus
     ```
+
+## Result of implemented algorithm 
+
+|Dataset    | fedpav(3) | feddkd(3) | fedcon(3) | fedcon+(3) |
+|-----------|-----------|-----------|---------|---------------|
+|MSMT17     | 0.6354    | 0.6419    | 0.6488  | 0.6594        |
+|DUKE-MTMC  | 0.6171    | 0.6117    | 0.6041  | 0.6127        |
+|Market-1501| 0.1271    | 0.1529    | 0.1407  | 0.1629        |
+|CHUK03-NP  | 0.6101    | 0.6554    | 0.6224  | 0.6327        |
+|PRID2011   | 0.282     | 0.3296    | 0.2697  | 0.2971        |
+|CHUK01     | 0.3481    | 0.3291    | 0.3196  | 0.3513        |
+|VIPeR      | 0.12      | 0.09      | 0.06    | 0.09          |
+|3DPeS      | 0.5894    | 0.6301    | 0.626   | 0.6545        |
+|iLIDS-VID  | 0.7449    | 0.7347    | 0.7653  | 0.8061        |
+
