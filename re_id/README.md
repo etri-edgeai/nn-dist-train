@@ -66,6 +66,3 @@ For running experiment with cross-silo setting (every client participate in ever
     ```
     python main.py --strategy fedcon_plus
     ```
-
-    
-
