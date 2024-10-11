@@ -67,7 +67,7 @@ For running experiment with cross-silo setting (every client participate in ever
     python main.py --strategy fedcon_plus
     ```
 
-## Result of implemented algorithm 
+## Result of implemented algorithm on 9 different person Re-ID benchmark
 
 |Dataset    | fedpav(3) | feddkd(3) | fedcon(3) | fedcon+(3) |
 |-----------|-----------|-----------|---------|---------------|
