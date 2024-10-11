@@ -53,22 +53,9 @@ For running experiment with cross-silo setting (every client participate in ever
     ```
     python main.py
     ```
-* Run FedPav with knowledge distillation (KD): 
-    ```
-    python main.py --kd --regularization
-    ```
-* Run FedPav with cosine distance weight (CDW): 
-    ```
-    python main.py --cdw
-    ```
-* Run FedPav with knowledge distillation and cosine distance weight: 
-    ```
-    python main.py --cdw --kd --regularization
-    ```
-* Run Federated Not-True Distillation (FedNTD): 
+* Run Federated Not-True Distillation (FedDKD): 
     ```
     python main.py --strategy feddkd
-    ```
     ```
 * Run Model-contrastive federated learning (FedCON): 
     ```
