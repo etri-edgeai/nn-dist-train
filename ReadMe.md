@@ -6,7 +6,6 @@ This repository is designed mainly for research, and pytorch implementation of v
 - **Image Classification**
 	- Global Federated Learning **(GFL)**
 	- Personalized Federated Learning **(PFL)**
-- **Object Detection**
 - **Re-Identification**
 - **NLP (Multi-Lingual Problem)**
 
@@ -33,8 +32,7 @@ The GitHub repositories we referred to for code implementations for each target 
 	- Personalized Federated Learning (PFL)
 		- https://github.com/pliang279/LG-FedAvg 
 		-  https://github.com/jhoon-oh/FedBABU
-- Object Detection
-	- https://github.com/FedML-AI/FedML
+
 - Re-Identification
 	- https://github.com/cap-ntu/FedReID
 - NLP (Multi-Lingual Problem)
